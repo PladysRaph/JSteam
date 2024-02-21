@@ -4,10 +4,10 @@ export default class View {
 
     constructor() {
         // Responsive view (canvas)
-        const canvasResizeObserver = new ResizeObserver(() => {
+        // TODO: Faire en sorte de redessiner le canvas à chaque redimensionnement
+        new ResizeObserver(() => {
             View.canvas.width = View.canvas.clientWidth;
             View.canvas.height = View.canvas.clientHeight;
-        });
-        canvasResizeObserver.observe(View.canvas);
+        }).observe(View.canvas);
     }
 }

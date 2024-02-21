@@ -2,32 +2,35 @@ import View from "./View.js";
 
 export default class PlayerView extends View {
     #player;
-    #avatar;
     
     constructor(player) {
         super();
         this.#player = player;
-        
-        const image = new Image();
-        image.src = '/assets/img/New Piskel.png';
 
-        this.#avatar = image;
+        // Attendre le chargement complet de l'avatar
+        this.#player.avatar.addEventListener('load', event => View.context2D.drawImage(this.#player.avatar, this.#player.x, this.#player.y));
 
+        // Écoute sur les évènements de cette vue (touches directionnelles pour contrôler le joueur)
         this.listen();
 
-        image.addEventListener('load', event => {
-            this.context2D.drawImage(image, this.#player.x, this.#player.y);
-        });
-
+        // Modifier le déplacement et facteurs de vitesse à intervalle régulier
         setInterval(() => {
             this.#player.x += this.#player.xFactor;
             this.#player.y += this.#player.yFactor;
+            // Gestion des collisions
+            if (this.#player.x > View.canvas.width - this.#player.avatar.width) this.#player.x = View.canvas.width - this.#player.avatar.width;
+            if (this.#player.x < 0) this.#player.x = 0;
+            if (this.#player.y > View.canvas.height - this.#player.avatar.height) this.#player.y = View.canvas.height - this.#player.avatar.height;
+            if (this.#player.y < 0) this.#player.y = 0;
         });
 
-        requestAnimationFrame(this.render);
+        // Afficher et synchroniser le rendu de l'image suivant le refresh rate de l'écran (60 FPS / 120 FPS)
+        requestAnimationFrame(this.render.bind(this));
     }
 
+    // Écouteur d'évènements de la vue
     listen() {
+        // Appuyer sur une touche, gestion des multi-touches supporté (haut-droite appuyés en même temps)
         addEventListener('keydown', e => {
             switch (e.code) {
                 case 'ArrowRight':
@@ -47,6 +50,7 @@ export default class PlayerView extends View {
             }
         });
 
+        // Relâcher une touche
         addEventListener('keyup', e => {
             switch (e.code) {
                 case 'ArrowRight':
@@ -67,10 +71,11 @@ export default class PlayerView extends View {
         });
     }
 
+    // Gérer le rendu de la vue
     render() {
-        View.context2D.clearRect(0, 0, View.context2D.width, View.context2D.height);
-        View.context2D.drawImage(this.#avatar, this.#player.x, this.#player.y);
-        requestAnimationFrame(this.render);
+        View.context2D.clearRect(0, 0, View.canvas.width, View.canvas.height);
+        View.context2D.drawImage(this.#player.avatar, this.#player.x, this.#player.y)
+        requestAnimationFrame(this.render.bind(this));
     }
 
 }
