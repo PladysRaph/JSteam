@@ -1,17 +1,22 @@
-import Player from"../Player.js";
+import View from "./View.js";
 
-export default class PlayerView {
+export default class PlayerView extends View {
     #player;
+    #avatar;
     
     constructor(player) {
+        super();
         this.#player = player;
+        
         const image = new Image();
         image.src = '/assets/img/New Piskel.png';
+
+        this.#avatar = image;
 
         this.listen();
 
         image.addEventListener('load', event => {
-            context.drawImage(image, this.#player.getX(), this.#player.y);
+            this.context2D.drawImage(image, this.#player.x, this.#player.y);
         });
 
         setInterval(() => {
@@ -19,7 +24,7 @@ export default class PlayerView {
             this.#player.y += this.#player.yFactor;
         });
 
-        requestAnimationFrame(render);
+        requestAnimationFrame(this.render);
     }
 
     listen() {
@@ -63,9 +68,9 @@ export default class PlayerView {
     }
 
     render() {
-        context.clearRect(0, 0, canvas.width, canvas.height);
-        context.drawImage(image, x, y);
-        requestAnimationFrame(render);
+        View.context2D.clearRect(0, 0, View.context2D.width, View.context2D.height);
+        View.context2D.drawImage(this.#avatar, this.#player.x, this.#player.y);
+        requestAnimationFrame(this.render);
     }
 
 }

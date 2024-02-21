@@ -1,15 +1,6 @@
 import PlayerView from "./view/PlayerView";
+import Player from "./Player.js";
 
-const canvas = document.querySelector('.gameCanvas'),
-	context = canvas.getContext('2d');
-
-const canvasResizeObserver = new ResizeObserver(() => resampleCanvas());
-canvasResizeObserver.observe(canvas);
-
-function resampleCanvas() {
-	canvas.width = canvas.clientWidth;
-	canvas.height = canvas.clientHeight;
-}
-
-let playerView = new PlayerView();
+// Player view
+let playerView = new PlayerView(new Player());
 playerView.render();

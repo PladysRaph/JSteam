@@ -6,26 +6,4 @@ export default class Player {
         this.yFactor = 0;
         this.speed = 1;
     }
-
-    getX() {
-        
-    }
-
-    setCoords(x, y) {
-        this.x = x;
-        this.y = y;
-    }
-
-    setFactors(xFactor, yFactor) {
-        this.xFactor = xFactor;
-        this.yFactor = yFactor;
-    }
-
-    setSpeed(speed) {
-        this.speed = speed;
-    }
-
-    addFactorX() {
-
-    }
 }
