@@ -18,7 +18,7 @@ export default class LoginViewController extends Controller {
         }
         
         // À changer...
-        let avatar = Avatar.renderImage("../../assets/img/New Piskel.png");
+        let avatar = Avatar.renderImage("../../assets/img/avatar-pick.jpg");
 
         this.currentModel = new Player(username, avatar);
 
