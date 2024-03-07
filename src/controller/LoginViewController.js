@@ -9,16 +9,16 @@ export default class LoginViewController extends Controller {
    }
 
     // Initialiser un nouveau joueur qui se connecte à une partie
-    createUser(main) {
+    createUser(main, imgLink) {
         let username = main.querySelector('#pseudo').value;
 
         if(username == null || username === '') {
             alert("Nom d'utilisateur vide");
             return false;
         }
-        
+
         // À changer...
-        let avatar = Avatar.renderImage("../../assets/img/avatar-pick.jpg");
+        let avatar = Avatar.renderImage(imgLink);
 
         this.currentModel = new Player(username, avatar);
 

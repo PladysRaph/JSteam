@@ -17,9 +17,16 @@ export default class LoginView extends View {
 
                         <div id="avatar">
                             <p>Choisissez votre avatar</p>
-                            <div id="pick-avatar">
-                                <img src="../../assets/img/avatar-pick.jpg" width=50 height=50 />
-                            </div>
+                            <div id="pick-avatar">`
+
+                            +
+
+                                `<img src="../../assets/img/avatar-pick.jpg" width=50 height=50 />
+                                <img src="../../assets/img/New Piskel.png" width=50 height=50 />`
+
+                                +
+
+                            `</div>
                         </div>
 
                         <input id="pseudo" type='text' placeholder='Entrez votre pseudo'>
@@ -36,11 +43,19 @@ export default class LoginView extends View {
     }
 
     listen() {
+
+        let imgLink;
+        this.mainContent.querySelectorAll('#pick-avatar img').forEach(element => {
+            element.addEventListener('click', () => {
+                imgLink = element.getAttribute("src");
+            })
+        });
         // Écouter sur l'envoi d'une requête
         this.mainContent.querySelector("input[type='submit']").addEventListener('click', e => {
             e.preventDefault();
+            
             // Si la création d'un utilisateur s'effectue avec succès
-            if(this.controller.createUser(this.mainContent))
+            if(this.controller.createUser(this.mainContent, imgLink))
                 new GameView(new GameViewController(this.controller.currentModel));
         })
     }
