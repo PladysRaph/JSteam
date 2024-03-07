@@ -61,7 +61,7 @@ export default class GameView extends View {
     // Gérer le rendu de la vue
     render() {
         this.#context2D.clearRect(0, 0, this.#canvas.width, this.#canvas.height);
-        this.#context2D.drawImage(this.#currentPlayer.avatar, this.#currentPlayer.x, this.#currentPlayer.y)
+        this.#context2D.drawImage(this.#currentPlayer.avatar, this.#currentPlayer.x, this.#currentPlayer.y, 100, 100)
         requestAnimationFrame(this.render.bind(this));
     }
 
