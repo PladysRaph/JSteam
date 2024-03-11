@@ -1,6 +1,6 @@
 import path from 'path';
 
-export default  {
+export default {
 	// Fichier d'entrée :
 	entry: './src/main.js',
 	// Fichier de sortie :

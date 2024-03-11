@@ -31,15 +31,14 @@ body {
     color: #fff;
 }
 
-#loginForm #avatar #pick-avatar {
-    border: 5px solid lightgrey;
-    border-radius: 5px;
-    height: 50px;
-    cursor: pointer;
+#loginForm #avatar #pick-avatar img {
+   margin-top: 3px;
+   margin-left: 5px;
+   border: 5px solid lightgrey;
 }
 
-#loginForm #avatar #pick-avatar img {
-    padding: 0px;
+#loginForm #avatar #pick-avatar img:hover {
+    border: 5px solid blue;
 }
 
 #loginForm input {

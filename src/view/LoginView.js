@@ -43,19 +43,22 @@ export default class LoginView extends View {
     }
 
     listen() {
-
         let imgLink;
-        this.mainContent.querySelectorAll('#pick-avatar img').forEach(element => {
-            element.addEventListener('click', () => {
-                imgLink = element.getAttribute("src");
+        let imgs = View.mainContent.querySelectorAll('#pick-avatar img');
+
+        for(let i = 0; i < imgs.length; i++) {
+            imgs[i].addEventListener('click', () => {
+                imgLink = imgs[i].getAttribute("src");
+                alert(`Vous avez choisi l'avatar n°${i+1} !`);
             })
-        });
+        }
+
         // Écouter sur l'envoi d'une requête
-        this.mainContent.querySelector("input[type='submit']").addEventListener('click', e => {
+        View.mainContent.querySelector("input[type='submit']").addEventListener('click', e => {
             e.preventDefault();
-            
+
             // Si la création d'un utilisateur s'effectue avec succès
-            if(this.controller.createUser(this.mainContent, imgLink))
+            if(this.controller.createUser(View.mainContent.querySelector('#pseudo').value, imgLink))
                 new GameView(new GameViewController(this.controller.currentModel));
         })
     }

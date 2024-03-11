@@ -1,5 +1,7 @@
-import View from "./View";
+import View from "./View.js";
 
-export default class CreditsView extends View{
-    
+export default class CreditsView extends View {
+    constructor() {
+        super('Crédits...');
+    }
 }

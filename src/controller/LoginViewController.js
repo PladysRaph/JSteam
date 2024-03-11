@@ -4,14 +4,12 @@ import Controller from "./Controller.js";
 
 export default class LoginViewController extends Controller {
 
-   constructor(model) {
+   constructor(model = null) {
     super(model);
    }
 
     // Initialiser un nouveau joueur qui se connecte à une partie
-    createUser(main, imgLink) {
-        let username = main.querySelector('#pseudo').value;
-
+    createUser(username, imgLink) {
         if(username == null || username === '') {
             alert("Nom d'utilisateur vide");
             return false;
