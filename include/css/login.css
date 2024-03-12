@@ -58,3 +58,9 @@ body {
     font-family: 'm6x11';
     font-size: 15px;
 }
+
+select {
+    padding: 10px;
+    border: 0px;
+    border-radius: 5px;
+}

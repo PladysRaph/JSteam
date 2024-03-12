@@ -33,6 +33,13 @@ export default class LoginView extends View {
 
                         <input id="server" type='text' placeholder='Adresse IP:[Port]' disabled>
 
+                        <select>
+                            <option disabled selected>Difficulté</option>
+                            <option>Facile</option>
+                            <option>Moyen</option>
+                            <option>Difficile</option>
+                        </select>
+
                         <input type='submit' value='Se connecter'>
                     </fieldset>
                 </div>
@@ -43,7 +50,7 @@ export default class LoginView extends View {
     }
 
     listen() {
-        let imgLink;
+        let imgLink = '../../assets/img/New Piskel.png';
         let imgs = View.mainContent.querySelectorAll('#pick-avatar img');
 
         for(let i = 0; i < imgs.length; i++) {
