@@ -21,8 +21,8 @@ export default class LoginView extends View {
 
                             +
 
-                                `<img src="../../assets/img/avatar-pick.jpg" width=50 height=50 />
-                                <img src="../../assets/img/New Piskel.png" width=50 height=50 />`
+                                `<img src="../../assets/img/balloonShip.png" width=50 height=50 />
+                                <img src="../../assets/img/pirateShip.png" width=50 height=50 />`
 
                                 +
 
@@ -50,7 +50,7 @@ export default class LoginView extends View {
     }
 
     listen() {
-        let imgLink = '../../assets/img/New Piskel.png';
+        let imgLink = '../../assets/img/pirateShip.png';
         let imgs = View.mainContent.querySelectorAll('#pick-avatar img');
 
         for(let i = 0; i < imgs.length; i++) {
