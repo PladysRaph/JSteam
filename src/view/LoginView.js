@@ -13,7 +13,7 @@ export default class LoginView extends View {
             <form id="loginForm" method='post'>
                 <div id="flex">
                     <fieldset>
-                        <legend>Bienvenue dans le Jeu Super Addictif et Elegant (JSaE)</legend>
+                        <legend>Bienvenue dans JSteam, un 'Shoot Them Up' ambiance Steam Punk</legend>
 
                         <div id="avatar">
                             <p>Choisissez votre avatar</p>
@@ -21,8 +21,9 @@ export default class LoginView extends View {
 
                             +
 
-                                `<img src="../../assets/img/balloonShip.png" width=50 height=50 />
-                                <img src="../../assets/img/pirateShip.png" width=50 height=50 />`
+                                `<img src="../../assets/img/balloon-ship.png" title="Ballon ship" width=50 height=50 />
+                                <img src="../../assets/img/pirate-ship.png" title="Pirate ship" width=50 height=50 />
+                                <img src="../../assets/img/transport-ship.png" title="Transport ship" width=50 height=50 />`
 
                                 +
 
@@ -53,12 +54,12 @@ export default class LoginView extends View {
         let imgLink = '../../assets/img/pirateShip.png';
         let imgs = View.mainContent.querySelectorAll('#pick-avatar img');
 
-        for(let i = 0; i < imgs.length; i++) {
-            imgs[i].addEventListener('click', () => {
-                imgLink = imgs[i].getAttribute("src");
-                alert(`Vous avez choisi l'avatar n°${i+1} !`);
+        imgs.forEach(img => {
+            img.addEventListener('click', () => {
+                imgLink = img.getAttribute("src");
+                alert(`Vous avez choisi le ${img.getAttribute('title')} !`);
             })
-        }
+        });
 
         // Écouter sur l'envoi d'une requête
         View.mainContent.querySelector("input[type='submit']").addEventListener('click', e => {

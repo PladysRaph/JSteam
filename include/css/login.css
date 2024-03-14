@@ -31,10 +31,16 @@ body {
     color: #fff;
 }
 
+#loginForm #avatar #pick-avatar {
+    padding: 5px;
+}
+
 #loginForm #avatar #pick-avatar img {
    margin-top: 3px;
    margin-left: 5px;
    border: 5px solid lightgrey;
+   padding: 5px;
+   cursor: pointer;
 }
 
 #loginForm #avatar #pick-avatar img:hover {
