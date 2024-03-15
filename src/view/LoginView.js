@@ -21,9 +21,9 @@ export default class LoginView extends View {
 
                             +
 
-                                `<img src="../../assets/img/balloon-ship.png" title="Ballon ship" width=50 height=50 />
-                                <img src="../../assets/img/pirate-ship.png" title="Pirate ship" width=50 height=50 />
-                                <img src="../../assets/img/transport-ship.png" title="Transport ship" width=50 height=50 />`
+                                `<img src="/public/assets/img/balloon-ship.png" title="Ballon ship" width=50 height=50 />
+                                <img src="/public/assets/img/pirate-ship.png" title="Pirate ship" width=50 height=50 />
+                                <img src="/public/assets/img/transport-ship.png" title="Transport ship" width=50 height=50 />`
 
                                 +
 
@@ -51,7 +51,7 @@ export default class LoginView extends View {
     }
 
     listen() {
-        let imgLink = '../../assets/img/pirateShip.png';
+        let imgLink = '/public/assets/img/pirate-ship.png';
         let imgs = View.mainContent.querySelectorAll('#pick-avatar img');
 
         imgs.forEach(img => {
@@ -60,6 +60,8 @@ export default class LoginView extends View {
                 alert(`Vous avez choisi le ${img.getAttribute('title')} !`);
             })
         });
+
+        console.log(imgLink);
 
         // Écouter sur l'envoi d'une requête
         View.mainContent.querySelector("input[type='submit']").addEventListener('click', e => {

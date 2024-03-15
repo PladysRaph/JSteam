@@ -7,9 +7,10 @@ export default class Player {
         // Coordonnées du joueur
         this.x = 0;
         this.y = 0;
-        // Facteurs d'accélération
+        // Facteurs de vitesse
         this.xFactor = 0;
         this.yFactor = 0;
+        // Vitesse de base
         this.speed = 1;
     }
 }

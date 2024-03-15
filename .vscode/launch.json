@@ -5,29 +5,19 @@
 	"version": "0.2.0",
 	"configurations": [
 		{
-			"name": "Debug on Chrome",
-			"type": "chrome",
+			"name": "Debug Node.js server",
+			"type": "node",
 			"request": "launch",
-			"url": "http://localhost:8000",
-			"webRoot": "${workspaceFolder}"
+			"cwd": "${workspaceFolder}",
+			"runtimeExecutable": "npm",
+			"runtimeArgs": ["run-script", "server:watch"],
+			"skipFiles": [
+				"<node_internals>/**"
+			],
+			"env": {
+				"PORT": "8000"
+			},	
 		},
-		{
-			"name": "Debug on Firefox",
-			"type": "firefox",
-			"request": "launch",
-			"reAttach": true,
-			"port": 8008,
-			"timeout": 25,
-			"url": "http://localhost:8000",
-			"webRoot": "${workspaceFolder}",
-			"pathMappings": [
-				{
-					"url": "webpack://jsteam/src",
-					"path": "${workspaceFolder}/src"
-				},
-				{ "url": "http://localhost:8000/build", "path": null }
-			]
-		}
 	]
 }
 

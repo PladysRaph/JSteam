@@ -2,17 +2,19 @@
   "name": "jsteam",
   "version": "1.0.0",
   "description": "JSteam (JS + Steam Punk) - Un jeu 'Shoot Them Up' ambiance Steam Punk en mode multijoueur écrit en NodeJS + ExpressJS + Socket.io",
-  "main": "index.js",
+  "main": "src/server/index.js",
   "type": "module",
   "scripts": {
     "test": "node --test",
     "test:watch": "node --test --watch",
-    "build": "webpack --mode=production",
-    "watch": "webpack --mode=development --watch",
-    "start": "webpack serve --mode=development"
+    "client:build": "webpack --mode=production",
+    "client:watch": "webpack --mode=development --watch",
+    "client:start": "webpack serve --mode=development",
+    "server": "node .",
+    "server:watch": "node --watch ."
   },
   "author": [
-  	"Raphael Pladys <raphael.pladys.etu@univ-lille.fr>",
+  "Raphael Pladys <raphael.pladys.etu@univ-lille.fr>",
 	"Florian Delbe <florian.delbe.etu@univ-lille.fr>",
 	"Karim AOULAD-TAYAB <karim.aouladtayab.etu@univ-lille.fr>"
   ],
@@ -26,6 +28,13 @@
     "prettier": "^3.2.5",
     "webpack": "^5.90.2",
     "webpack-cli": "^5.1.4",
-    "webpack-dev-server": "^5.0.2"
+    "webpack-dev-server": "^5.0.2",
+    "webpack-dev-middleware": "^7.0.0",
+    "webpack-hot-middleware": "^2.26.1"
+  },
+  "dependencies": {
+    "express": "^4.18.3",
+    "socket.io": "^4.7.4",
+    "socket.io-client": "^4.7.4"
   }
 }

@@ -1,5 +1,5 @@
 body {
-    background: no-repeat url("../../assets/img/wallpaper_login.jpeg");
+    background: no-repeat url("/public/assets/img/wallpaper_login.jpeg");
     background-position: center center;
     background-attachment: fixed;
     background-size: cover;
