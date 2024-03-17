@@ -51,11 +51,15 @@ export default class GameView extends View {
 			this.#context2D.drawImage(this.#currentPlayer.avatar, this.#currentPlayer.x, this.#currentPlayer.y)
 		});
 
-         // Appuyer sur une touche, gestion des multi-touches supporté (haut-droite appuyés en même temps)
-        this.controller.keyup();
-        
+        // Appuyer sur une touche, gestion des multi-touches supporté (haut-droite appuyés en même temps)
+        addEventListener('keydown', e => {
+            this.controller.keydown(e.code);
+        });
+
         // Relâcher une touche
-        this.controller.keydown();
+        addEventListener('keyup', e => {
+            this.controller.keyup(e.code);
+        });
     }
 
     // Gérer le rendu de la vue

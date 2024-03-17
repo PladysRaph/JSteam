@@ -17,17 +17,21 @@ export default class LoginView extends View {
 
                         <div id="avatar">
                             <p>Choisissez votre avatar</p>
-                            <div id="pick-avatar">`
+                            <div id="pick-avatar">
 
-                            +
+                                <img src="/public/assets/img/balloon-ship.png" title="Ballon ship" width=50 height=50 />
 
-                                `<img src="/public/assets/img/balloon-ship.png" title="Ballon ship" width=50 height=50 />
                                 <img src="/public/assets/img/pirate-ship.png" title="Pirate ship" width=50 height=50 />
-                                <img src="/public/assets/img/transport-ship.png" title="Transport ship" width=50 height=50 />`
 
-                                +
+                                <img src="/public/assets/img/transport-ship.png" title="Transport ship" width=50 height=50 />
 
-                            `</div>
+                            </div>
+
+                            <input type="submit" id="btn-lobby" value="Créer une partie">
+
+                            <div class="dialog-box">
+                                <div></div>
+                            </div>
                         </div>
 
                         <input id="pseudo" type='text' placeholder='Entrez votre pseudo'>
@@ -41,7 +45,7 @@ export default class LoginView extends View {
                             <option>Difficile</option>
                         </select>
 
-                        <input type='submit' value='Se connecter'>
+                        <input id="connect-btn" type='submit' value='Se connecter'>
                     </fieldset>
                 </div>
             </form>`, controller);
@@ -53,22 +57,41 @@ export default class LoginView extends View {
     listen() {
         let imgLink = '/public/assets/img/pirate-ship.png';
         let imgs = View.mainContent.querySelectorAll('#pick-avatar img');
+        let btnLobby = View.mainContent.querySelector('#btn-lobby');
+        let dialog = View.mainContent.querySelector('.dialog-box');
+
+        btnLobby.addEventListener('click', event => {
+            event.preventDefault();
+            dialog.style.display = 'block';
+            dialog.querySelector('div').innerHTML = `
+                <p>Lobby</p>
+            `;
+        });
 
         imgs.forEach(img => {
             img.addEventListener('click', () => {
                 imgLink = img.getAttribute("src");
-                alert(`Vous avez choisi le ${img.getAttribute('title')} !`);
+                dialog.style.display = 'block';
+                dialog.querySelector('div').innerHTML = `<p>Vous avez choisi le ${img.getAttribute('title')} !</p>`;
             })
         });
 
-        console.log(imgLink);
+        window.addEventListener('click', e => {
+            if(e.target == dialog)
+                dialog.style.display = 'none';
+        })
 
         // Écouter sur l'envoi d'une requête
-        View.mainContent.querySelector("input[type='submit']").addEventListener('click', e => {
+        View.mainContent.querySelector('#connect-btn').addEventListener('click', e => {
             e.preventDefault();
 
+            let res = this.controller.createUser(View.mainContent.querySelector('#pseudo').value, imgLink);
+
             // Si la création d'un utilisateur s'effectue avec succès
-            if(this.controller.createUser(View.mainContent.querySelector('#pseudo').value, imgLink))
+            if(res == 1) {
+                dialog.style.display = 'block';
+                dialog.querySelector('div').innerHTML = `<p>Le nom d'utilisateur est vide !</p>`;
+            } else
                 new GameView(new GameViewController(this.controller.currentModel));
         })
     }

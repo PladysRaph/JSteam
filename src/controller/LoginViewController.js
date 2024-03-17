@@ -11,8 +11,7 @@ export default class LoginViewController extends Controller {
     // Initialiser un nouveau joueur qui se connecte à une partie
     createUser(username, imgLink) {
         if(username == null || username === '') {
-            alert("Nom d'utilisateur vide");
-            return false;
+            return 1;
         }
 
         // À changer...
@@ -20,7 +19,7 @@ export default class LoginViewController extends Controller {
 
         this.currentModel = new Player(username, avatar);
 
-        return true;
+        return 0;
     }
 
 }
