@@ -8,7 +8,7 @@ import Track from '../model/Track.js';
 //test pour verifier la création d'Entity
 describe('Create Entity',() =>{
     it('should create a new entity',() =>{
-        const entity = new Entity(100, 100, new Avatar('/public/assets/img/pirate-ship.png'),
+        const entity = new Entity("entity", 100, 100, 1, null,
             [
                 new Track(1, -1, 1)
             ]
@@ -23,15 +23,13 @@ describe('Create Entity',() =>{
         assert.notEqual(entity.speed, undefined);
         assert.notEqual(entity.pattern, null);
         assert.notEqual(entity.pattern, undefined);
-        assert.notEqual(entity.avatar, null);
-        assert.notEqual(entity.avatar, undefined);
     }
     )}
 )
 
 describe('Displace Entity',() =>{
     it('should displace an entity regarding on its Pattern',() =>{
-        const entity = new Entity(200, 200, new Avatar('/public/assets/img/pirate-ship.png'),
+        const entity = new Entity("entity", 200, 200, 1, null,
             [
                 new Track(1, -1, 1)
             ]

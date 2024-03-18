@@ -14,10 +14,7 @@ export default class LoginViewController extends Controller {
             return 1;
         }
 
-        // À changer...
-        let avatar = Avatar.renderImage(imgLink);
-
-        this.currentModel = new Player(username, avatar);
+        this.currentModel = new Player(username, new Avatar(imgLink, 100, 100));
 
         return 0;
     }

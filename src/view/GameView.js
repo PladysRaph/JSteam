@@ -47,8 +47,8 @@ export default class GameView extends View {
         }).observe(this.#canvas);
 
 		// Attendre le chargement complet de l'avatar du joueur
-		this.#currentPlayer.avatar.addEventListener('load', event => {
-			this.#context2D.drawImage(this.#currentPlayer.avatar, this.#currentPlayer.x, this.#currentPlayer.y)
+		this.#currentPlayer.avatar.image.addEventListener('load', event => {
+			this.#context2D.drawImage(this.#currentPlayer.avatar.image, this.#currentPlayer.x, this.#currentPlayer.y)
 		});
 
         // Appuyer sur une touche, gestion des multi-touches supporté (haut-droite appuyés en même temps)
@@ -65,7 +65,7 @@ export default class GameView extends View {
     // Gérer le rendu de la vue
     render() {
         this.#context2D.clearRect(0, 0, this.#canvas.width, this.#canvas.height);
-        this.#context2D.drawImage(this.#currentPlayer.avatar, this.#currentPlayer.x, this.#currentPlayer.y, 100, 100)
+        this.#context2D.drawImage(this.#currentPlayer.avatar.image, this.#currentPlayer.x, this.#currentPlayer.y, this.#currentPlayer.avatar.width, this.#currentPlayer.avatar.height);
         requestAnimationFrame(this.render.bind(this));
     }
 

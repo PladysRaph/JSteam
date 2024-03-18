@@ -1,9 +1,12 @@
 export default class Avatar {
+    image;
+    width;
+    height;
 
-    // Avatar sous format image
-    static renderImage(url) {
-        let image = new Image();
-        image.src = url;
-        return image;
+    constructor(url, width, height) {
+        this.image = new Image();
+        this.image.src = url;
+        this.width = width;
+        this.height = height;
     }
 }
