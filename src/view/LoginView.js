@@ -5,6 +5,12 @@ import View from "./View.js";
 
 export default class LoginView extends View {
 	#controller;
+    #avatarChoiceUser
+    #avatars
+    #username
+    #createLobbyBtn
+    #joinPartyBtn
+    #dialogBox
 
     constructor(controller) {
         // Initialiser la vue
@@ -13,21 +19,17 @@ export default class LoginView extends View {
             <form id="loginForm" method='post'>
                 <div id="flex">
                     <fieldset>
-                        <legend>Bienvenue dans JSteam, un 'Shoot Them Up' ambiance Steam Punk</legend>
+                        <legend>JSteam, un 'Shoot Them Up' ambiance Steam Punk en JS !</legend>
 
                         <div id="avatar">
                             <p>Choisissez votre avatar</p>
                             <div id="pick-avatar">
-
                                 <img src="/public/assets/img/balloon-ship.png" title="Ballon ship" width=50 height=50 />
-
                                 <img src="/public/assets/img/pirate-ship.png" title="Pirate ship" width=50 height=50 />
-
                                 <img src="/public/assets/img/transport-ship.png" title="Transport ship" width=50 height=50 />
-
                             </div>
 
-                            <input type="submit" id="btn-lobby" value="Créer une partie">
+                            <input type="submit" id="btn-lobby" value="Creer une partie">
 
                             <div class="dialog-box">
                                 <div></div>
@@ -36,63 +38,62 @@ export default class LoginView extends View {
 
                         <input id="pseudo" type='text' placeholder='Entrez votre pseudo'>
 
-                        <input id="server" type='text' placeholder='Adresse IP:[Port]' disabled>
+                        <input id="party" type='text' placeholder='Code de la partie (ex: AC16XB)' disabled>
 
-                        <select>
-                            <option disabled selected>Difficulté</option>
-                            <option>Facile</option>
-                            <option>Moyen</option>
-                            <option>Difficile</option>
-                        </select>
-
-                        <input id="connect-btn" type='submit' value='Se connecter'>
+                        <input id="join-party-btn" type='submit' value='Rejoindre une partie'>
                     </fieldset>
                 </div>
             </form>`, controller);
+
+        
+        // Avatar par défaut
+        this.#avatarChoiceUser = '/public/assets/img/pirate-ship.png';
+
+        // Élements de la vue
+        this.#avatars = View.mainContent.querySelectorAll('#pick-avatar img');
+        this.#username = View.mainContent.querySelector('#pseudo');
+        this.#createLobbyBtn = View.mainContent.querySelector('#btn-lobby');
+        this.#joinPartyBtn = View.mainContent.querySelector('#join-party-btn');
+        this.#dialogBox = View.mainContent.querySelector('.dialog-box');
 		
         // Écouteur d'évènements
         this.listen();
     }
 
     listen() {
-        let imgLink = '/public/assets/img/pirate-ship.png';
-        let imgs = View.mainContent.querySelectorAll('#pick-avatar img');
-        let btnLobby = View.mainContent.querySelector('#btn-lobby');
-        let dialog = View.mainContent.querySelector('.dialog-box');
-
-        btnLobby.addEventListener('click', event => {
+        this.#createLobbyBtn.addEventListener('click', event => {
             event.preventDefault();
-            dialog.style.display = 'block';
-            dialog.querySelector('div').innerHTML = `
-                <p>Lobby</p>
-            `;
+            this.controller.showDialogBox(
+                this.#dialogBox,
+                `<p>Lobby</p>
+                <select>
+                    <option disabled selected>Difficulté</option>
+                    <option>Facile</option>
+                    <option>Moyen</option>
+                    <option>Difficile</option>
+                </select>`
+            );
         });
 
-        imgs.forEach(img => {
+        this.#avatars.forEach(img => {
             img.addEventListener('click', () => {
-                imgLink = img.getAttribute("src");
-                dialog.style.display = 'block';
-                dialog.querySelector('div').innerHTML = `<p>Vous avez choisi le ${img.getAttribute('title')} !</p>`;
-            })
+                this.#avatarChoiceUser = this.controller.chooseAvatar(img, this.#dialogBox)
+            });
         });
 
         window.addEventListener('click', e => {
-            if(e.target == dialog)
-                dialog.style.display = 'none';
+            if(e.target == this.#dialogBox)
+                this.controller.hideDialogBox(this.#dialogBox);
         })
 
-        // Écouter sur l'envoi d'une requête
-        View.mainContent.querySelector('#connect-btn').addEventListener('click', e => {
+        // Démarrer une partie
+        this.#joinPartyBtn.addEventListener('click', e => {
             e.preventDefault();
-
-            let res = this.controller.createUser(View.mainContent.querySelector('#pseudo').value, imgLink);
-
-            // Si la création d'un utilisateur s'effectue avec succès
-            if(res == 1) {
-                dialog.style.display = 'block';
-                dialog.querySelector('div').innerHTML = `<p>Le nom d'utilisateur est vide !</p>`;
-            } else
-                new GameView(new GameViewController(this.controller.currentModel));
+            this.controller.joinParty(
+                this.#dialogBox,
+                this.#username.value,
+                this.#avatarChoiceUser
+            );
         })
     }
 

@@ -6,6 +6,13 @@ export default class GameViewController extends Controller {
         super(model);
     }
 
+    handleResponsiveCanvas(canvas) {
+        new ResizeObserver(() => {
+            canvas.width = canvas.clientWidth;
+            canvas.height = canvas.clientHeight;
+        }).observe(canvas);
+    }
+
     // Appuyer sur une touche
     keydown(keyCode) {
         switch (keyCode) {

@@ -41,10 +41,7 @@ export default class GameView extends View {
     listen() {
 
         // Responsive view (canvas)
-        new ResizeObserver(() => {
-            this.#canvas.width = this.#canvas.clientWidth;
-            this.#canvas.height = this.#canvas.clientHeight;
-        }).observe(this.#canvas);
+        this.controller.handleResponsiveCanvas(this.#canvas);
 
 		// Attendre le chargement complet de l'avatar du joueur
 		this.#currentPlayer.avatar.image.addEventListener('load', event => {
