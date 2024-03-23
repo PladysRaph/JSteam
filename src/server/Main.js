@@ -1,6 +1,6 @@
-import Server from './server.js'
+import JSteamServer from './JSteamServer.js'
 import express from 'express';
-import addWebpackMiddleware from './webpack_middleware.js';
+import addWebpackMiddleware from './WebpackMiddleware.js';
 
 let app = express();
 
@@ -8,4 +8,4 @@ let app = express();
 addWebpackMiddleware(app);
 
 // Démarrer un serveur Express.js
-new Server(app);
+new JSteamServer(app);

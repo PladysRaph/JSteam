@@ -1,16 +1,10 @@
-export default class Player {
+import Entity from './Entity.js'
+
+export default class Player extends Entity {
     constructor(name, avatar) {
-        // Nom du joueur
-        this.name = name;
-        // Avatar du joueur
-        this.avatar = avatar;
-        // Coordonnées du joueur
-        this.x = 0;
-        this.y = 0;
+        super(name, 0, 0, 1, avatar);
         // Facteurs de vitesse
         this.xFactor = 0;
         this.yFactor = 0;
-        // Vitesse de base
-        this.speed = 1;
     }
 }

@@ -1,36 +1,13 @@
-import Track from "./Track.js";
-
 export default class Entity {
-    name;
-    x;
-    y;
-    speed;
-    avatar;
-    pattern;
-
-    constructor(name, x, y, speed, avatar, pattern){
+    constructor(name, x, y, speed, avatar) {
+        // Nom de l'entité
         this.name=name;
+        // Coordonnées de l'entité
         this.x = x;
         this.y = y;
+        // Vitesse
         this.speed = speed;
+        // Avatar du joueur
         this.avatar = avatar;
-        if (!Array.isArray(pattern)) {
-            this.pattern = [
-                new Track(-1, 0, 1)
-            ]
-        } else this.pattern=pattern;
     }
-
-    skipTime(time) {
-        var xtemp = 0;
-        var ytemp = 0;
-        for (let index = 0; index < this.pattern.length; index++) {
-            xtemp += this.pattern[index].x;
-            ytemp += this.pattern[index].y;
-            
-        }
-        this.x += xtemp*time;
-        this.y += ytemp*time;
-    }
-
 }

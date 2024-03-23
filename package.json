@@ -2,7 +2,7 @@
   "name": "jsteam",
   "version": "1.0.0",
   "description": "JSteam (JS + Steam Punk) - Un jeu 'Shoot Them Up' ambiance Steam Punk en mode multijoueur écrit en NodeJS + ExpressJS + Socket.io",
-  "main": "src/server/index.js",
+  "main": "src/server/Main.js",
   "type": "module",
   "scripts": {
     "test": "node --test",
@@ -14,9 +14,9 @@
     "server:watch": "node --watch ."
   },
   "author": [
-  "Raphael Pladys <raphael.pladys.etu@univ-lille.fr>",
-	"Florian Delbe <florian.delbe.etu@univ-lille.fr>",
-	"Karim AOULAD-TAYAB <karim.aouladtayab.etu@univ-lille.fr>"
+    "Raphael Pladys <raphael.pladys.etu@univ-lille.fr>",
+	  "Florian Delbe <florian.delbe.etu@univ-lille.fr>",
+	  "Karim AOULAD-TAYAB <karim.aouladtayab.etu@univ-lille.fr>"
   ],
   "homepage": "https://gitlab.univ-lille.fr/karim.aouladtayab.etu/sae-2024-groupeG-pladys-delbe-aouladtayab",
   "license": "ISC",

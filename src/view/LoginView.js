@@ -4,7 +4,6 @@ import GameView from "./GameView.js";
 import View from "./View.js";
 
 export default class LoginView extends View {
-	#controller;
     #avatarChoiceUser
     #avatars
     #username

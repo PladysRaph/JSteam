@@ -2,11 +2,11 @@ import path from 'path';
 
 export default {
 	// Fichier d'entrée :
-	entry: './src/main.js',
+	entry: './src/App.js',
 	// Fichier de sortie :
 	output: {
 		path: path.resolve(import.meta.dirname, './build'),
-		filename: 'main.bundle.js',
+		filename: 'App.bundle.js',
 		publicPath: '/build/',
 	},
 	// compatibilité anciens navigateurs (si besoin du support de IE11 ou android 4.4)
