@@ -14,11 +14,22 @@ export default class Enemy extends Entity {
     skipTime(time) {
         let xtemp = 0;
         let ytemp = 0;
-        for (let i = 0; i < this.pattern.length; i++) {
-            xtemp += this.pattern[i].x;
-            ytemp += this.pattern[i].y;
+        let timeLeft = time;
+        while(timeLeft > 0) {
+            for (let i = 0; i < this.pattern.length; i++) {
+                if (timeLeft - this.pattern[i].time > 0) {
+                    xtemp += this.pattern[i].x * this.pattern[i].time;
+                    ytemp += this.pattern[i].y * this.pattern[i].time;
+                    timeLeft -= this.pattern[i].time;
+                } else {
+                    xtemp += this.pattern[i].x * timeLeft;
+                    ytemp += this.pattern[i].y * timeLeft;
+                    timeLeft = 0;
+                    break;
+                }
+            }
         }
-        this.x += xtemp*time;
-        this.y += ytemp*time;
+        this.x += xtemp;
+        this.y += ytemp;
     }
 }

@@ -33,3 +33,25 @@ describe('Create Ennemy',() => {
     )}
 )
 
+describe('Displace Ennemy',() => {
+    it('shoud displace an ennemy', () =>{
+        const enemy1 = new Ennemy(
+            'Monster 1',
+            new Avatar('public/assets/img/balloon-ship.png', 100, 100),
+            200, 0,
+            1,
+            null);
+        const track = new Track(-1, 0, 1);
+
+        // Vérifie la position de base de e
+        assert.equal(enemy1.x, 200);
+        assert.equal(enemy1.y, 0);
+
+        // Déplace l'enemy comme s'il avait bougé pendant 100 frames puis vérifie que le déplacement a bien été effectué
+        enemy1.skipTime(100);
+        assert.equal(enemy1.x, 100);
+        assert.equal(enemy1.y, 0);
+    }
+)}
+)
+
