@@ -1,3 +1,5 @@
+import Avatar from "../model/Avatar.js";
+import Enemy from "../model/Enemy.js";
 import Controller from "./Controller.js";
 
 export default class GameViewController extends Controller {
@@ -20,11 +22,11 @@ export default class GameViewController extends Controller {
     }
 
     // Dessiner une image
-    drawImage(canvas, img) {
+    drawImage(canvas, img, x = this.currentModel.x, y = this.currentModel.y) {
         canvas.drawImage(
             img,
-            this.currentModel.x,
-            this.currentModel.y,
+            x,
+            y,
             img.width,
             img.height);
     }
@@ -73,22 +75,20 @@ export default class GameViewController extends Controller {
     // Relâche une touche arrêter le déplacement
     keyup(keyCode) {
         switch (keyCode) {
-            case 'ArrowRight':
+            case 'KeyD':
                 this.currentModel.xFactor = 0;
                 break;
-            case 'ArrowLeft':
+            case 'KeyA':
                 this.currentModel.xFactor = 0;
                 break;
-            case 'ArrowUp':
+            case 'KeyW':
                 this.currentModel.yFactor = 0;
                 break;
-            case 'ArrowDown':
+            case 'KeyS':
                 this.currentModel.yFactor = 0
                 break;
             default:
                 break;
         }
     }
-
-    
 }

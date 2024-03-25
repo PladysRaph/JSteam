@@ -2,7 +2,7 @@ import Entity from './Entity.js'
 import Track from './Track.js';
 
 export default class Enemy extends Entity {
-    constructor(name, avatar, x, y, speed, pattern = null) {
+    constructor(name, x, y, speed, avatar, pattern = null) {
         super(name, x, y, speed, avatar);
         // Pattern de déplacement
         if (!Array.isArray(pattern))
@@ -11,6 +11,7 @@ export default class Enemy extends Entity {
             this.pattern = pattern;
     }
 
+    // Effectue le pattern comme si l'ennemy avait bougé pendant time frames
     skipTime(time) {
         let xtemp = 0;
         let ytemp = 0;

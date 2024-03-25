@@ -13,7 +13,6 @@ describe('Create Ennemy',() => {
                 0, 0,
                 1,
                 null);
-            const track = new Track(-1, 0, 1);
 
             // Vérifie que e est bien crée
             assert.notEqual(enemy1, undefined);
@@ -41,7 +40,6 @@ describe('Displace Ennemy',() => {
             200, 0,
             1,
             null);
-        const track = new Track(-1, 0, 1);
 
         // Vérifie la position de base de e
         assert.equal(enemy1.x, 200);

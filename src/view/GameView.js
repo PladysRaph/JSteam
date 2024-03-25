@@ -1,9 +1,15 @@
+import Avatar from "../model/Avatar.js";
+import Enemy from "../model/Enemy.js";
+import Track from "../model/Track.js";
 import View from "./View.js";
 
 export default class GameView extends View {
-    #avatarImage
+    #avatarImage;
     #canvas;
     #context2D;
+    #enemies;
+    #enemiesImages;
+
     
     constructor(controller) {
         // Initialiser la vue
@@ -18,6 +24,15 @@ export default class GameView extends View {
 		// Canvas de la vue
         this.#canvas = View.mainContent.querySelector('.gameCanvas');
         this.#context2D = this.#canvas.getContext('2d');
+
+        this.#enemies = [
+            new Enemy("pirateExemple", 1500, 300, 1, new Avatar("/public/assets/img/pirate-ship.png", 100, 100), null),
+            new Enemy("balloonExemple", 1000, 200, 2, new Avatar("/public/assets/img/balloon-ship.png", 100, 100), [
+                new Track(-1, -1, 22), new Track(-1, 1, 22), new Track(1, 1, 22), new Track(1, -1, 22)
+            ]),
+            new Enemy("transportExemple", 500, 500, 3, new Avatar("/public/assets/img/transport-ship.png", 100, 100), [
+                new Track(0, 1, 22), new Track(0, -1, 22)
+            ])];
 
         // Écoute sur les évènements de cette vue (redimensionnement de fenêtre, touches directionnelles pour contrôler le joueur)
         this.listen();
@@ -40,6 +55,8 @@ export default class GameView extends View {
 			this.controller.drawImage(this.#context2D, this.#avatarImage);
 		});
 
+
+
         // Appuyer sur une touche, gestion des multi-touches supporté (haut-droite appuyés en même temps)
         addEventListener('keydown', e => {
             this.controller.keydown(e.code);
@@ -55,6 +72,13 @@ export default class GameView extends View {
     render() {
         this.#context2D.clearRect(0, 0, this.#canvas.width, this.#canvas.height);
         this.controller.drawImage(this.#context2D, this.#avatarImage);
+
+        this.#enemies.forEach(element => {
+            let image = new Image(element.avatar.width, element.avatar.height);
+            image.src = element.avatar.url;
+            this.controller.drawImage(this.#context2D, image, element.x, element.y);  
+        });
+
         requestAnimationFrame(this.render.bind(this));
     }
 
