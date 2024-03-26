@@ -3,4 +3,25 @@
     src:
       url("../fonts/m6x11.ttf") format("truetype");
 }
+@font-face {
+  font-family: "personaMenu";
+  src: url("../fonts/Persona5MenuFontPrototype-Regular.ttf") format("truetype");
+}
   
+@font-face {
+  font-family: "personamain";
+  src: url("../fonts/Persona5main.ttf") format("truetype");
+}
+@font-face {
+  font-family: "personahatty";
+  src: url("../fonts/p5hatty-1.ttf") format("truetype");
+}
+@font-face{
+  font-family: "csSourceFont";
+  src: url("../fonts/cs_regular.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "MarioGalaxy2";
+  src: url("../fonts/Mario-Party-Hudson-Font.ttf") format("truetype");
+}

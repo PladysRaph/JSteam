@@ -1,4 +1,24 @@
-#credits {
+#members {
     font-size: x-large;
-    display: inline-block;
+    /*display: flex;*/
+    justify-content: space-evenly;
+    margin: auto;
+    width: 50%;
+    text-align: center;
+
+}
+
+#Nitor {
+    text-align: center;
+    font-family: 'personamain';
+}
+
+#Neyato {
+    text-align: center  ;
+    font-family: 'MarioGalaxy2';
+}
+
+#Mortim {
+    text-align: center;
+    font-family: 'csSourceFont';
 }
