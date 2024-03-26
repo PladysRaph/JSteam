@@ -26,11 +26,11 @@ export default class GameView extends View {
         this.#context2D = this.#canvas.getContext('2d');
 
         this.#enemies = [
-            new Enemy("pirateExemple", 1500, 300, 1, new Avatar("/public/assets/img/pirate-ship.png", 100, 100), null),
-            new Enemy("balloonExemple", 1000, 200, 2, new Avatar("/public/assets/img/balloon-ship.png", 100, 100), [
+            new Enemy("sphere1", 1500, 300, 1, new Avatar("/public/assets/img/dark-sphere.png", 64, 64), null),
+            new Enemy("sphere2", 1000, 200, 2, new Avatar("/public/assets/img/dark-sphere.png", 64, 64), [
                 new Track(-1, -1, 22), new Track(-1, 1, 22), new Track(1, 1, 22), new Track(1, -1, 22)
             ]),
-            new Enemy("transportExemple", 500, 500, 3, new Avatar("/public/assets/img/transport-ship.png", 100, 100), [
+            new Enemy("sphere3", 500, 500, 3, new Avatar("/public/assets/img/dark-sphere.png", 64, 64), [
                 new Track(0, 1, 22), new Track(0, -1, 22)
             ])];
 
@@ -76,7 +76,8 @@ export default class GameView extends View {
         this.#enemies.forEach(element => {
             let image = new Image(element.avatar.width, element.avatar.height);
             image.src = element.avatar.url;
-            this.controller.drawImage(this.#context2D, image, element.x, element.y);  
+            this.controller.drawImage(this.#context2D, image, element.x, element.y); 
+            element.move();
         });
 
         requestAnimationFrame(this.render.bind(this));
