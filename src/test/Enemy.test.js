@@ -1,17 +1,15 @@
 import assert from 'node:assert/strict';
 import {describe, it } from 'node:test';
 
-import Ennemy from '../model/Enemy.js';
+import Enemy from '../model/Enemy.js';
 import Avatar from '../model/Avatar.js'
 import Track from '../model/Track.js'
 
 describe('Create Ennemy',() => {
-        it('shoud create new ennemy', () =>{
-            const enemy1 = new Ennemy(
-                'Monster 1',
+        it('shoud create new enemy', () =>{
+            const enemy1 = new Enemy(
+                'Monster 1', 0, 0, 1,
                 new Avatar('public/assets/img/balloon-ship.png', 100, 100),
-                0, 0,
-                1,
                 null);
 
             // Vérifie que e est bien crée
@@ -25,20 +23,18 @@ describe('Create Ennemy',() => {
             assert.equal(enemy1.avatar.height, 100);
             assert.equal(enemy1.x, 0);
             assert.equal(enemy1.y, 0);
-            assert.equal(enemy1.pattern[0].x, track.x);
-            assert.equal(enemy1.pattern[0].y, track.y);
-            assert.equal(enemy1.pattern[0].time, track.time);
+            assert.equal(enemy1.pattern[0].x, -1);
+            assert.equal(enemy1.pattern[0].y, 0);
+            assert.equal(enemy1.pattern[0].time, 1);
         }
     )}
 )
 
 describe('Displace Ennemy',() => {
-    it('shoud displace an ennemy', () =>{
-        const enemy1 = new Ennemy(
-            'Monster 1',
+    it('shoud displace an enemy', () =>{
+        const enemy1 = new Enemy(
+            'Monster 1', 200, 0, 1,
             new Avatar('public/assets/img/balloon-ship.png', 100, 100),
-            200, 0,
-            1,
             null);
 
         // Vérifie la position de base de e
