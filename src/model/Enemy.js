@@ -1,17 +1,25 @@
+import Avatar from './Avatar.js';
+import Bullet from './Bullet.js';
 import Entity from './Entity.js'
+import PatternFactory from './PatternFactory.js';
 import Track from './Track.js';
 
 export default class Enemy extends Entity {
-    constructor(name, x, y, speed, avatar, pattern = null) {
+    constructor(name, x, y, speed, avatar, pattern = null, bullet = null) {
         super(name, x, y, speed, avatar);
         // Pattern de déplacement
-        if (pattern == null || !Array.isArray(pattern)) {
-            this.pattern = [new Track(-1, 0, 1)];
-        }
+        if (pattern == null || !Array.isArray(pattern))
+            this.pattern = PatternFactory.defaultPattern();
         else
             this.pattern = pattern;
-        console.log(this.pattern);
         this.pathTravelled = 0;
+        if (bullet == null)
+            this.bullet = new Bullet(
+                'Red pearl bullet', x, y, 10,
+                new Avatar('public/assets/img/red-pearl-bullet.png', 16, 16),
+                null, 1, 50);
+        else
+            this.bullet = bullet;
     }
 
     // Effectue le pattern comme si l'Enemy avait bougé pendant time frames, permet de tester le déplacement
@@ -38,5 +46,7 @@ export default class Enemy extends Entity {
             if (this.pathTravelled == currentPathMax) 
                 this.pathTravelled = 0;
         }
+        this.bullet.x = this.x;
+        this.bullet.y = this.y;
     }
 }

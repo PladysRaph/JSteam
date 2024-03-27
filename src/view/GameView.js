@@ -2,14 +2,15 @@ import Avatar from "../model/Avatar.js";
 import Enemy from "../model/Enemy.js";
 import Track from "../model/Track.js";
 import View from "./View.js";
+import Bullet from "../model/Bullet.js";
+import EnemyFactory from "../model/EnemyFactory.js";
+import PatternFactory from "../model/PatternFactory.js";
 
 export default class GameView extends View {
     #avatarImage;
     #canvas;
     #context2D;
     #enemies;
-    #enemiesImages;
-
     
     constructor(controller) {
         // Initialiser la vue
@@ -26,13 +27,21 @@ export default class GameView extends View {
         this.#context2D = this.#canvas.getContext('2d');
 
         this.#enemies = [
-            new Enemy("sphere1", 1500, 300, 1, new Avatar("/public/assets/img/dark-sphere.png", 64, 64), null),
-            new Enemy("sphere2", 1000, 200, 2, new Avatar("/public/assets/img/dark-sphere.png", 64, 64), [
-                new Track(-1, -1, 22), new Track(-1, 1, 22), new Track(1, 1, 22), new Track(1, -1, 22)
-            ]),
-            new Enemy("sphere3", 500, 500, 3, new Avatar("/public/assets/img/dark-sphere.png", 64, 64), [
-                new Track(0, 1, 22), new Track(0, -1, 22)
-            ])];
+            EnemyFactory.defaultEnemy(1500, 300),
+
+            new Enemy("sphere2", 1000, 200, 5,
+                new Avatar("/public/assets/img/dark-sphere.png", 64, 64), 
+                PatternFactory.circlePattern(22, 0, false), 
+                new Bullet('Red pearl bullet', 1000, 200, 10,
+                    new Avatar('public/assets/img/red-pearl-bullet.png', 16, 16), 
+                    PatternFactory.circlePattern(44, 0, false), 1, 20)),
+
+            new Enemy("sphere3", 500, 500, 3, 
+                new Avatar("/public/assets/img/dark-sphere.png", 64, 64), 
+                PatternFactory.snakePattern(22, 0), 
+                new Bullet('Red pearl bullet', 1000, 200, 10,
+                    new Avatar('public/assets/img/red-pearl-bullet.png', 16, 16), 
+                    PatternFactory.circlePattern(10, 20), 1, 90))];
 
         // Écoute sur les évènements de cette vue (redimensionnement de fenêtre, touches directionnelles pour contrôler le joueur)
         this.listen();
@@ -78,6 +87,13 @@ export default class GameView extends View {
             image.src = element.avatar.url;
             this.controller.drawImage(this.#context2D, image, element.x, element.y); 
             element.move();
+
+            for (let index = 0; index < element.bullet.arrX.length; index++) {
+                let bulletImg = new Image(element.bullet.avatar.width, element.bullet.avatar.height);
+                bulletImg.src = element.bullet.avatar.url;
+                this.controller.drawImage(this.#context2D, bulletImg, element.bullet.arrX[index], element.bullet.arrY[index]); 
+            }
+            element.bullet.moveAll();
         });
 
         requestAnimationFrame(this.render.bind(this));
