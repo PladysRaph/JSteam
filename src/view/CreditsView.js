@@ -16,7 +16,7 @@ export default class CreditsView extends View {
                     <h3 id="BestGame"><a target="_blank" href="https://store.steampowered.com/app/1687950/Persona_5_Royal/">Persona 5 royal</a></h3>
                     
                 </div>
-                <div id='Neyato'>
+                <div id='Neyako'>
                     <h1>Raphaël PLADYS</h1>
                     <h2>Neyako</h2>
                     <h3 id="BestGame"><a target="_blank" href="https://www.nintendo.fr/Jeux/Wii/Super-Mario-Galaxy-2-529982.html">Super Mario Galaxy 2</a></h3>

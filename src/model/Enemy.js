@@ -1,6 +1,7 @@
 import Avatar from './Avatar.js';
 import Bullet from './Bullet.js';
 import Entity from './Entity.js'
+import PatternFactory from './PatternFactory.js';
 import Track from './Track.js';
 
 export default class Enemy extends Entity {
@@ -8,7 +9,7 @@ export default class Enemy extends Entity {
         super(name, x, y, speed, avatar);
         // Pattern de déplacement
         if (pattern == null || !Array.isArray(pattern))
-            this.pattern = [new Track(-1, 0, 1)];
+            this.pattern = PatternFactory.defaultPattern();
         else
             this.pattern = pattern;
         this.pathTravelled = 0;

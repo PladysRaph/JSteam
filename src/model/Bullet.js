@@ -1,11 +1,12 @@
 import Entity from './Entity.js';
+import PatternFactory from './PatternFactory.js';
 import Track from './Track.js';
 
 export default class Bullet extends Entity {
     constructor(name, x, y, speed, avatar, pattern = null, damage, cooldown) {
         super(name, x, y, speed, avatar);
         if (pattern == null || !Array.isArray(pattern))
-            this.pattern = [new Track(-1, 0, 1)];
+            this.pattern = PatternFactory.defaultPattern();
         else
             this.pattern = pattern;
         this.damage = damage;
