@@ -9,8 +9,7 @@ describe('Create Bullet',() => {
         it('should create new bullet', () =>{
             const bullet = new Bullet(
                 'Bullet 1', 0, 0, 10,
-                new Avatar('public/assets/img/red-pearl-bullet.png', 32, 32),
-                null, 1, 500);
+                new Avatar('public/assets/img/red-pearl-bullet.png', 32, 32), 1, 500);
 
             // Vérifie que bulllet est bien créé
             assert.notEqual(bullet, undefined);
@@ -31,8 +30,7 @@ describe('Displace Bullet',() => {
     it('should displace a bullet', () =>{
         const bullet = new Bullet(
             'Bullet 1', 200, 0, 1,
-            new Avatar('public/assets/img/red-pearl-bullet.png', 32, 32),
-            null, 1, 50);
+            new Avatar('public/assets/img/red-pearl-bullet.png', 32, 32), 1, 50);
 
         // Vérifie la position de base du bullet
         assert.equal(bullet.x, 200);

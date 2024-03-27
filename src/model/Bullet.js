@@ -4,9 +4,10 @@ import Track from './Track.js';
 export default class Bullet extends Entity {
     constructor(name, x, y, speed, avatar, pattern = null, damage, cooldown) {
         super(name, x, y, speed, avatar);
-        if (pattern == null || !Array.isArray(pattern)) {
+        if (pattern == null || !Array.isArray(pattern))
             this.pattern = [new Track(-1, 0, 1)];
-        }
+        else
+            this.pattern = pattern;
         this.damage = damage;
         this.cooldown = cooldown;
         this.release = cooldown;

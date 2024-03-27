@@ -6,11 +6,10 @@ import Avatar from '../model/Avatar.js'
 import Track from '../model/Track.js'
 
 describe('Create Ennemy',() => {
-        it('shoud create new enemy', () =>{
+        it('should create new enemy', () =>{
             const enemy1 = new Enemy(
                 'Monster 1', 0, 0, 1,
-                new Avatar('public/assets/img/balloon-ship.png', 100, 100),
-                null);
+                new Avatar('public/assets/img/balloon-ship.png', 100, 100));
 
             // Vérifie que e est bien crée
             assert.notEqual(enemy1, undefined);
@@ -31,11 +30,10 @@ describe('Create Ennemy',() => {
 )
 
 describe('Displace Ennemy',() => {
-    it('shoud displace an enemy', () =>{
+    it('should displace an enemy', () =>{
         const enemy1 = new Enemy(
             'Monster 1', 200, 0, 1,
-            new Avatar('public/assets/img/balloon-ship.png', 100, 100),
-            null);
+            new Avatar('public/assets/img/balloon-ship.png', 100, 100));
 
         // Vérifie la position de base de e
         assert.equal(enemy1.x, 200);
