@@ -1,6 +1,6 @@
-import LoginView from "../view/LoginView";
-import Controller from "./Controller";
-import LoginViewController from "./LoginViewController";
+import LoginView from "../view/LoginView.js";
+import Controller from "./Controller.js";
+import LoginViewController from "./LoginViewController.js";
 
 export default class CreditsViewController extends Controller{
     constructor(model=null){
