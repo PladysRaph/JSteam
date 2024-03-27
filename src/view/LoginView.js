@@ -1,13 +1,12 @@
-import LoginViewController from "../controller/LoginViewController.js";
-import GameViewController from "../controller/GameViewController.js";
-import GameView from "./GameView.js";
 import View from "./View.js";
 
 export default class LoginView extends View {
     #avatarChoiceUser
     #avatars
     #username
-    #createLobbyBtn
+    #party
+    #difficulty
+    #createPartyBtn
     #joinPartyBtn
     #dialogBox
 
@@ -28,8 +27,6 @@ export default class LoginView extends View {
                                 <img src="/public/assets/img/transport-ship.png" title="Transport ship" width=50 height=50 />
                             </div>
 
-                            <input type="submit" id="btn-lobby" value="Creer une partie">
-
                             <div class="dialog-box">
                                 <div></div>
                             </div>
@@ -37,9 +34,19 @@ export default class LoginView extends View {
 
                         <input id="pseudo" type='text' placeholder='Entrez votre pseudo'>
 
-                        <input id="party" type='text' placeholder='Code de la partie (ex: AC16XB)' disabled>
+                        <input id="party" type='text' placeholder='Code de la partie (ex: AC16XB)' maxlength="6">
 
-                        <input id="join-party-btn" type='submit' value='Rejoindre une partie'>
+                        <select id="difficulty">
+                            <option disabled selected>Difficulté</option>
+                            <option>Facile</option>
+                            <option>Moyen</option>
+                            <option>Difficile</option>
+                        </select>
+
+                        <div id="flex-btn-div">
+                            <input id="join-party-btn" type='submit' value='Rejoindre une partie'>
+                            <input id="create-party-btn" type='submit' value='Creer une partie'>
+                        </div>
                     </fieldset>
                 </div>
             </form>`, controller);
@@ -51,8 +58,10 @@ export default class LoginView extends View {
         // Élements de la vue
         this.#avatars = View.mainContent.querySelectorAll('#pick-avatar img');
         this.#username = View.mainContent.querySelector('#pseudo');
-        this.#createLobbyBtn = View.mainContent.querySelector('#btn-lobby');
+        this.#party = View.mainContent.querySelector('#party');
+        this.#difficulty = View.mainContent.querySelector('#difficulty');
         this.#joinPartyBtn = View.mainContent.querySelector('#join-party-btn');
+        this.#createPartyBtn = View.mainContent.querySelector('#create-party-btn');
         this.#dialogBox = View.mainContent.querySelector('.dialog-box');
 		
         // Écouteur d'évènements
@@ -60,30 +69,15 @@ export default class LoginView extends View {
     }
 
     listen() {
-        this.#createLobbyBtn.addEventListener('click', event => {
-            event.preventDefault();
-            this.controller.showDialogBox(
-                this.#dialogBox,
-                `<p>Lobby</p>
-                <select>
-                    <option disabled selected>Difficulté</option>
-                    <option>Facile</option>
-                    <option>Moyen</option>
-                    <option>Difficile</option>
-                </select>`
-            );
-        });
-
+        // Système de sélection d'avatar
         this.#avatars.forEach(img => {
             img.addEventListener('click', () => {
                 this.#avatarChoiceUser = this.controller.chooseAvatar(img, this.#dialogBox)
             });
         });
 
-        window.addEventListener('click', e => {
-            if(e.target == this.#dialogBox)
-                this.controller.hideDialogBox(this.#dialogBox);
-        })
+        // Cacher la boîte de dialogue
+        window.onclick = e => this.controller.hideDialogBox(e, this.#dialogBox);
 
         // Démarrer une partie
         this.#joinPartyBtn.addEventListener('click', e => {
@@ -91,9 +85,23 @@ export default class LoginView extends View {
             this.controller.joinParty(
                 this.#dialogBox,
                 this.#username.value,
+                this.#party.value,
                 this.#avatarChoiceUser
             );
         })
+
+        // Créer une partie
+        this.#createPartyBtn.addEventListener('click', e => {
+            e.preventDefault();
+            let {id, btn} = this.controller.createParty(
+                this.#dialogBox,
+                this.#username.value,
+                this.#avatarChoiceUser,
+                this.#difficulty.value
+            );
+
+            btn.addEventListener('click', e => this.controller.startGame(id));
+        });
     }
 
 }
