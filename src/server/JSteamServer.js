@@ -14,7 +14,7 @@ export default class JSteamServer {
 		});
 		this.socketServer = new IOServer(this.httpServer);
 		this.handleSocketConnection();
-		this.difficultyParties = [];
+		this.parties = new Map();
 	}
 
 	routes() {
@@ -32,21 +32,37 @@ export default class JSteamServer {
 	handleSocketConnection() {
 		this.socketServer.on('connection', socket => {
 
-			socket.on('create party', (id, difficulty) => {
-				// L'utilisateur créé la room et la rejoint
-				this.difficultyParties.push({
-					"id": id,
-					"difficulty":  difficulty
+			socket.on('create party', partyInfo => {
+				this.parties.set(partyInfo.id, {
+					"id": partyInfo.id,
+					"owner": partyInfo.owner,
+					"difficulty": partyInfo.difficulty,
+					"players": [
+						{
+							"username": partyInfo.owner.username,
+							"avatar": partyInfo.owner.avatar
+						}
+					]
 				});
-				socket.join(id);
+				// L'utilisateur créé la room et la rejoint
+				socket.join(partyInfo.id);
 			});
 
 			socket.on('join party', data => {
 				socket.join(data.id);
-				this.socketServer.to(data.id).emit('un nouveau joueur rejoint la partie', {
-					"avatar_url": data.model.player.avatar.url,
-					"username": data.model.player.name
+				let roomInfo = this.parties.get(data.id);
+				
+				this.parties.set(data.id, {
+					"id": data.id,
+					"owner": roomInfo.owner,
+					"difficulty": roomInfo.difficulty,
+					"players": roomInfo.players.concat([{
+						"username": data.model.player.name,
+						"avatar": data.model.player.avatar.url
+					}])
 				});
+
+				this.socketServer.to(data.id).emit('un nouveau joueur rejoint la partie', this.parties.get(data.id));
 			});
 
 			socket.on('start game', idRoom => {

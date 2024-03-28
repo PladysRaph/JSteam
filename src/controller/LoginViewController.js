@@ -30,7 +30,6 @@ export default class LoginViewController extends Controller {
             else
                 res += String.fromCharCode(65 + offsets[i]%26);
         }
-
         return res;
     }
 
@@ -73,36 +72,49 @@ export default class LoginViewController extends Controller {
         return true;
     }
 
-    // Salle d'attente (lobby) de la partie
-    lobbyWaiting(dialogBox) {
-        this.socketClient.on('un nouveau joueur rejoint la partie', playerInfo => {
-            // Créer une nouvelle ligne dans le tableau
-            let tr = this.createElement('tr', null);
-
-            let tdAvatar = this.createElement('td', null);
-            tdAvatar.appendChild(
-                this.createElement(
-                    'img',
-                    null,
-                    {
-                        'src': playerInfo.avatar_url,
-                        'width': 50
-                    },
-                )
-            )
-                        
-            tr.appendChild(tdAvatar);
-            tr.appendChild(this.createElement('td', playerInfo.username));
-
-            dialogBox.querySelector('div table tbody').appendChild(tr);
-        });
-    }
-
     // Démarrer une partie
     startGame(id) {
         this.socketClient.emit('start game', id);
         new GameView(new GameViewController(this.currentModel));
     }
+
+    // Lobby par défaut (sans joueurs)
+    defaultLobby(dialogBox, id, isOwner) {
+        this.showDialogBox(dialogBox, `
+            <p>Voici le code pour inviter vos amis : ${id}</p>
+            <p>Les joueurs connectés au lobby :</p>
+            <div>
+                <table>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+            ${isOwner ? '<button id="start-game">Commencer la partie</button>' : ''}`);
+        window.onclick = undefined;
+    }
+
+    addPlayerAtLobby(dialogBox, username, avatar) {
+        // Créer une nouvelle ligne dans le tableau
+        let tr = this.createElement('tr', null);
+
+        let tdAvatar = this.createElement('td', null);
+        tdAvatar.appendChild(
+            this.createElement(
+                'img',
+                null,
+                {
+                    'src': avatar,
+                    'width': 50
+                },
+            )
+        )
+                    
+        tr.appendChild(tdAvatar);
+        tr.appendChild(this.createElement('td', username));
+
+        dialogBox.querySelector('div table tbody').appendChild(tr);
+    }
+
 
     // Rejoindre une partie
     joinParty(dialogBox, username, partyID, avatarChoiceUser) {
@@ -118,6 +130,13 @@ export default class LoginViewController extends Controller {
                 }
             });
 
+            this.socketClient.on('un nouveau joueur rejoint la partie', info => {
+                this.defaultLobby(dialogBox, partyID, false);
+                info.players.forEach(player => {
+                    this.addPlayerAtLobby(dialogBox, player.username, player.avatar);
+                });
+            });
+
             this.socketClient.on('la partie commence', () => {
                 new GameView(new GameViewController(this.currentModel));
             })
@@ -130,34 +149,32 @@ export default class LoginViewController extends Controller {
             this.showDialogBox(dialogBox, `<p>Le nom d'utilisateur est vide !</p>`);
         else {
             let id = this.generateID();
-            this.socketClient.emit(
-                'create party', 
-                id, 
-                difficulty === 'Difficulté' ? 'Facile' : difficulty);
 
-            this.showDialogBox(dialogBox, `
-                <p>Voici le code pour inviter vos amis : ${id}</p>
-                <p>Les joueurs connectés au lobby :</p>
-                <div>
-                    <table>
-                        <tbody>
-                            <tr>
-                                <td><img src="${avatarChoiceUser}" width=50></td>
-                                <td>${username}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <button id="start-game">Commencer la partie</button>
-            `);
+            let partyInfo = {
+                'id': id,
+                'owner': {
+                    'username': username,
+                    'avatar': avatarChoiceUser
+                },
+                'difficulty': 'Difficulté' ? 'Facile' : difficulty
+            };
 
-            this.lobbyWaiting(dialogBox);
-            window.onclick = undefined;
+            this.socketClient.emit('create party', partyInfo);
+
+            this.defaultLobby(dialogBox, id, true);
+
+            // On ajoute l'owner de la partie au préalable
+            this.addPlayerAtLobby(dialogBox, username, avatarChoiceUser);
+
+            this.socketClient.on('un nouveau joueur rejoint la partie', partyInfo => {
+                let lastPlayer = partyInfo.players.slice(-1)[0]
+                this.addPlayerAtLobby(dialogBox, lastPlayer.username, lastPlayer.avatar);
+            });
+
             return {
                 'id': id,
                 'btn': View.mainContent.querySelector('#start-game'),
             }
-
         }
     }
 

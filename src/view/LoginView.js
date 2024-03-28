@@ -88,6 +88,7 @@ export default class LoginView extends View {
                 this.#party.value,
                 this.#avatarChoiceUser
             );
+            
         })
 
         // Créer une partie
@@ -99,7 +100,6 @@ export default class LoginView extends View {
                 this.#avatarChoiceUser,
                 this.#difficulty.value
             );
-
             btn.addEventListener('click', e => this.controller.startGame(id));
         });
     }
