@@ -73,18 +73,9 @@ export default class LoginViewController extends Controller {
     }
 
     // Démarrer une partie
-    startGame(event, dialogBox, id) {
-        event.preventDefault();
-
+    startGame(id) {
         this.socketClient.emit('start game', id);
-
-        this.socketClient.on('le nombre de joueurs doit être de 2 minimum', () => {
-            dialogBox.querySelector('div').innerHTML += '<p id="warning-message-dialog-box">Le nombre de joueurs doit être de 2 au minimum</p>';
-        });
-
-        this.socketClient.on('la partie commence', () => {
-            new GameView(new GameViewController(this.currentModel));
-        });
+        new GameView(new GameViewController(this.player));
     }
 
     // Lobby par défaut (sans joueurs)
@@ -135,7 +126,7 @@ export default class LoginViewController extends Controller {
             this.socketClient.emit('join party', {
                 "id": partyID.toUpperCase(),
                 "model": {
-                    "player": this.currentModel
+                    "player": this.player
                 }
             });
 
@@ -190,9 +181,6 @@ export default class LoginViewController extends Controller {
             this.addPlayerAtLobby(dialogBox, username, avatarChoiceUser);
 
             this.socketClient.on('un nouveau joueur rejoint la partie', partyInfo => {
-                let warningMessage = View.mainContent.querySelector('#warning-message-dialog-box');
-                if(warningMessage != null)
-                    warningMessage.innerHTML = '';
                 let lastPlayer = partyInfo.players.slice(-1)[0]
                 this.addPlayerAtLobby(dialogBox, lastPlayer.username, lastPlayer.avatar);
             });

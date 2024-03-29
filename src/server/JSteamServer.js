@@ -89,10 +89,7 @@ export default class JSteamServer {
 			});
 
 			socket.on('start game', idRoom => {
-				if(this.parties.get(idRoom).players.length < 2) {
-					this.socketServer.emit('le nombre de joueurs doit être de 2 minimum');
-				} else
-					this.socketServer.to(idRoom).emit('la partie commence');
+				this.socketServer.to(idRoom).emit('la partie commence');
 			});
 
 			socket.on("disconnect", () => {
