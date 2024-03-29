@@ -10,7 +10,6 @@ export default class GameView extends View {
     #avatarImage;
     #canvas;
     #context2D;
-    #enemies;
     
     constructor(controller) {
         // Initialiser la vue
@@ -28,9 +27,6 @@ export default class GameView extends View {
 		// Canvas de la vue
         this.#canvas = View.mainContent.querySelector('.gameCanvas');
         this.#context2D = this.#canvas.getContext('2d');
-
-        // Créer les ennemis
-        this.#enemies = this.controller.enemies;
 
         // Écoute sur les évènements de cette vue (redimensionnement de fenêtre, touches directionnelles pour contrôler le joueur)
         this.listen();
@@ -69,23 +65,9 @@ export default class GameView extends View {
     // Gérer le rendu de la vue
     render() {
         this.#context2D.clearRect(0, 0, this.#canvas.width, this.#canvas.height);
-        this.controller.drawImage(this.#context2D, this.#avatarImage);
-        this.#enemies.forEach(element => {
-            let image = new Image(element.avatar.width, element.avatar.height);
-            image.src = element.avatar.url;
-            this.controller.drawImage(this.#context2D, image, element.x, element.y); 
-            element.move();
-
-            for (let index = 0; index < element.bullet.arrX.length; index++) {
-                let bulletImg = new Image(element.bullet.avatar.width, element.bullet.avatar.height);
-                bulletImg.src = element.bullet.avatar.url;
-                this.controller.drawImage(this.#context2D, bulletImg, element.bullet.arrX[index], element.bullet.arrY[index]); 
-            }
-            element.bullet.moveAll();
-        });
-
+        this.controller.drawEnemies(this.#context2D);
+        this.controller.drawPlayer(this.#context2D);
         this.controller.drawHealthbar(this.#context2D, 10, 10, 210, 20);
-
         requestAnimationFrame(this.render.bind(this));
     }
 

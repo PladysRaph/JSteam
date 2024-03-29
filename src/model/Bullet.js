@@ -57,9 +57,9 @@ export default class Bullet extends Entity {
     }
 
     // Déplace tout les Bullets et les crée quand besoin
-    moveAll() {
+    moveAll(createNew = true) {
         // S'il est temps qu'on envoie un nouveau bullet, on ajoute les informations nécessaires et on reset le timer
-        if (this.release == this.cooldown) {
+        if (createNew && this.release >= this.cooldown) {
             this.pathTravelled.push(0);
             this.arrX.push(this.x);
             this.arrY.push(this.y);

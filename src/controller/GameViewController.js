@@ -50,6 +50,36 @@ export default class GameViewController extends Controller {
         return res;
     }
 
+    // Dessiner les Images du joueur
+    drawPlayer(ctx) {
+        let image = new Image(this.currentModel.avatar.width, this.currentModel.avatar.height);
+        image.src = this.currentModel.avatar.url;
+        this.drawImage(ctx, image);
+        for (let index = 0; index < this.currentModel.bullet.arrX.length; index++) {
+            let bulletImg = new Image(this.currentModel.bullet.avatar.width, this.currentModel.bullet.avatar.height);
+            bulletImg.src = this.currentModel.bullet.avatar.url;
+            this.drawImage(ctx, bulletImg, this.currentModel.bullet.arrX[index], this.currentModel.bullet.arrY[index]); 
+        }
+        this.currentModel.bullet.moveAll(this.currentModel.isShooting);
+    }
+
+    // Desiner les Images des ennemis
+    drawEnemies(ctx) {
+        this.enemies.forEach(element => {
+            let image = new Image(element.avatar.width, element.avatar.height);
+            image.src = element.avatar.url;
+            this.drawImage(ctx, image, element.x, element.y); 
+            element.move();
+
+            for (let index = 0; index < element.bullet.arrX.length; index++) {
+                let bulletImg = new Image(element.bullet.avatar.width, element.bullet.avatar.height);
+                bulletImg.src = element.bullet.avatar.url;
+                this.drawImage(ctx, bulletImg, element.bullet.arrX[index], element.bullet.arrY[index]); 
+            }
+            element.bullet.moveAll();
+        });
+    }
+
     // Dessiner une image
     drawImage(canvas, img, x = this.currentModel.x, y = this.currentModel.y) {
         canvas.drawImage(
@@ -101,10 +131,10 @@ export default class GameViewController extends Controller {
         // Définir un ratio d'hitbox pour les collisions
         let hitbox = 0.8;
 
-        // Vérifier que le joueur ne touche ni un ennemi ni une balle
         let playerWidth = this.currentModel.avatar.width;
         let playerHeight = this.currentModel.avatar.height;
         this.enemies.forEach(element => {
+            // Fait perdre des vies au joueur s'il se fait toucher par l'ennemi ou les balles de l'ennemi
             if (this.currentModel.x + playerWidth * ((1-hitbox)/2) < element.x + element.avatar.width
                 && this.currentModel.x + playerWidth * ((1+hitbox)/2) > element.x
                 && this.currentModel.y + playerHeight * ((1-hitbox)/2) < element.y + element.avatar.height
@@ -120,7 +150,24 @@ export default class GameViewController extends Controller {
                         this.currentModel.hp -= element.bullet.damage;
                 }
             }
+            // Fait perdre des vies aux ennemis s'ils sont touchés par les balles du joueur
+            for (let index = 0; index < this.currentModel.bullet.arrX.length; index++) {
+                if (element.x < this.currentModel.bullet.arrX[index] + this.currentModel.bullet.avatar.width
+                    && element.x + element.avatar.width > this.currentModel.bullet.arrX[index]
+                    && element.y < this.currentModel.bullet.arrY[index] + this.currentModel.bullet.avatar.height
+                    && element.y + element.avatar.height > this.currentModel.bullet.arrY[index]) {
+                        this.currentModel.bullet.delete(index);
+                        element.hp -= this.currentModel.bullet.damage;
+                }
+            }
         });
+
+        this.enemies = this.enemies.filter(enemy => {
+            if (enemy.hp >= 0) return true;
+            else return false;
+        });
+
+        // Retour au lobby si toutes les vies sont perdues
         if (this.currentModel.hp <= 0)  {
             new LoginView(new LoginViewController(this.currentModel));
             this.currentModel.hp = 50;
@@ -131,6 +178,8 @@ export default class GameViewController extends Controller {
     move(canvas) {
         this.currentModel.x += this.currentModel.xFactor;
         this.currentModel.y += this.currentModel.yFactor;
+        this.currentModel.bullet.x = this.currentModel.x + this.currentModel.avatar.width;
+        this.currentModel.bullet.y = this.currentModel.y + this.currentModel.avatar.height/2;
         this.handleCollisions(canvas);
     }
 
@@ -142,7 +191,7 @@ export default class GameViewController extends Controller {
         });
     }
 
-    // Appuyer sur une touche pour se déplacer
+    // Appuyer sur une touche pour se déplacer et/ou tirer
     keydown(keyCode) {
         switch (keyCode) {
             case 'KeyD':
@@ -158,13 +207,14 @@ export default class GameViewController extends Controller {
                 this.currentModel.yFactor = this.currentModel.speed;
                 break;
             case 'Space':
+                this.currentModel.isShooting = true;
                 break;
             default:
                 break;
         }
     }
 
-    // Relâche une touche arrêter le déplacement
+    // Relâche une touche arrêter le déplacement et/ou les tirs
     keyup(keyCode) {
         switch (keyCode) {
             case 'KeyD':
@@ -180,6 +230,7 @@ export default class GameViewController extends Controller {
                 this.currentModel.yFactor = 0
                 break;
             case 'Space':
+                this.currentModel.isShooting = false;
                 break;
             default:
                 break;

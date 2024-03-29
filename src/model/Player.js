@@ -1,6 +1,8 @@
 import Avatar from './Avatar.js';
 import Bullet from './Bullet.js';
 import Entity from './Entity.js'
+import PatternFactory from './PatternFactory.js';
+import Track from './Track.js';
 
 export default class Player extends Entity {
     constructor(name, avatar, bullet = null) {
@@ -12,9 +14,11 @@ export default class Player extends Entity {
         this.yFactor = 0;
         // Balle qu'utilise le joueur
         if (bullet == null) 
-            this.bullet = new Bullet('Red pearl bullet', this.x, this.y, 10,
+            this.bullet = new Bullet('Red pearl bullet', this.x, this.y - this.avatar.height/2, 10,
                 new Avatar('public/assets/img/red-pearl-bullet.png', 16, 16),
-                null, 1, 50);
+                [new Track(1, 0, 1)], 5, 20);
         else this.bullet = bullet;
+        // Indique si le joueur est en train de tirer
+        this.isShooting = false;
     }
 }
