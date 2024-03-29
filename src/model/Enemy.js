@@ -7,6 +7,7 @@ import Track from './Track.js';
 export default class Enemy extends Entity {
     constructor(name, x, y, speed, avatar, pattern = null, bullet = null) {
         super(name, x, y, speed, avatar);
+        // PVs du joueur
         this.hp = 30;
         // Pattern de déplacement
         if (pattern == null || !Array.isArray(pattern))
@@ -14,6 +15,7 @@ export default class Enemy extends Entity {
         else
             this.pattern = pattern;
         this.pathTravelled = 0;
+        // Balle utilisée
         if (bullet == null)
             this.bullet = new Bullet(
                 'Red pearl bullet', x, y, 10,
@@ -23,29 +25,39 @@ export default class Enemy extends Entity {
             this.bullet = bullet;
     }
 
-    // Effectue le pattern comme si l'Enemy avait bougé pendant time frames, permet de tester le déplacement
-    skipTime(time) {
-        for (let index = 0; index < time; index++)
+    // Effectue le pattern comme si l'Enemy avait bougé pendant les frames, permet de tester le déplacement
+    skipFrame(frame) {
+        for (let index = 0; index < frame; index++) {
             this.move();
+        }
     }
 
-    // Déplace l'ennemi sur son Track dépendamment de sa vitesse
+    //Déplace l'Enemy sur son Pattern dépendemment de sa vitesse
     move() {
+        // On effectue speed fois l'opération
         for (let index = 0; index < this.speed; index++) {
+            // On définit les limites de temps pour déterminer dans quel vecteur on se situe
             let currentPathMin = 0;
             let currentPathMax = 0;
+            // Pour chaque track dans le pattern, on vérifie si c'est bien à son tour d'être utilisé
             for (let index = 0; index < this.pattern.length; index++) {
-                currentPathMax += this.pattern[index].time;
+                // La limite maximum correspond à l'addition des frames des vecteurs y compris le courant
+                currentPathMax += this.pattern[index].frame;
+                // Si c'est le bon vecteur, on se déplace
                 if (this.pathTravelled >= currentPathMin && this.pathTravelled < currentPathMax) {
                     this.x += this.pattern[index].x;
                     this.y += this.pattern[index].y;
                 } 
-                currentPathMin += this.pattern[index].time;
+                // La limite minimum correspond à l'addition des frames des vecteurs sans le courant durant la vérification
+                currentPathMin += this.pattern[index].frame;
             }
+            // On indique qu'on s'est déplacé
             this.pathTravelled++;
+            // Si on a parcouru tout le pattern, on revient au début
             if (this.pathTravelled == currentPathMax) 
                 this.pathTravelled = 0;
         }
+        // En conséquence, on change le point de départ des balles
         this.bullet.x = this.x;
         this.bullet.y = this.y;
     }

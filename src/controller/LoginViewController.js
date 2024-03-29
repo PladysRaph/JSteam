@@ -68,7 +68,7 @@ export default class LoginViewController extends Controller {
     createUser(username, imgLink) {
         if(username == null || username === '')
             return false;
-        this.currentModel = new Player(username, new Avatar(imgLink, 100, 100));
+        this.player = new Player(username, new Avatar(imgLink, 100, 100));
         return true;
     }
 
@@ -161,7 +161,7 @@ export default class LoginViewController extends Controller {
             })
 
             this.socketClient.on('la partie commence', () => {
-                new GameView(new GameViewController(this.currentModel));
+                new GameView(new GameViewController(this.player));
             })
         }
     }

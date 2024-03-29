@@ -1,9 +1,9 @@
 export default class Track {
-    constructor(x, y, time) {
+    constructor(x, y, frame) {
         // Vecteur de déplacement
         this.x = x;
         this.y = y;
-        // Temps durant lequel effectuer le déplacement
-        this.time = time;
+        // Nombre d'exécutions du déplacement du vecteur
+        this.frame = frame;
     }
 }

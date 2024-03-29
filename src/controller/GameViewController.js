@@ -21,15 +21,15 @@ export default class GameViewController extends Controller {
     }
 
     // Générer l'avatar en HTML
-    generateHTMLAvatar(width = this.currentModel.avatar.width, height = this.currentModel.avatar.height, url = this.currentModel.avatar.url) {
-        let image = new Image(width, height);
-        image.src = url;
+    generateHTMLAvatar() {
+        let image = new Image(this.player.avatar.width, this.player.avatar.height);
+        image.src = this.player.avatar.url;
         return image;
     }
 
     // Générer des ennemis
     generateEnemies() {
-        return [
+        let res = [
             EnemyFactory.defaultEnemy(1500, 300),
 
             new Enemy("sphere2", 1000, 200, 5,
@@ -46,10 +46,44 @@ export default class GameViewController extends Controller {
                     new Avatar('public/assets/img/red-pearl-bullet.png', 16, 16), 
                     PatternFactory.circlePattern(10, 20), 3, 90))
         ];
+        this.enemies = res;
+        return res;
+    }
+
+    // Dessiner les Images du joueur
+    drawPlayer(ctx) {
+        let image = new Image(this.player.avatar.width, this.player.avatar.height);
+        image.src = this.player.avatar.url;
+        this.drawImage(ctx, image);
+        this.drawBullets(ctx)
+        this.player.bullet.moveAll(this.player.isShooting);
+    }
+
+    // Desiner les Images des ennemis
+    drawEnemies(ctx) {
+        this.enemies.forEach(element => {
+            let image = new Image(element.avatar.width, element.avatar.height);
+            image.src = element.avatar.url;
+            this.drawImage(ctx, image, element.x, element.y); 
+            element.move();
+            this.drawBullets(ctx, element);
+            element.bullet.moveAll();
+        });
+    }
+
+    // Dessiner les Images des balles qu'une entité possède
+    drawBullets(ctx, entity = this.player) {
+        let bullet = entity.bullet;
+        for (let index = 0; index < bullet.arrX.length; index++) {
+            let bulletImg = new Image(bullet.avatar.width, bullet.avatar.height);
+            bulletImg.src = bullet.avatar.url;
+            this.drawImage(ctx, bulletImg, bullet.arrX[index], bullet.arrY[index]); 
+        }
+
     }
 
     // Dessiner une image
-    drawImage(canvas, img, x = this.currentModel.x, y = this.currentModel.y) {
+    drawImage(canvas, img, x = this.player.x, y = this.player.y) {
         canvas.drawImage(
             img,
             x,
@@ -58,111 +92,164 @@ export default class GameViewController extends Controller {
             img.height);
     }
 
+    // Dessiner la barre de vie
     drawHealthbar(context, x, y, width, height){
+        context.beginPath();
         context.strokestyle="black";
         context.lineWidth = 3;
         context.rect(x-1, y-1, width+3, height+3);
         context.stroke();
-
-        context.beginPath();
-        let value = this.currentModel.hp/50;
-        context.rect(x, y, width*value, height);
-        if(value > 0.63)
-            context.fillStyle="green"
-        else if(value > 0.37)
-            context.fillStyle="gold"
-        else if(value > 0.13)
-            context.fillStyle="orange";
-        else
-            context.fillStyle="red";
         context.closePath();
-
+        context.beginPath();
+        const value = this.player.hp/50;
+        context.rect(x, y, width*value, height);
+        if(value > 0.63){
+            context.fillStyle="green"
+        }else if(value > 0.37){
+            context.fillStyle="gold"
+        }else if(value > 0.13){
+            context.fillStyle="orange";
+        }else{
+            context.fillStyle="red";
+        }
+        context.closePath();
         context.fill();
       }
 
-    // Gestion des collisions
-    handleCollisions(canvas) {
+    // Vérifier que le joueur ne sorte pas du canvas
+    noPlayerOutOfBound(canvas, player =  this.player) {
+        const avatar = player.avatar;
         // Vérifier que le joueur ne dépasse pas le cadre vers la droite / bas
-        if (this.currentModel.x > canvas.width - this.currentModel.avatar.width)
-            this.currentModel.x = canvas.width - this.currentModel.avatar.width;
-
-        if (this.currentModel.y > canvas.height - this.currentModel.avatar.height)
-            this.currentModel.y = canvas.height - this.currentModel.avatar.height;
+        if (player.x > canvas.width - avatar.width)
+            player.x = canvas.width - avatar.width;
+        if (player.y > canvas.height - avatar.height)
+            player.y = canvas.height - avatar.height;
         
         // Vérifier que le  joueur ne dépasse pas le cadre vers la gauche / haut
-        if (this.currentModel.x < 0) this.currentModel.x = 0;
-        if (this.currentModel.y < 0) this.currentModel.y = 0;
+        if (player.x < 0) player.x = 0;
+        if (player.y < 0) player.y = 0;
+    }
 
-
-        // Définir un ratio d'hitbox pour les collisions
-        let hitbox = 0.8;
-
-        // Vérifier que le joueur ne touche ni un ennemi ni une balle
-        let playerWidth = this.currentModel.avatar.width;
-        let playerHeight = this.currentModel.avatar.height;
-        this.enemies.forEach(element => {
-            if (this.currentModel.x + playerWidth * ((1-hitbox)/2) < element.x + element.avatar.width
-                && this.currentModel.x + playerWidth * ((1+hitbox)/2) > element.x
-                && this.currentModel.y + playerHeight * ((1-hitbox)/2) < element.y + element.avatar.height
-                && this.currentModel.y + playerHeight * ((1+hitbox)/2) > element.y) {
-                    this.currentModel.hp--;
-                }
-            for (let index = 0; index < element.bullet.arrX.length; index++) {
-                if (this.currentModel.x < element.bullet.arrX[index] + element.bullet.avatar.width
-                    && this.currentModel.x + this.currentModel.avatar.width > element.bullet.arrX[index]
-                    && this.currentModel.y < element.bullet.arrY[index] + element.bullet.avatar.height
-                    && this.currentModel.y + this.currentModel.avatar.height > element.bullet.arrY[index]) {
-                        element.bullet.delete(index);
-                        this.currentModel.hp -= element.bullet.damage;
+    // Applique les dégâts au joueur s'il rentre en collision avec des entités adverses
+    damagingPlayer(hitbox, player = this.player) {
+        const playerWidth = this.player.avatar.width;
+        const playerHeight = this.player.avatar.height;
+        this.enemies.forEach(enemy => {
+            const enemyAvatar = enemy.avatar
+            // Fait perdre des vies au joueur s'il se fait toucher par l'ennemi
+            if (player.x + playerWidth * ((1-hitbox)/2) < enemy.x + enemyAvatar.width
+                && player.x + playerWidth * ((1+hitbox)/2) > enemy.x
+                && player.y + playerHeight * ((1-hitbox)/2) < enemy.y + enemyAvatar.height
+                && player.y + playerHeight * ((1+hitbox)/2) > enemy.y) 
+                player.hp--;
+            const bullet = enemy.bullet;
+            // Fait perdre des vies au joueur s'il se fait toucher par les balles de l'ennemi
+            for (let index = 0; index < bullet.arrX.length; index++) {
+                if (player.x < bullet.arrX[index] + bullet.avatar.width
+                    && player.x + playerWidth > bullet.arrX[index]
+                    && player.y < bullet.arrY[index] + bullet.avatar.height
+                    && player.y + playerHeight > bullet.arrY[index]) {
+                        bullet.delete(index);
+                        player.hp -= bullet.damage;
                 }
             }
         });
-        return this.currentModel.hp;
+    }
+
+    // Applique les dégâts aux ennemis s'ils rentre en collision avec les balles du joueur
+    damagingEnemies(player = this.player) {
+        this.enemies.forEach(enemy => {
+            const bullet = player.bullet;
+            for (let index = 0; index < bullet.arrX.length; index++) {
+                if (enemy.x < bullet.arrX[index] + bullet.avatar.width
+                    && enemy.x + enemy.avatar.width > bullet.arrX[index]
+                    && enemy.y < bullet.arrY[index] + bullet.avatar.height
+                    && enemy.y + enemy.avatar.height > bullet.arrY[index]) {
+                        bullet.delete(index);
+                        enemy.hp -= bullet.damage;
+                }
+            }
+        });
+    }
+
+    // Gestion des collisions
+    handleCollisions(canvas) {
+        this.noPlayerOutOfBound(canvas);
+
+        let hitbox = 0.8;
+        this.damagingPlayer(hitbox);
+        this.damagingEnemies();
+        
+        // Enlève les ennemis morts
+        this.enemies = this.enemies.filter(enemy => {
+            if (enemy.hp >= 0) return true;
+            else return false;
+        });
+
+        // Retour au lobby si toutes les vies sont perdues ou si tous les ennemis sont morts
+        if (this.player.hp <= 0 || this.enemies.length == 0)  {
+            this.player.hp = 50;
+            new LoginView(new LoginViewController(this.player))
+        }
     }
 
     // Déplacer le joueur en changeant ses coordonnées
     move(canvas) {
-        this.currentModel.x += this.currentModel.xFactor;
-        this.currentModel.y += this.currentModel.yFactor;
-        let hp = this.handleCollisions(canvas);
-        if (hp <= 0) 
-            new LoginView(new LoginViewController(this.currentModel));
+        this.player.x += this.player.xFactor;
+        this.player.y += this.player.yFactor;
+        this.player.bullet.x = this.player.x + this.player.avatar.width;
+        this.player.bullet.y = this.player.y + this.player.avatar.height/2;
+        this.handleCollisions(canvas);
     }
 
-    // Appuyer sur une touche pour se déplacer
+    // Déplacer les ennemies en changeant leurs coordonnées
+    moveEnemies() {
+        this.enemies.forEach(element => {
+            element.move();
+            element.bullet.moveAll();
+        });
+    }
+
+    // Appuyer sur une touche pour se déplacer et/ou tirer
     keydown(keyCode) {
         switch (keyCode) {
             case 'KeyD':
-                this.currentModel.xFactor = this.currentModel.speed;
+                this.player.xFactor = this.player.speed;
                 break;
             case 'KeyA':
-                this.currentModel.xFactor = -this.currentModel.speed;
+                this.player.xFactor = -this.player.speed;
                 break;
             case 'KeyW':
-                this.currentModel.yFactor = -this.currentModel.speed;
+                this.player.yFactor = -this.player.speed;
                 break;
             case 'KeyS':
-                this.currentModel.yFactor = this.currentModel.speed;
+                this.player.yFactor = this.player.speed;
+                break;
+            case 'Space':
+                this.player.isShooting = true;
                 break;
             default:
                 break;
         }
     }
 
-    // Relâche une touche arrêter le déplacement
+    // Relâche une touche arrêter le déplacement et/ou les tirs
     keyup(keyCode) {
         switch (keyCode) {
             case 'KeyD':
-                this.currentModel.xFactor = 0;
+                this.player.xFactor = 0;
                 break;
             case 'KeyA':
-                this.currentModel.xFactor = 0;
+                this.player.xFactor = 0;
                 break;
             case 'KeyW':
-                this.currentModel.yFactor = 0;
+                this.player.yFactor = 0;
                 break;
             case 'KeyS':
-                this.currentModel.yFactor = 0
+                this.player.yFactor = 0
+                break;
+            case 'Space':
+                this.player.isShooting = false;
                 break;
             default:
                 break;
