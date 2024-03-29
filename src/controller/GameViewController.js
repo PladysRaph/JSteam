@@ -1,6 +1,9 @@
 import Avatar from "../model/Avatar.js";
 import Enemy from "../model/Enemy.js";
+import PatternFactory from "../model/PatternFactory.js";
 import Controller from "./Controller.js";
+import EnemyFactory from "../model/EnemyFactory.js";
+import Bullet from "../model/Bullet.js";
 
 export default class GameViewController extends Controller {
 
@@ -19,6 +22,27 @@ export default class GameViewController extends Controller {
         let image = new Image(this.currentModel.avatar.width, this.currentModel.avatar.height);
         image.src = this.currentModel.avatar.url;
         return image;
+    }
+
+    // Générer des ennemis
+    generateEnemies() {
+        return [
+            EnemyFactory.defaultEnemy(1500, 300),
+
+            new Enemy("sphere2", 1000, 200, 5,
+                new Avatar("/public/assets/img/dark-sphere.png", 64, 64), 
+                PatternFactory.circlePattern(22, 0, false), 
+                new Bullet('Red pearl bullet', 1000, 200, 10,
+                    new Avatar('public/assets/img/red-pearl-bullet.png', 16, 16), 
+                    PatternFactory.circlePattern(44, 0, false), 1, 20)),
+
+            new Enemy("sphere3", 500, 500, 3, 
+                new Avatar("/public/assets/img/dark-sphere.png", 64, 64), 
+                PatternFactory.snakePattern(22, 0), 
+                new Bullet('Red pearl bullet', 1000, 200, 10,
+                    new Avatar('public/assets/img/red-pearl-bullet.png', 16, 16), 
+                    PatternFactory.circlePattern(10, 20), 1, 90))
+        ];
     }
 
     // Dessiner une image

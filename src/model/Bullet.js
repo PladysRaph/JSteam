@@ -14,6 +14,7 @@ export default class Bullet extends Entity {
         this.release = cooldown;
         this.arrX = new Array();
         this.arrY = new Array();
+        this.timeToLive = 200;
         this.pathTravelled = new Array();
     }
     
@@ -40,11 +41,17 @@ export default class Bullet extends Entity {
             this.pathTravelled.push(0);
             this.arrX.push(this.x);
             this.arrY.push(this.y);
+            if (this.timeToLive == 0) {
+                this.arrX.shift();
+                this.arrY.shift();
+                this.pathTravelled.shift();
+            }
             this.release = 0;
         }
         for (let index = 0; index < this.arrX.length; index++)
             this.move(index);
         this.release++;
+        if (this.timeToLive != 0) this.timeToLive--;
     }
 
     skipTime(time) {

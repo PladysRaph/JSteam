@@ -26,22 +26,8 @@ export default class GameView extends View {
         this.#canvas = View.mainContent.querySelector('.gameCanvas');
         this.#context2D = this.#canvas.getContext('2d');
 
-        this.#enemies = [
-            EnemyFactory.defaultEnemy(1500, 300),
-
-            new Enemy("sphere2", 1000, 200, 5,
-                new Avatar("/public/assets/img/dark-sphere.png", 64, 64), 
-                PatternFactory.circlePattern(22, 0, false), 
-                new Bullet('Red pearl bullet', 1000, 200, 10,
-                    new Avatar('public/assets/img/red-pearl-bullet.png', 16, 16), 
-                    PatternFactory.circlePattern(44, 0, false), 1, 20)),
-
-            new Enemy("sphere3", 500, 500, 3, 
-                new Avatar("/public/assets/img/dark-sphere.png", 64, 64), 
-                PatternFactory.snakePattern(22, 0), 
-                new Bullet('Red pearl bullet', 1000, 200, 10,
-                    new Avatar('public/assets/img/red-pearl-bullet.png', 16, 16), 
-                    PatternFactory.circlePattern(10, 20), 1, 90))];
+        // Créer les ennemis
+        this.#enemies = this.controller.generateEnemies();
 
         // Écoute sur les évènements de cette vue (redimensionnement de fenêtre, touches directionnelles pour contrôler le joueur)
         this.listen();
