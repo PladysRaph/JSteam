@@ -71,12 +71,18 @@ export default class GameViewController extends Controller {
         if (this.currentModel.x < 0) this.currentModel.x = 0;
         if (this.currentModel.y < 0) this.currentModel.y = 0;
 
+
+        // Définir un ratio d'hitbox pour les collisions
+        let hitbox = 0.8;
+
         // Vérifier que le joueur ne touche ni un ennemi ni une balle
+        let playerWidth = this.currentModel.avatar.width;
+        let playerHeight = this.currentModel.avatar.height;
         this.enemies.forEach(element => {
-            if (this.currentModel.x < element.x + element.avatar.width
-                && this.currentModel.x + this.currentModel.avatar.width > element.x
-                && this.currentModel.y < element.y + element.avatar.height
-                && this.currentModel.y + this.currentModel.avatar.height > element.y) {
+            if (this.currentModel.x + playerWidth * ((1-hitbox)/2) < element.x + element.avatar.width
+                && this.currentModel.x + playerWidth * ((1+hitbox)/2) > element.x
+                && this.currentModel.y + playerHeight * ((1-hitbox)/2) < element.y + element.avatar.height
+                && this.currentModel.y + playerHeight * ((1+hitbox)/2) > element.y) {
                     console.log("ennemi !");
                     new LoginView(new LoginViewController(this.currentModel));
                 }
