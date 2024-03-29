@@ -100,7 +100,7 @@ export default class LoginView extends View {
                 this.#avatarChoiceUser,
                 this.#difficulty.value
             );
-            btn.addEventListener('click', e => this.controller.startGame(id));
+            btn.addEventListener('click', e => this.controller.startGame(e, this.#dialogBox, id));
         });
     }
 

@@ -73,9 +73,18 @@ export default class LoginViewController extends Controller {
     }
 
     // Démarrer une partie
-    startGame(id) {
+    startGame(event, dialogBox, id) {
+        event.preventDefault();
+
         this.socketClient.emit('start game', id);
-        new GameView(new GameViewController(this.currentModel));
+
+        this.socketClient.on('le nombre de joueurs doit être de 2 minimum', () => {
+            dialogBox.querySelector('div').innerHTML += '<p id="warning-message-dialog-box">Le nombre de joueurs doit être de 2 au minimum</p>';
+        });
+
+        this.socketClient.on('la partie commence', () => {
+            new GameView(new GameViewController(this.currentModel));
+        });
     }
 
     // Lobby par défaut (sans joueurs)
@@ -130,12 +139,26 @@ export default class LoginViewController extends Controller {
                 }
             });
 
+            this.socketClient.on('le code de la partie n\'existe pas', () => {
+                this.showDialogBox(dialogBox, `<p>Le code de la partie n'existe pas</p>`);
+            });
+
+            this.socketClient.on('un joueur a déjà le même pseudo dans le lobby', () => {
+                this.showDialogBox(dialogBox, `<p>Un joueur a déjà le même pseudo dans le lobby</p>`);
+            });
+
             this.socketClient.on('un nouveau joueur rejoint la partie', info => {
                 this.defaultLobby(dialogBox, partyID, false);
                 info.players.forEach(player => {
                     this.addPlayerAtLobby(dialogBox, player.username, player.avatar);
                 });
             });
+
+            this.socketClient.on('déconnexion de la partie', () => {
+                dialogBox.style.display = 'none';
+                this.showDialogBox(dialogBox, '<p>Vous avez été déconnecté, l\'owner de la partie s\'est déconnecté</p>');
+                window.onclick = e => this.hideDialogBox(e, dialogBox);
+            })
 
             this.socketClient.on('la partie commence', () => {
                 new GameView(new GameViewController(this.currentModel));
@@ -167,6 +190,9 @@ export default class LoginViewController extends Controller {
             this.addPlayerAtLobby(dialogBox, username, avatarChoiceUser);
 
             this.socketClient.on('un nouveau joueur rejoint la partie', partyInfo => {
+                let warningMessage = View.mainContent.querySelector('#warning-message-dialog-box');
+                if(warningMessage != null)
+                    warningMessage.innerHTML = '';
                 let lastPlayer = partyInfo.players.slice(-1)[0]
                 this.addPlayerAtLobby(dialogBox, lastPlayer.username, lastPlayer.avatar);
             });
