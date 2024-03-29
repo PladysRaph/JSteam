@@ -137,23 +137,37 @@ export default class GameViewController extends Controller {
         this.enemies.forEach(enemy => {
             const enemyAvatar = enemy.avatar
             // Fait perdre des vies au joueur s'il se fait toucher par l'ennemi
-            if (player.x + playerWidth * ((1-hitbox)/2) < enemy.x + enemyAvatar.width
-                && player.x + playerWidth * ((1+hitbox)/2) > enemy.x
-                && player.y + playerHeight * ((1-hitbox)/2) < enemy.y + enemyAvatar.height
-                && player.y + playerHeight * ((1+hitbox)/2) > enemy.y) 
+            if (this.isCollisionning(player, enemy, null, hitbox)) 
                 player.hp--;
             const bullet = enemy.bullet;
             // Fait perdre des vies au joueur s'il se fait toucher par les balles de l'ennemi
             for (let index = 0; index < bullet.arrX.length; index++) {
-                if (player.x < bullet.arrX[index] + bullet.avatar.width
-                    && player.x + playerWidth > bullet.arrX[index]
-                    && player.y < bullet.arrY[index] + bullet.avatar.height
-                    && player.y + playerHeight > bullet.arrY[index]) {
-                        bullet.delete(index);
-                        player.hp -= bullet.damage;
+                if (this.isCollisionning(player, bullet, index)) {
+                    bullet.delete(index);
+                    player.hp -= bullet.damage;
                 }
             }
         });
+    }
+
+    // Répond vrai si les deux entités se superposent.
+    // Si un index est précisé, on considère que la deuxième entité est un tableau de coordonnées
+    isCollisionning(entity1, entity2, index = null, hitbox1 = 1, hitbox2 = 1) {
+        const avatar1 = entity1.avatar;
+        const avatar2 = entity2.avatar;
+        let entity2x;
+        let entity2y;
+        if (index == null) {
+            entity2x = entity2.x;
+            entity2y = entity2.y;
+        } else {
+            entity2x = entity2.arrX[index];
+            entity2y = entity2.arrY[index];
+        }
+        return entity1.x + avatar1.width * ((1-hitbox1)/2) < entity2x + avatar2.width * ((1+hitbox2)/2)
+            && entity1.x + avatar1.width * ((1+hitbox1)/2) > entity2x + avatar2.width * ((1-hitbox2)/2)
+            && entity1.y + avatar1.height * ((1-hitbox1)/2) < entity2y + avatar2.height * ((1+hitbox2)/2)
+            && entity1.y + avatar1.height * ((1+hitbox1)/2) > entity2y + avatar2.height * ((1-hitbox2)/2);
     }
 
     // Applique les dégâts aux ennemis s'ils rentre en collision avec les balles du joueur
