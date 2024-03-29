@@ -21,9 +21,9 @@ export default class GameViewController extends Controller {
     }
 
     // Générer l'avatar en HTML
-    generateHTMLAvatar() {
-        let image = new Image(this.currentModel.avatar.width, this.currentModel.avatar.height);
-        image.src = this.currentModel.avatar.url;
+    generateHTMLAvatar(width = this.currentModel.avatar.width, height = this.currentModel.avatar.height, url = this.currentModel.avatar.url) {
+        let image = new Image(width, height);
+        image.src = url;
         return image;
     }
 
@@ -59,25 +59,24 @@ export default class GameViewController extends Controller {
     }
 
     drawHealthbar(context, x, y, width, height){
-        context.beginPath();
         context.strokestyle="black";
         context.lineWidth = 3;
         context.rect(x-1, y-1, width+3, height+3);
         context.stroke();
-        context.closePath();
+
         context.beginPath();
         let value = this.currentModel.hp/50;
         context.rect(x, y, width*value, height);
-        if(value > 0.63){
+        if(value > 0.63)
             context.fillStyle="green"
-        }else if(value > 0.37){
+        else if(value > 0.37)
             context.fillStyle="gold"
-        }else if(value > 0.13){
+        else if(value > 0.13)
             context.fillStyle="orange";
-        }else{
+        else
             context.fillStyle="red";
-        }
         context.closePath();
+
         context.fill();
       }
 
@@ -118,17 +117,16 @@ export default class GameViewController extends Controller {
                 }
             }
         });
-        if (this.currentModel.hp <= 0)  {
-            new LoginView(new LoginViewController(this.currentModel));
-            this.currentModel.hp = 50;
-        }
+        return this.currentModel.hp;
     }
 
     // Déplacer le joueur en changeant ses coordonnées
     move(canvas) {
         this.currentModel.x += this.currentModel.xFactor;
         this.currentModel.y += this.currentModel.yFactor;
-        this.handleCollisions(canvas);
+        let hp = this.handleCollisions(canvas);
+        if (hp <= 0) 
+            new LoginView(new LoginViewController(this.currentModel));
     }
 
     // Appuyer sur une touche pour se déplacer

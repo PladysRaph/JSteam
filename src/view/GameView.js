@@ -69,15 +69,26 @@ export default class GameView extends View {
         this.controller.drawImage(this.#context2D, this.#avatarImage);
 
         this.#enemies.forEach(element => {
-            let image = new Image(element.avatar.width, element.avatar.height);
-            image.src = element.avatar.url;
-            this.controller.drawImage(this.#context2D, image, element.x, element.y); 
+            this.controller.drawImage(
+                this.#context2D,
+                this.controller.generateHTMLAvatar(
+                    element.avatar.width,
+                    element.avatar.height,
+                    element.avatar.url),
+                element.x,
+                element.y); 
+
             element.move();
 
             for (let index = 0; index < element.bullet.arrX.length; index++) {
-                let bulletImg = new Image(element.bullet.avatar.width, element.bullet.avatar.height);
-                bulletImg.src = element.bullet.avatar.url;
-                this.controller.drawImage(this.#context2D, bulletImg, element.bullet.arrX[index], element.bullet.arrY[index]); 
+                this.controller.drawImage(
+                    this.#context2D,
+                    this.controller.generateHTMLAvatar(
+                        element.bullet.avatar.width,
+                        element.bullet.avatar.height,
+                        element.bullet.avatar.url),
+                    element.bullet.arrX[index],
+                    element.bullet.arrY[index]); 
             }
             element.bullet.moveAll();
         });

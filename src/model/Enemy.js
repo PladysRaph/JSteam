@@ -25,12 +25,11 @@ export default class Enemy extends Entity {
 
     // Effectue le pattern comme si l'Enemy avait bougé pendant time frames, permet de tester le déplacement
     skipTime(time) {
-        for (let index = 0; index < time; index++) {
+        for (let index = 0; index < time; index++)
             this.move();
-        }
     }
 
-    //Déplace l'Enemy sur son Track dépendemment de sa vitesse
+    // Déplace l'ennemi sur son Track dépendamment de sa vitesse
     move() {
         for (let index = 0; index < this.speed; index++) {
             let currentPathMin = 0;
