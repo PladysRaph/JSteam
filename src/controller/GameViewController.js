@@ -29,7 +29,7 @@ export default class GameViewController extends Controller {
 
     // Générer des ennemis
     generateEnemies() {
-        return [
+        let res = [
             EnemyFactory.defaultEnemy(1500, 300),
 
             new Enemy("sphere2", 1000, 200, 5,
@@ -46,6 +46,8 @@ export default class GameViewController extends Controller {
                     new Avatar('public/assets/img/red-pearl-bullet.png', 16, 16), 
                     PatternFactory.circlePattern(10, 20), 3, 90))
         ];
+        this.enemies = res;
+        return res;
     }
 
     // Dessiner une image
@@ -58,6 +60,7 @@ export default class GameViewController extends Controller {
             img.height);
     }
 
+    // Dessiner la barre de vie
     drawHealthbar(context, x, y, width, height){
         context.beginPath();
         context.strokestyle="black";
@@ -131,6 +134,14 @@ export default class GameViewController extends Controller {
         this.handleCollisions(canvas);
     }
 
+    // Déplacer les ennemies en changeant leurs coordonnées
+    moveEnemies() {
+        this.enemies.forEach(element => {
+            element.move();
+            element.bullet.moveAll();
+        });
+    }
+
     // Appuyer sur une touche pour se déplacer
     keydown(keyCode) {
         switch (keyCode) {
@@ -145,6 +156,8 @@ export default class GameViewController extends Controller {
                 break;
             case 'KeyS':
                 this.currentModel.yFactor = this.currentModel.speed;
+                break;
+            case 'Space':
                 break;
             default:
                 break;
@@ -165,6 +178,8 @@ export default class GameViewController extends Controller {
                 break;
             case 'KeyS':
                 this.currentModel.yFactor = 0
+                break;
+            case 'Space':
                 break;
             default:
                 break;

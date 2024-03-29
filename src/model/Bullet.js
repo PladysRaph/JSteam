@@ -23,12 +23,12 @@ export default class Bullet extends Entity {
             let currentPathMin = 0;
             let currentPathMax = 0;
             for (let index = 0; index < this.pattern.length; index++) {
-                currentPathMax += this.pattern[index].time;
+                currentPathMax += this.pattern[index].frame;
                 if (this.pathTravelled[printingIndex] >= currentPathMin && this.pathTravelled[printingIndex] < currentPathMax) {
                     this.arrX[printingIndex] += this.pattern[index].x;
                     this.arrY[printingIndex] += this.pattern[index].y;
                 } 
-                currentPathMin += this.pattern[index].time;
+                currentPathMin += this.pattern[index].frame;
             }
             this.pathTravelled[printingIndex]++;
             if (this.pathTravelled[printingIndex] == currentPathMax) 
@@ -58,8 +58,8 @@ export default class Bullet extends Entity {
         this.TTLs.splice(printingIndex, 1);
     }
 
-    skipTime(time) {
-        for (let index = 0; index < time; index++) {
+    skipFrame(frame) {
+        for (let index = 0; index < frame; index++) {
             this.moveAll();
         }
     }

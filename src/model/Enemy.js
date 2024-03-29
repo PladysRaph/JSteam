@@ -24,8 +24,8 @@ export default class Enemy extends Entity {
     }
 
     // Effectue le pattern comme si l'Enemy avait bougé pendant time frames, permet de tester le déplacement
-    skipTime(time) {
-        for (let index = 0; index < time; index++) {
+    skipFrame(frame) {
+        for (let index = 0; index < frame; index++) {
             this.move();
         }
     }
@@ -36,12 +36,12 @@ export default class Enemy extends Entity {
             let currentPathMin = 0;
             let currentPathMax = 0;
             for (let index = 0; index < this.pattern.length; index++) {
-                currentPathMax += this.pattern[index].time;
+                currentPathMax += this.pattern[index].frame;
                 if (this.pathTravelled >= currentPathMin && this.pathTravelled < currentPathMax) {
                     this.x += this.pattern[index].x;
                     this.y += this.pattern[index].y;
                 } 
-                currentPathMin += this.pattern[index].time;
+                currentPathMin += this.pattern[index].frame;
             }
             this.pathTravelled++;
             if (this.pathTravelled == currentPathMax) 

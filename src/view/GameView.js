@@ -21,6 +21,9 @@ export default class GameView extends View {
 
 		// Créer l'avatar du joueur
 		this.#avatarImage = this.controller.generateHTMLAvatar();
+
+        // Créer l'avatar de la balle du joueur
+        this.#avatarImage = this.controller.generateHTMLAvatar();
 		
 		// Canvas de la vue
         this.#canvas = View.mainContent.querySelector('.gameCanvas');
@@ -67,7 +70,6 @@ export default class GameView extends View {
     render() {
         this.#context2D.clearRect(0, 0, this.#canvas.width, this.#canvas.height);
         this.controller.drawImage(this.#context2D, this.#avatarImage);
-
         this.#enemies.forEach(element => {
             let image = new Image(element.avatar.width, element.avatar.height);
             image.src = element.avatar.url;
