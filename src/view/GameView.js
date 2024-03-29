@@ -82,6 +82,8 @@ export default class GameView extends View {
             element.bullet.moveAll();
         });
 
+        this.controller.drawHealthbar(this.#context2D, 10, 10, 210, 20);
+
         requestAnimationFrame(this.render.bind(this));
     }
 

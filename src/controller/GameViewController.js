@@ -37,14 +37,14 @@ export default class GameViewController extends Controller {
                 PatternFactory.circlePattern(22, 0, false), 
                 new Bullet('Red pearl bullet', 1000, 200, 10,
                     new Avatar('public/assets/img/red-pearl-bullet.png', 16, 16), 
-                    PatternFactory.circlePattern(44, 0, false), 1, 20)),
+                    PatternFactory.circlePattern(44, 0, false), 5, 20)),
 
             new Enemy("sphere3", 500, 500, 3, 
                 new Avatar("/public/assets/img/dark-sphere.png", 64, 64), 
                 PatternFactory.snakePattern(22, 0), 
                 new Bullet('Red pearl bullet', 1000, 200, 10,
                     new Avatar('public/assets/img/red-pearl-bullet.png', 16, 16), 
-                    PatternFactory.circlePattern(10, 20), 1, 90))
+                    PatternFactory.circlePattern(10, 20), 3, 90))
         ];
     }
 
@@ -57,6 +57,29 @@ export default class GameViewController extends Controller {
             img.width,
             img.height);
     }
+
+    drawHealthbar(context, x, y, width, height){
+        context.beginPath();
+        context.strokestyle="black";
+        context.lineWidth = 3;
+        context.rect(x-1, y-1, width+3, height+3);
+        context.stroke();
+        context.closePath();
+        context.beginPath();
+        let value = this.currentModel.hp/50;
+        context.rect(x, y, width*value, height);
+        if(value > 0.63){
+            context.fillStyle="green"
+        }else if(value > 0.37){
+            context.fillStyle="gold"
+        }else if(value > 0.13){
+            context.fillStyle="orange";
+        }else{
+            context.fillStyle="red";
+        }
+        context.closePath();
+        context.fill();
+      }
 
     // Gestion des collisions
     handleCollisions(canvas) {
@@ -83,19 +106,22 @@ export default class GameViewController extends Controller {
                 && this.currentModel.x + playerWidth * ((1+hitbox)/2) > element.x
                 && this.currentModel.y + playerHeight * ((1-hitbox)/2) < element.y + element.avatar.height
                 && this.currentModel.y + playerHeight * ((1+hitbox)/2) > element.y) {
-                    console.log("ennemi !");
-                    new LoginView(new LoginViewController(this.currentModel));
+                    this.currentModel.hp--;
                 }
             for (let index = 0; index < element.bullet.arrX.length; index++) {
                 if (this.currentModel.x < element.bullet.arrX[index] + element.bullet.avatar.width
                     && this.currentModel.x + this.currentModel.avatar.width > element.bullet.arrX[index]
                     && this.currentModel.y < element.bullet.arrY[index] + element.bullet.avatar.height
                     && this.currentModel.y + this.currentModel.avatar.height > element.bullet.arrY[index]) {
-                        console.log("balle !");
-                        new LoginView(new LoginViewController(this.currentModel));
+                        element.bullet.delete(index);
+                        this.currentModel.hp -= element.bullet.damage;
                 }
             }
         });
+        if (this.currentModel.hp <= 0)  {
+            new LoginView(new LoginViewController(this.currentModel));
+            this.currentModel.hp = 50;
+        }
     }
 
     // Déplacer le joueur en changeant ses coordonnées

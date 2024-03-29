@@ -7,6 +7,7 @@ import Track from './Track.js';
 export default class Enemy extends Entity {
     constructor(name, x, y, speed, avatar, pattern = null, bullet = null) {
         super(name, x, y, speed, avatar);
+        this.hp = 30;
         // Pattern de déplacement
         if (pattern == null || !Array.isArray(pattern))
             this.pattern = PatternFactory.defaultPattern();

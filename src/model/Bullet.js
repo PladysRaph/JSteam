@@ -14,7 +14,7 @@ export default class Bullet extends Entity {
         this.release = cooldown;
         this.arrX = new Array();
         this.arrY = new Array();
-        this.timeToLive = 240;
+        this.TTLs = new Array();
         this.pathTravelled = new Array();
     }
     
@@ -34,6 +34,8 @@ export default class Bullet extends Entity {
             if (this.pathTravelled[printingIndex] == currentPathMax) 
                 this.pathTravelled[printingIndex] = 0;
         }
+        this.TTLs[printingIndex]--;
+        if (this.TTLs[printingIndex] == 0) this.delete(printingIndex);
     }
 
     moveAll() {
@@ -41,17 +43,19 @@ export default class Bullet extends Entity {
             this.pathTravelled.push(0);
             this.arrX.push(this.x);
             this.arrY.push(this.y);
-            if (this.timeToLive == 0) {
-                this.arrX.shift();
-                this.arrY.shift();
-                this.pathTravelled.shift();
-            }
+            this.TTLs.push(240);
             this.release = 0;
         }
         for (let index = 0; index < this.arrX.length; index++)
             this.move(index);
         this.release++;
-        if (this.timeToLive != 0) this.timeToLive--;
+    }
+
+    delete(printingIndex) {
+        this.arrX.splice(printingIndex, 1);
+        this.arrY.splice(printingIndex, 1);
+        this.pathTravelled.splice(printingIndex, 1);
+        this.TTLs.splice(printingIndex, 1);
     }
 
     skipTime(time) {
