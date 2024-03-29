@@ -27,7 +27,7 @@ export default class GameView extends View {
         this.#context2D = this.#canvas.getContext('2d');
 
         // Créer les ennemis
-        this.#enemies = this.controller.generateEnemies();
+        this.#enemies = this.controller.enemies;
 
         // Écoute sur les évènements de cette vue (redimensionnement de fenêtre, touches directionnelles pour contrôler le joueur)
         this.listen();

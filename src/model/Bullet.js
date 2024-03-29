@@ -14,7 +14,7 @@ export default class Bullet extends Entity {
         this.release = cooldown;
         this.arrX = new Array();
         this.arrY = new Array();
-        this.timeToLive = 200;
+        this.timeToLive = 240;
         this.pathTravelled = new Array();
     }
     

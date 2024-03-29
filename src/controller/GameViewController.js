@@ -4,11 +4,14 @@ import PatternFactory from "../model/PatternFactory.js";
 import Controller from "./Controller.js";
 import EnemyFactory from "../model/EnemyFactory.js";
 import Bullet from "../model/Bullet.js";
+import LoginView from "../view/LoginView.js";
+import LoginViewController from "./LoginViewController.js";
 
 export default class GameViewController extends Controller {
 
     constructor(model) {
         super(model);
+        this.enemies = this.generateEnemies();
     }
 
     // Redimensionner le canvas (responsive-design)
@@ -67,6 +70,26 @@ export default class GameViewController extends Controller {
         // Vérifier que le  joueur ne dépasse pas le cadre vers la gauche / haut
         if (this.currentModel.x < 0) this.currentModel.x = 0;
         if (this.currentModel.y < 0) this.currentModel.y = 0;
+
+        // Vérifier que le joueur ne touche ni un ennemi ni une balle
+        this.enemies.forEach(element => {
+            if (this.currentModel.x < element.x + element.avatar.width
+                && this.currentModel.x + this.currentModel.avatar.width > element.x
+                && this.currentModel.y < element.y + element.avatar.height
+                && this.currentModel.y + this.currentModel.avatar.height > element.y) {
+                    console.log("ennemi !");
+                    new LoginView(new LoginViewController(this.currentModel));
+                }
+            for (let index = 0; index < element.bullet.arrX.length; index++) {
+                if (this.currentModel.x < element.bullet.arrX[index] + element.bullet.avatar.width
+                    && this.currentModel.x + this.currentModel.avatar.width > element.bullet.arrX[index]
+                    && this.currentModel.y < element.bullet.arrY[index] + element.bullet.avatar.height
+                    && this.currentModel.y + this.currentModel.avatar.height > element.bullet.arrY[index]) {
+                        console.log("balle !");
+                        new LoginView(new LoginViewController(this.currentModel));
+                }
+            }
+        });
     }
 
     // Déplacer le joueur en changeant ses coordonnées
