@@ -68,14 +68,14 @@ export default class LoginViewController extends Controller {
     createUser(username, imgLink) {
         if(username == null || username === '')
             return false;
-        this.currentModel = new Player(username, new Avatar(imgLink, 100, 100));
+        this.player = new Player(username, new Avatar(imgLink, 100, 100));
         return true;
     }
 
     // Démarrer une partie
     startGame(id) {
         this.socketClient.emit('start game', id);
-        new GameView(new GameViewController(this.currentModel));
+        new GameView(new GameViewController(this.player));
     }
 
     // Lobby par défaut (sans joueurs)
@@ -126,7 +126,7 @@ export default class LoginViewController extends Controller {
             this.socketClient.emit('join party', {
                 "id": partyID.toUpperCase(),
                 "model": {
-                    "player": this.currentModel
+                    "player": this.player
                 }
             });
 
@@ -138,7 +138,7 @@ export default class LoginViewController extends Controller {
             });
 
             this.socketClient.on('la partie commence', () => {
-                new GameView(new GameViewController(this.currentModel));
+                new GameView(new GameViewController(this.player));
             })
         }
     }
