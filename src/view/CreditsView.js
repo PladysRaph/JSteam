@@ -2,7 +2,6 @@ import View from "./View.js";
 
 export default class CreditsView extends View {
     #MenuBtn
-    #BestGames
 
     constructor(controller) {
         super(`<section id="credits">        
@@ -31,8 +30,8 @@ export default class CreditsView extends View {
     </div>
     </section>`, controller);
 
-    this.#MenuBtn=View.mainContent.querySelector("#indexButton");
-    this.setListener();
+        this.#MenuBtn=View.mainContent.querySelector("#indexButton");
+        this.setListener();
     }
     
     setListener(){
@@ -42,5 +41,4 @@ export default class CreditsView extends View {
         });
 
     }
-
 }

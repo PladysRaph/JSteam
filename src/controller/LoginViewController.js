@@ -73,7 +73,6 @@ export default class LoginViewController extends Controller {
     // Démarrer une partie
     startGame(id) {
         this.socketClient.emit('start game', id);
-        console.log(this.socketClient.id);
         new GameView(new GameViewController(this.player, this.socketClient));
     }
 

@@ -12,6 +12,7 @@ export default class LoginView extends View {
     #joinPartyBtn
     #dialogBox
     #creditsButton
+
     constructor(controller) {
         // Initialiser la vue
         super(
@@ -107,9 +108,9 @@ export default class LoginView extends View {
         });
 
         //affiche les credits
-        this.#creditsButton.addEventListener('click',e => {
-e.preventDefault();
-new CreditsView(new CreditsViewController());
+        this.#creditsButton.addEventListener('click', e => {
+            e.preventDefault();
+            new CreditsView(new CreditsViewController());
         });
     }
 

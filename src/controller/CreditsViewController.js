@@ -3,7 +3,7 @@ import Controller from "./Controller.js";
 import LoginViewController from "./LoginViewController.js";
 
 export default class CreditsViewController extends Controller{
-    constructor(model=null){
+    constructor(model = null){
         super(model);
     }
 
