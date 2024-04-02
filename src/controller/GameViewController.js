@@ -55,7 +55,9 @@ export default class GameViewController extends Controller {
     drawPlayer(ctx, player = this.player) {
         let image = new Image(player.avatar.width, player.avatar.height);
         image.src = player.avatar.url;
-        console.log(player);
+        ctx.fillStyle = 'blue'
+        ctx.font = "20px m6x11";
+        ctx.fillText(player.name, player.x+10, player.y-10);
         this.drawImage(ctx, image, player.x, player.y);
         this.drawBullets(ctx, player);
         player.bullet.moveAll(player.isShooting);
@@ -81,7 +83,6 @@ export default class GameViewController extends Controller {
             bulletImg.src = bullet.avatar.url;
             this.drawImage(ctx, bulletImg, bullet.arrX[index], bullet.arrY[index]); 
         }
-
     }
 
     // Dessiner une image

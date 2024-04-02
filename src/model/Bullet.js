@@ -1,6 +1,5 @@
 import Entity from './Entity.js';
 import PatternFactory from './PatternFactory.js';
-import Track from './Track.js';
 
 export default class Bullet extends Entity {
     constructor(name, x, y, speed, avatar, pattern = null, damage, cooldown) {

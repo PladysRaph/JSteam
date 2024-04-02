@@ -11,7 +11,6 @@ export default class GameView extends View {
     #avatarImage;
     #canvas;
     #context2D;
-    other;
     
     constructor(controller) {
         // Initialiser la vue
@@ -22,6 +21,8 @@ export default class GameView extends View {
 
 		// Créer l'avatar du joueur
 		this.#avatarImage = this.controller.generateHTMLAvatar();
+
+        this.otherPlayers = new Map();
 		
 		// Canvas de la vue
         this.#canvas = View.mainContent.querySelector('.gameCanvas');
@@ -47,8 +48,6 @@ export default class GameView extends View {
 			this.controller.drawImage(this.#context2D, this.#avatarImage);
 		});
 
-
-
         // Appuyer sur une touche, gestion des multi-touches supporté (haut-droite appuyés en même temps)
         addEventListener('keydown', e => {
             this.controller.keydown(e.code);
@@ -59,26 +58,31 @@ export default class GameView extends View {
             this.controller.keyup(e.code);
         });
 
+		// On réinstancie car socket.io ne déserialise pas entièrement l'object Player (il manque les méthodes fournies par cette méthode)
         this.controller.socketClient.on("le joueur a fait une action", player => {
-            this.other = new Player(
-                player.name, 
-                new Avatar(
-                    player.avatar.url, 
-                    player.avatar.width, 
-                    player.avatar.height
-                ),
-                null,
-                player.x,
-                player.y);
+            this.otherPlayers.set(
+                player.name,
+                new Player(
+                    player.name, 
+                    new Avatar(
+                        player.avatar.url, 
+                        player.avatar.width, 
+                        player.avatar.height
+                    ),
+					null,
+                    player.x,
+                    player.y)
+            )
         });
     }
 
     // Gérer le rendu de la vue
     render() {
         this.#context2D.clearRect(0, 0, this.#canvas.width, this.#canvas.height);
-        this.controller.drawEnemies(this.#context2D);    
-        this.controller.drawPlayer(this.#context2D, this.other);
-        this.controller.drawPlayer(this.#context2D);     
+        this.controller.drawEnemies(this.#context2D);
+		for(let [key, value] of this.otherPlayers)
+			this.controller.drawPlayer(this.#context2D, value);
+        this.controller.drawPlayer(this.#context2D);
         this.controller.drawHealthbar(this.#context2D, 10, 10, 210, 20);
         requestAnimationFrame(this.render.bind(this));
     }
