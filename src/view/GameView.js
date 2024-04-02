@@ -5,11 +5,13 @@ import View from "./View.js";
 import Bullet from "../model/Bullet.js";
 import EnemyFactory from "../model/EnemyFactory.js";
 import PatternFactory from "../model/PatternFactory.js";
+import Player from "../model/Player.js";
 
 export default class GameView extends View {
     #avatarImage;
     #canvas;
     #context2D;
+    other;
     
     constructor(controller) {
         // Initialiser la vue
@@ -20,9 +22,6 @@ export default class GameView extends View {
 
 		// Créer l'avatar du joueur
 		this.#avatarImage = this.controller.generateHTMLAvatar();
-
-        // Créer l'avatar de la balle du joueur
-        this.#avatarImage = this.controller.generateHTMLAvatar();
 		
 		// Canvas de la vue
         this.#canvas = View.mainContent.querySelector('.gameCanvas');
@@ -31,7 +30,6 @@ export default class GameView extends View {
         // Écoute sur les évènements de cette vue (redimensionnement de fenêtre, touches directionnelles pour contrôler le joueur)
         this.listen();
 
-        // Modifier le déplacement et facteurs de vitesse à intervalle régulier
         setInterval(() => this.controller.move(this.#canvas), 1000/60);
 
         // Afficher et synchroniser le rendu de l'image suivant le refresh rate de l'écran (60 FPS / 120 FPS)
@@ -60,18 +58,28 @@ export default class GameView extends View {
         addEventListener('keyup', e => {
             this.controller.keyup(e.code);
         });
+
+        this.controller.socketClient.on("le joueur a fait une action", player => {
+            this.other = new Player(
+                player.name, 
+                new Avatar(
+                    player.avatar.url, 
+                    player.avatar.width, 
+                    player.avatar.height
+                ),
+                null,
+                player.x,
+                player.y);
+        });
     }
 
     // Gérer le rendu de la vue
     render() {
         this.#context2D.clearRect(0, 0, this.#canvas.width, this.#canvas.height);
-        this.controller.drawEnemies(this.#context2D);
-        this.controller.drawPlayer(this.#context2D);
+        this.controller.drawEnemies(this.#context2D);    
+        this.controller.drawPlayer(this.#context2D, this.other);
+        this.controller.drawPlayer(this.#context2D);     
         this.controller.drawHealthbar(this.#context2D, 10, 10, 210, 20);
-        this.controller.socketClient.on("le joueur a fait une action", player => {
-            console.log(player);
-            this.controller.drawPlayer(this.#context2D, player);
-        });
         requestAnimationFrame(this.render.bind(this));
     }
 

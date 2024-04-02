@@ -13,7 +13,6 @@ export default class GameViewController extends Controller {
     constructor(model, socketClient) {
         super(model, socketClient);
         this.enemies = this.generateEnemies();
-        console.log(this.socketClient.id);
     }
 
     // Redimensionner le canvas (responsive-design)
@@ -56,18 +55,10 @@ export default class GameViewController extends Controller {
     drawPlayer(ctx, player = this.player) {
         let image = new Image(player.avatar.width, player.avatar.height);
         image.src = player.avatar.url;
+        console.log(player);
         this.drawImage(ctx, image, player.x, player.y);
         this.drawBullets(ctx, player);
-        let bullet = new Bullet(
-            player.bullet.name, 
-            player.bullet.x, 
-            player.bullet.y, 
-            player.bullet.speed, 
-            player.bullet.avatar, 
-            player.bullet.pattern, 
-            player.bullet.damage, 
-            player.bullet.cooldown);
-        bullet.moveAll(player.isShooting);
+        player.bullet.moveAll(player.isShooting);
     }
 
     // Desiner les Images des ennemis
@@ -143,10 +134,7 @@ export default class GameViewController extends Controller {
 
     // Applique les dégâts au joueur s'il rentre en collision avec des entités adverses
     damagingPlayer(hitbox, player = this.player) {
-        const playerWidth = this.player.avatar.width;
-        const playerHeight = this.player.avatar.height;
         this.enemies.forEach(enemy => {
-            const enemyAvatar = enemy.avatar
             // Fait perdre des vies au joueur s'il se fait toucher par l'ennemi
             if (this.isCollisionning(player, enemy, null, hitbox)) 
                 player.hp--;

@@ -95,7 +95,7 @@ export default class JSteamServer {
 			socket.on("action du joueur", player => {
 				for(let [key, value] of this.parties) {
 					if(value.players.filter(p => p.username == player.name).length != 0) {
-						this.socketServer.to(key).emit("le joueur a fait une action", player);
+						socket.to(key).emit("le joueur a fait une action", player);
 					}
 				}
 			});
