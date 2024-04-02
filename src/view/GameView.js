@@ -32,7 +32,7 @@ export default class GameView extends View {
         this.listen();
 
         // Modifier le déplacement et facteurs de vitesse à intervalle régulier
-        setInterval(() => this.controller.move(this.#canvas), 10);
+        setInterval(() => this.controller.move(this.#canvas), 1000/60);
 
         // Afficher et synchroniser le rendu de l'image suivant le refresh rate de l'écran (60 FPS / 120 FPS)
         requestAnimationFrame(this.render.bind(this));

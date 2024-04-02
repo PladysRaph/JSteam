@@ -56,10 +56,18 @@ export default class GameViewController extends Controller {
     drawPlayer(ctx, player = this.player) {
         let image = new Image(player.avatar.width, player.avatar.height);
         image.src = player.avatar.url;
-        this.drawImage(ctx, image);
+        this.drawImage(ctx, image, player.x, player.y);
         this.drawBullets(ctx, player);
-        let bullet = player.bullet;
-        player.bullet.moveAll(player.isShooting);
+        let bullet = new Bullet(
+            player.bullet.name, 
+            player.bullet.x, 
+            player.bullet.y, 
+            player.bullet.speed, 
+            player.bullet.avatar, 
+            player.bullet.pattern, 
+            player.bullet.damage, 
+            player.bullet.cooldown);
+        bullet.moveAll(player.isShooting);
     }
 
     // Desiner les Images des ennemis
