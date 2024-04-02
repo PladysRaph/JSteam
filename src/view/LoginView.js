@@ -1,3 +1,5 @@
+import CreditsViewController from "../controller/CreditsViewController.js";
+import CreditsView from "./CreditsView.js";
 import View from "./View.js";
 
 export default class LoginView extends View {
@@ -9,11 +11,12 @@ export default class LoginView extends View {
     #createPartyBtn
     #joinPartyBtn
     #dialogBox
-
+    #creditsButton
     constructor(controller) {
         // Initialiser la vue
         super(
-            `
+            `          
+            <a href="index.html" id="creditsButton">Credits</a>
             <form id="loginForm" method='post'>
                 <div id="flex">
                     <fieldset>
@@ -63,7 +66,7 @@ export default class LoginView extends View {
         this.#joinPartyBtn = View.mainContent.querySelector('#join-party-btn');
         this.#createPartyBtn = View.mainContent.querySelector('#create-party-btn');
         this.#dialogBox = View.mainContent.querySelector('.dialog-box');
-		
+		this.#creditsButton= View.mainContent.querySelector('#creditsButton');
         // Écouteur d'évènements
         this.listen();
     }
@@ -101,6 +104,12 @@ export default class LoginView extends View {
                 this.#difficulty.value
             );
             btn.addEventListener('click', e => this.controller.startGame(id));
+        });
+
+        //affiche les credits
+        this.#creditsButton.addEventListener('click',e => {
+e.preventDefault();
+new CreditsView(new CreditsViewController());
         });
     }
 

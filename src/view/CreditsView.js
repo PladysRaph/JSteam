@@ -6,7 +6,7 @@ export default class CreditsView extends View {
 
     constructor(controller) {
         super(`<section id="credits">        
-        <a href="index.html" id="indexButton">Revenir a l'écran de Conenxion</a>
+        <a href="index.html" id="indexButton">Revenir a l'écran de Connexion</a>
         <div id="crawling">
         <div id="members">
                 <h2>Groupe G</h2>
@@ -32,7 +32,6 @@ export default class CreditsView extends View {
     </section>`, controller);
 
     this.#MenuBtn=View.mainContent.querySelector("#indexButton");
-    this.#BestGames=View.mainContent.querySelectorAll('#BestGame')
     this.setListener();
     }
     
@@ -41,10 +40,7 @@ export default class CreditsView extends View {
             event.preventDefault();
             this.controller.backToTitleScreen();
         });
-        this.#BestGames.forEach(game =>{
-            e.preventDefault();
 
-        });
     }
 
 }
