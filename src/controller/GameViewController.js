@@ -8,10 +8,12 @@ import LoginView from "../view/LoginView.js";
 import LoginViewController from "./LoginViewController.js";
 
 export default class GameViewController extends Controller {
+    otherModels;
 
-    constructor(model) {
-        super(model);
+    constructor(model, socketClient) {
+        super(model, socketClient);
         this.enemies = this.generateEnemies();
+        console.log(this.socketClient.id);
     }
 
     // Redimensionner le canvas (responsive-design)
@@ -51,12 +53,13 @@ export default class GameViewController extends Controller {
     }
 
     // Dessiner les Images du joueur
-    drawPlayer(ctx) {
-        let image = new Image(this.player.avatar.width, this.player.avatar.height);
-        image.src = this.player.avatar.url;
+    drawPlayer(ctx, player = this.player) {
+        let image = new Image(player.avatar.width, player.avatar.height);
+        image.src = player.avatar.url;
         this.drawImage(ctx, image);
-        this.drawBullets(ctx)
-        this.player.bullet.moveAll(this.player.isShooting);
+        this.drawBullets(ctx, player);
+        let bullet = player.bullet;
+        player.bullet.moveAll(player.isShooting);
     }
 
     // Desiner les Images des ennemis
@@ -201,9 +204,10 @@ export default class GameViewController extends Controller {
         });
 
         // Retour au lobby si toutes les vies sont perdues ou si tous les ennemis sont morts
-        if (this.player.hp <= 0 || this.enemies.length == 0)  {
+        if (this.player.hp <= 0  || this.enemies.length == 0)  {
+            this.enemies = [EnemyFactory.defaultEnemy()];
             this.player.hp = 50;
-            new LoginView(new LoginViewController(this.player))
+            new LoginView(new LoginViewController(this.player));
         }
     }
 
@@ -213,6 +217,7 @@ export default class GameViewController extends Controller {
         this.player.y += this.player.yFactor;
         this.player.bullet.x = this.player.x + this.player.avatar.width;
         this.player.bullet.y = this.player.y + this.player.avatar.height/2;
+        this.socketClient.emit("action du joueur", this.player);
         this.handleCollisions(canvas);
     }
 

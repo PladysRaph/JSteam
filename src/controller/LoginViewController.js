@@ -2,7 +2,6 @@ import Player from "../model/Player.js";
 import Avatar from "../model/Avatar.js";
 import Controller from "./Controller.js";
 import View from '../view/View.js';
-import { io } from 'socket.io-client'; 
 import GameView from "../view/GameView.js";
 import GameViewController from '../controller/GameViewController.js';
 
@@ -10,7 +9,6 @@ export default class LoginViewController extends Controller {
     
    constructor(model = null) {
     super(model);
-    this.socketClient = io();
    }
 
     // Générer un ID pour les rooms (ex: AC16XB)
@@ -75,7 +73,8 @@ export default class LoginViewController extends Controller {
     // Démarrer une partie
     startGame(id) {
         this.socketClient.emit('start game', id);
-        new GameView(new GameViewController(this.player));
+        console.log(this.socketClient.id);
+        new GameView(new GameViewController(this.player, this.socketClient));
     }
 
     // Lobby par défaut (sans joueurs)
@@ -152,7 +151,7 @@ export default class LoginViewController extends Controller {
             })
 
             this.socketClient.on('la partie commence', () => {
-                new GameView(new GameViewController(this.player));
+                new GameView(new GameViewController(this.player, this.socketClient));
             })
         }
     }

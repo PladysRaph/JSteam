@@ -32,7 +32,7 @@ export default class GameView extends View {
         this.listen();
 
         // Modifier le déplacement et facteurs de vitesse à intervalle régulier
-        setInterval(() => this.controller.move(this.#canvas));
+        setInterval(() => this.controller.move(this.#canvas), 10);
 
         // Afficher et synchroniser le rendu de l'image suivant le refresh rate de l'écran (60 FPS / 120 FPS)
         requestAnimationFrame(this.render.bind(this));
@@ -68,6 +68,10 @@ export default class GameView extends View {
         this.controller.drawEnemies(this.#context2D);
         this.controller.drawPlayer(this.#context2D);
         this.controller.drawHealthbar(this.#context2D, 10, 10, 210, 20);
+        this.controller.socketClient.on("le joueur a fait une action", player => {
+            console.log(player);
+            this.controller.drawPlayer(this.#context2D, player);
+        });
         requestAnimationFrame(this.render.bind(this));
     }
 
