@@ -4,8 +4,6 @@
     margin: auto;
     width: 50%;
     text-align: center;
-
-
 }
 
 #Nitor {
@@ -59,7 +57,7 @@ body {
     position: relative;
     top: 9999px;
     transform-origin: 50% 100%;
-    animation: crawl 30s linear;
+    animation: crawl 10s linear;
     animation-iteration-count: infinite;
     font-size: 90%;
     text-align: center;
@@ -69,10 +67,10 @@ body {
   
   #indexButton {
     display: block;
-  font-size: larger;
-  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;  
-  text-decoration: none;
-  color: #722f37;
+    font-size: larger;
+    font-family: 'm6x11';
+    text-decoration: none;
+    color: #722f37;
   }
 
   @keyframes crawl {

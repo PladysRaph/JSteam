@@ -9,6 +9,6 @@ export default class CreditsViewController extends Controller{
 
     //Revenir a l'ecran de connexion
     backToTitleScreen(){
-        new LoginView(new LoginViewController);
+        new LoginView(new LoginViewController());
     }
 }

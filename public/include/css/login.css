@@ -120,8 +120,9 @@ select {
 
 #creditsButton {
     display: block;
-  font-size: larger;
-  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;  
-  text-decoration: none;
-  color: #722f37;
+    font-size: larger;
+    font-family: 'm6x11';
+    font-size: 23px;
+    text-decoration: none;
+    color: #722f37;
 }
