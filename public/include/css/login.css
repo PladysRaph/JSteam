@@ -117,3 +117,11 @@ select {
     flex-direction: column;
     align-items: center;
 }
+
+#creditsButton {
+    display: block;
+  font-size: larger;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;  
+  text-decoration: none;
+  color: #722f37;
+}

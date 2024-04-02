@@ -13,7 +13,7 @@
     font-family: 'personamain';
 }
 
-#Neyato {
+#Neyako {
     text-align: center  ;
     font-family: 'MarioGalaxy2';
     
@@ -59,13 +59,22 @@ body {
     position: relative;
     top: 9999px;
     transform-origin: 50% 100%;
-    animation: crawl 60s linear;
+    animation: crawl 30s linear;
+    animation-iteration-count: infinite;
     font-size: 90%;
     text-align: center;
     margin: 0 0 100px;
     text-transform: uppercase;
   }
   
+  #indexButton {
+    display: block;
+  font-size: larger;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;  
+  text-decoration: none;
+  color: #722f37;
+  }
+
   @keyframes crawl {
     0% {
       top: 0;
