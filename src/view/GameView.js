@@ -85,9 +85,10 @@ export default class GameView extends View {
                     ),
                     player.x,
                     player.y,
+                    player.hp,
                     player.isShooting)
             )
-            console.log(player.isShooting);
+            this.controller.damagingEnemies(this.otherPlayers.get(player.name));
         });
     }
 
@@ -95,8 +96,12 @@ export default class GameView extends View {
     render() {
         this.#context2D.clearRect(0, 0, this.#canvas.width, this.#canvas.height);
         this.controller.drawEnemies(this.#context2D);
-		for(let [key, value] of this.otherPlayers)
+        let index = 0;
+		for(let [key, value] of this.otherPlayers) {
+            index++;
 			this.controller.drawPlayer(this.#context2D, value);
+            this.controller.drawHealthbar(this.#context2D, 15, 15+index*30, 200, 8, value.hp);
+        }
         this.controller.drawPlayer(this.#context2D);
         this.controller.drawHealthbar(this.#context2D, 10, 10, 210, 20);
         requestAnimationFrame(this.render.bind(this));
