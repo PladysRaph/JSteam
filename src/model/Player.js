@@ -5,7 +5,7 @@ import PatternFactory from './PatternFactory.js';
 import Track from './Track.js';
 
 export default class Player extends Entity {
-    constructor(name, avatar, bullet = null, x = 0, y = 0) {
+    constructor(name, avatar, bullet = null, x = 0, y = 0, isShooting = false) {
         super(name, x, y, 2, avatar);
         // PVs du joueur
         this.hp = 50;
@@ -19,6 +19,6 @@ export default class Player extends Entity {
                 [new Track(1, 0, 1)], 5, 20);
         else this.bullet = bullet;
         // Indique si le joueur est en train de tirer
-        this.isShooting = false;
+        this.isShooting = isShooting;
     }
 }

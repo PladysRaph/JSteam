@@ -2,7 +2,7 @@ import Entity from './Entity.js';
 import PatternFactory from './PatternFactory.js';
 
 export default class Bullet extends Entity {
-    constructor(name, x, y, speed, avatar, pattern = null, damage, cooldown) {
+    constructor(name, x, y, speed, avatar, pattern = null, damage, cooldown, arrX = new Array(), arrY = new Array(), TTLs = new Array(), pathTravelled = new Array()) {
         super(name, x, y, speed, avatar);
         // Patterne pour les balles
         if (pattern == null || !Array.isArray(pattern))
@@ -16,12 +16,12 @@ export default class Bullet extends Entity {
         // Frames restantes avant qu'une balle sorte
         this.release = cooldown;
         // Tableaux de coordonnées des balles existantes
-        this.arrX = new Array();
-        this.arrY = new Array();
+        this.arrX = arrX;
+        this.arrY = arrY;
         // Tableau des frames restantes d'existence des balles
-        this.TTLs = new Array();
+        this.TTLs = TTLs;
         // Tableau des frames que les balles ont déjà parcourues sur leur patterne respectif
-        this.pathTravelled = new Array();
+        this.pathTravelled = pathTravelled;
     }
     
     //Déplace un des Bullets sur le Pattern dépendemment de la vitesse

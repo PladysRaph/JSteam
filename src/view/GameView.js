@@ -69,10 +69,25 @@ export default class GameView extends View {
                         player.avatar.width, 
                         player.avatar.height
                     ),
-					null,
+					new Bullet(
+                        player.bullet.name, 
+                        player.bullet.x, 
+                        player.bullet.y, 
+                        player.bullet.speed, 
+                        player.bullet.avatar, 
+                        player.bullet.pattern, 
+                        player.bullet.damage, 
+                        player.bullet.cooldown,
+                        player.bullet.arrX,
+                        player.bullet.arrY,
+                        player.bullet.TTLs,
+                        player.bullet.pathTravelled
+                    ),
                     player.x,
-                    player.y)
+                    player.y,
+                    player.isShooting)
             )
+            console.log(player.isShooting);
         });
     }
 
