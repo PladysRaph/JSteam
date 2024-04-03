@@ -57,6 +57,7 @@ export default class JSteamServer {
 						{
 							"username": partyInfo.owner.username,
 							"avatar": partyInfo.owner.avatar,
+							"socket_id": socket.id
 						}
 					]
 				});
@@ -81,7 +82,8 @@ export default class JSteamServer {
 						"difficulty": roomInfo.difficulty,
 						"players": roomInfo.players.concat([{
 							"username": data.model.player.name,
-							"avatar": data.model.player.avatar.url
+							"avatar": data.model.player.avatar.url,
+							"socket_id": socket.id
 						}])
 					});
 
@@ -117,14 +119,46 @@ export default class JSteamServer {
 			socket.on("disconnect", () => {
 				let isOwner = false;
 				let roomId;
+
 				for(let [key, value] of this.parties) {
 					if(value.socket_id_owner == socket.id) {
 						roomId = key;
 						isOwner = true;
 						this.socketServer.to(key).emit('déconnexion de la partie');
+						socket.disconnect();
+						break;
+					} else {
+						let partyInfo = this.parties.get(key);
+
+						let newPlayers = partyInfo.players.filter(
+							player => {
+								return player.socket_id != socket.id
+							}
+						);
+
+						let player = partyInfo.players.filter(
+							player => {
+								return player.socket_id == socket.id
+							}
+						);
+
+						if(player.length != 0) {
+							this.parties.set(partyInfo.id, {
+								"id": partyInfo.id,
+								"started": partyInfo.started,
+								"socket_id_owner": socket.id,
+								"owner": partyInfo.owner,
+								"difficulty": partyInfo.difficulty,
+								"players": newPlayers
+							});
+							this.socketServer.to(key).emit("le joueur se déconnecte", player[0].username);
+							socket.disconnect();
+						}
 					}
 				}
-				if(isOwner)
+
+				// Si la partie n'a pas encore commencé et que le joueur s'est déconnecté
+				if(isOwner && !this.parties.get(roomId).started)
 					this.parties.delete(roomId);
 			});
 		});

@@ -87,7 +87,10 @@ export default class GameView extends View {
                     player.y,
                     player.isShooting)
             )
-            console.log(player.isShooting);
+        });
+        
+        this.controller.socketClient.on("le joueur se déconnecte", username => {
+            this.otherPlayers.delete(username);
         });
     }
 

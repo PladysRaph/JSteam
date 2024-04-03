@@ -201,7 +201,7 @@ export default class GameViewController extends Controller {
         });
 
         // Retour au lobby si toutes les vies sont perdues ou si tous les ennemis sont morts
-        if (this.player.hp <= 0  || this.enemies.length == 0)  {
+        if (this.player.hp <= 0 || this.enemies.length == 0)  {
             this.enemies = [EnemyFactory.defaultEnemy()];
             this.player.hp = 50;
             new LoginView(new LoginViewController(this.player));
