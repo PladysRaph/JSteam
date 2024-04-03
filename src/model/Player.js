@@ -5,10 +5,10 @@ import PatternFactory from './PatternFactory.js';
 import Track from './Track.js';
 
 export default class Player extends Entity {
-    constructor(name, avatar, bullet = null, x = 0, y = 0, isShooting = false) {
+    constructor(name, avatar, bullet = null, x = 0, y = 0, hp = 50, isShooting = false) {
         super(name, x, y, 2, avatar);
         // PVs du joueur
-        this.hp = 50;
+        this.hp = hp;
         // Facteurs de vitesse
         this.xFactor = 0;
         this.yFactor = 0;

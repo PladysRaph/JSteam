@@ -96,7 +96,7 @@ export default class GameViewController extends Controller {
     }
 
     // Dessiner la barre de vie
-    drawHealthbar(context, x, y, width, height){
+    drawHealthbar(context, x, y, width, height, hp = this.player.hp){
         context.beginPath();
         context.strokestyle="black";
         context.lineWidth = 3;
@@ -104,7 +104,7 @@ export default class GameViewController extends Controller {
         context.stroke();
         context.closePath();
         context.beginPath();
-        const value = this.player.hp/50;
+        const value = hp/50;
         context.rect(x, y, width*value, height);
         if(value > 0.63){
             context.fillStyle="green"
