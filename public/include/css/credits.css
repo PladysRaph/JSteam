@@ -64,13 +64,19 @@ body {
     margin: 0 0 100px;
     text-transform: uppercase;
   }
-  
+
+  #members h1, #members h2, #members h3, #members a {
+    font-family: 'm6x11';
+    color: #fff;
+  }
+
   #indexButton {
     display: block;
     font-size: larger;
     font-family: 'm6x11';
+    font-size: 23px;
     text-decoration: none;
-    color: #722f37;
+    color: #000;
   }
 
   @keyframes crawl {

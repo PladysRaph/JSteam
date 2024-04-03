@@ -1,5 +1,5 @@
 body {
-    background: no-repeat url("/public/assets/img/wallpaper_login.jpeg");
+    background: no-repeat url("/public/assets/img/wallpaper_login.png");
     background-position: center center;
     background-attachment: fixed;
     background-size: cover;
@@ -124,5 +124,5 @@ select {
     font-family: 'm6x11';
     font-size: 23px;
     text-decoration: none;
-    color: #722f37;
+    color: #000;
 }

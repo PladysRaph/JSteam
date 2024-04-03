@@ -7,9 +7,9 @@ import GameViewController from '../controller/GameViewController.js';
 
 export default class LoginViewController extends Controller {
     
-   constructor(model = null) {
-    super(model);
-   }
+    constructor(model = null) {
+        super(model);
+    }
 
     // Générer un ID pour les rooms (ex: AC16XB)
     generateID() {
@@ -77,9 +77,9 @@ export default class LoginViewController extends Controller {
     }
 
     // Lobby par défaut (sans joueurs)
-    defaultLobby(dialogBox, id, isOwner) {
+    defaultLobby(dialogBox, idRoom, isOwner) {
         this.showDialogBox(dialogBox, `
-            <p>Voici le code pour inviter vos amis : ${id}</p>
+            <p>Voici le code pour inviter vos amis : ${idRoom}</p>
             <p>Les joueurs connectés au lobby :</p>
             <div>
                 <table>
@@ -93,7 +93,9 @@ export default class LoginViewController extends Controller {
 
     addPlayerAtLobby(dialogBox, username, avatar) {
         // Créer une nouvelle ligne dans le tableau
-        let tr = this.createElement('tr', null);
+        let tr = this.createElement('tr', null, {
+            'id': username
+        });
 
         let tdAvatar = this.createElement('td', null);
         tdAvatar.appendChild(
@@ -122,10 +124,8 @@ export default class LoginViewController extends Controller {
             this.showDialogBox(dialogBox, `<p>Le code pour rejoindre une partie est vide !</p>`);
         else {
             this.socketClient.emit('join party', {
-                "id": partyID.toUpperCase(),
-                "model": {
-                    "player": this.player
-                }
+                "idRoom": partyID.toUpperCase(),
+                "model": this.player
             });
 
             this.socketClient.on('le code de la partie n\'existe pas', () => {
@@ -136,9 +136,9 @@ export default class LoginViewController extends Controller {
                 this.showDialogBox(dialogBox, `<p>Un joueur a déjà le même pseudo dans le lobby</p>`);
             });
 
-            this.socketClient.on('un nouveau joueur rejoint la partie', info => {
+            this.socketClient.on('un nouveau joueur rejoint la partie', players => {
                 this.defaultLobby(dialogBox, partyID, false);
-                info.players.forEach(player => {
+                players.forEach(player => {
                     this.addPlayerAtLobby(dialogBox, player.username, player.avatar);
                 });
             });
@@ -162,26 +162,30 @@ export default class LoginViewController extends Controller {
         else {
             let id = this.generateID();
 
-            let partyInfo = {
-                'id': id,
-                'owner': {
-                    'username': username,
-                    'avatar': avatarChoiceUser
-                },
-                'difficulty': 'Difficulté' ? 'Facile' : difficulty
-            };
-
-            this.socketClient.emit('create party', partyInfo);
+            this.socketClient.emit(
+                'create party',
+                {
+                    'id': id,
+                    'owner': {
+                        'username': username,
+                        'avatar': avatarChoiceUser
+                    },
+                    'difficulty': 'Difficulté' ? 'Facile' : difficulty
+                });
 
             this.defaultLobby(dialogBox, id, true);
 
             // On ajoute l'owner de la partie au préalable
             this.addPlayerAtLobby(dialogBox, username, avatarChoiceUser);
 
-            this.socketClient.on('un nouveau joueur rejoint la partie', partyInfo => {
-                let lastPlayer = partyInfo.players.slice(-1)[0]
+            this.socketClient.on('un nouveau joueur rejoint la partie', players => {
+                let lastPlayer = players.slice(-1)[0];
                 this.addPlayerAtLobby(dialogBox, lastPlayer.username, lastPlayer.avatar);
             });
+
+            this.socketClient.on('le joueur quitte le lobby', username => {
+                View.mainContent.querySelector(`#${username}`).remove();
+            })
 
             return {
                 'id': id,

@@ -29,6 +29,20 @@ export default class JSteamServer {
         });
 	}
 
+	getParty(idRoom) {
+		return this.parties.get(idRoom);
+	}
+
+	setParty(idRoom, started, socket_id_owner, difficulty, players) {
+		this.parties.set(idRoom, {
+			"id": idRoom,
+			"started": started,
+			"socket_id_owner": socket_id_owner,
+			"difficulty": difficulty,
+			"players": players
+		});
+	}
+
 	// Vérifie si le code de la partie ou le username existe
 	isExists(element, elements, typeElement) {
 		for(let i = 0; i < elements.length; i++) {
@@ -43,123 +57,113 @@ export default class JSteamServer {
 		return false;
 	}
 
+	playerDisconnects(socket, currentRoom) {
+		let player = currentRoom.players.filter(player => player.socket_id == socket.id);
+		if(player.length != 0) {
+			this.setParty(
+				currentRoom.id,
+				currentRoom.started,
+				socket.id,
+				currentRoom.difficulty,
+				currentRoom.players.filter(p => p.socket_id != socket.id)
+			);
+			return true;
+		}
+		return false;
+	}
+
 	handleSocketConnection() {
 		this.socketServer.on('connection', socket => {
 
 			socket.on('create party', partyInfo => {
-				this.parties.set(partyInfo.id, {
-					"id": partyInfo.id,
-					"started": false,
-					"socket_id_owner": socket.id,
-					"owner": partyInfo.owner,
-					"difficulty": partyInfo.difficulty,
-					"players": [
+				this.setParty(
+					partyInfo.id,
+					false,
+					socket.id,
+					partyInfo.difficulty,
+					[
 						{
 							"username": partyInfo.owner.username,
 							"avatar": partyInfo.owner.avatar,
 							"socket_id": socket.id
 						}
 					]
-				});
+				)
 				// L'utilisateur créé la room et la rejoint
 				socket.join(partyInfo.id);
 			});
 
 			socket.on('join party', data => {
-				if(!this.isExists(data.id, Array.from(this.parties.keys()), 'id_room'))
-					this.socketServer.emit('le code de la partie n\'existe pas');
-				else if(this.isExists(data.model.player.name, this.parties.get(data.id).players, 'username'))
-					this.socketServer.emit('un joueur a déjà le même pseudo dans le lobby');
+				// Vérifie si la room existe suivant le code donné
+				if(!this.isExists(data.idRoom, Array.from(this.parties.keys()), 'id_room'))
+					socket.emit('le code de la partie n\'existe pas');
+				// Vérifie que le pseudo n'est pas déjà prit dans la partie qu'on tente de rejoindre
+				else if(this.isExists(data.model.name, this.parties.get(data.idRoom).players, 'username'))
+					socket.emit('un joueur a déjà le même pseudo dans le lobby');
 				else {
-					socket.join(data.id);
-					let roomInfo = this.parties.get(data.id);
-
-					this.parties.set(data.id, {
-						"id": data.id,
-						"started": data.started,
-						"socket_id_owner": roomInfo.socket_id_owner,
-						"owner": roomInfo.owner,
-						"difficulty": roomInfo.difficulty,
-						"players": roomInfo.players.concat([{
-							"username": data.model.player.name,
-							"avatar": data.model.player.avatar.url,
+					socket.join(data.idRoom);
+					let currentRoom = this.getParty(data.idRoom);
+					this.setParty(
+						data.idRoom,
+						currentRoom.started,
+						currentRoom.socket_id_owner,
+						currentRoom.difficulty,
+						currentRoom.players.concat([{
+							"username": data.model.name,
+							"avatar": data.model.avatar.url,
 							"socket_id": socket.id
 						}])
-					});
-
+					);
 					// Si la partie a déjà commencé
-					if(roomInfo.started)
-						this.socketServer.to(data.id).emit('la partie commence');
+					if(currentRoom.started)
+						this.socketServer.to(data.idRoom).emit('la partie commence');
 					else
-						this.socketServer.to(data.id).emit('un nouveau joueur rejoint la partie', this.parties.get(data.id));
+						this.socketServer.to(data.idRoom).emit('un nouveau joueur rejoint la partie', this.getParty(data.idRoom).players);
 				}
 			});
 
 			socket.on('start game', idRoom => {
-				let partyInfo = this.parties.get(idRoom);
-				this.parties.set(partyInfo.id, {
-					"id": partyInfo.id,
-					"started": true,
-					"socket_id_owner": socket.id,
-					"owner": partyInfo.owner,
-					"difficulty": partyInfo.difficulty,
-					"players": partyInfo.players
-				});
+				let currentRoom = this.parties.get(idRoom);
+				this.setParty(
+					idRoom,
+					true,
+					socket.id,
+					currentRoom.difficulty,
+					currentRoom.players
+				);
 				this.socketServer.to(idRoom).emit('la partie commence');
 			});
 
 			socket.on("action du joueur", player => {
-				for(let [key, value] of this.parties) {
-					if(value.players.filter(p => p.username == player.name).length != 0) {
+				for(let [key, value] of this.parties)
+					if(value.players.filter(p => p.username == player.name).length != 0)
 						socket.to(key).emit("le joueur a fait une action", player);
-					}
-				}
 			});
 
 			socket.on("disconnect", () => {
-				let isOwner = false;
-				let roomId;
+				console.log("déconnexion");
+				// let roomId;
+				// let isOwner = false;
 
-				for(let [key, value] of this.parties) {
-					if(value.socket_id_owner == socket.id) {
-						roomId = key;
-						isOwner = true;
-						this.socketServer.to(key).emit('déconnexion de la partie');
-						socket.disconnect();
-						break;
-					} else {
-						let partyInfo = this.parties.get(key);
+				// for(let [key, value] of this.parties) {
+				// 	let currentRoom = this.getParty(key);
+				// 	if(currentRoom.started) {
+				// 		console.log(currentRoom);
+				// 		if(this.playerDisconnects(key, socket, currentRoom)) this.socketServer.to(key).emit("le joueur se déconnecte", player[0].username);
+				// 	} else {
+				// 		if(value.socket_id_owner == socket.id) {
+				// 			roomId = key;
+				// 			isOwner = true;
+				// 			this.socketServer.to(roomId).emit('déconnexion de la partie');
+				// 		} else {
+				// 			if(this.playerDisconnects(key, socket, currentRoom)) this.socketServer.to(key).emit("le joueur quitte le lobby", player[0].username);
+				// 		}
+				// 	}
+				// }
 
-						let newPlayers = partyInfo.players.filter(
-							player => {
-								return player.socket_id != socket.id
-							}
-						);
-
-						let player = partyInfo.players.filter(
-							player => {
-								return player.socket_id == socket.id
-							}
-						);
-
-						if(player.length != 0) {
-							this.parties.set(partyInfo.id, {
-								"id": partyInfo.id,
-								"started": partyInfo.started,
-								"socket_id_owner": socket.id,
-								"owner": partyInfo.owner,
-								"difficulty": partyInfo.difficulty,
-								"players": newPlayers
-							});
-							this.socketServer.to(key).emit("le joueur se déconnecte", player[0].username);
-							socket.disconnect();
-						}
-					}
-				}
-
-				// Si la partie n'a pas encore commencé et que le joueur s'est déconnecté
-				if(isOwner && !this.parties.get(roomId).started)
-					this.parties.delete(roomId);
+				// // Si la partie n'a pas encore commencé et que l'owner s'est déconnecté
+				// if(isOwner)
+				// 	this.parties.delete(roomId);
 			});
 		});
 	}
