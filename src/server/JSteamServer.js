@@ -1,7 +1,6 @@
 import http from 'http';
 import express from 'express';
 import { Server as IOServer } from 'socket.io';
-import e from 'express';
 
 export default class JSteamServer {
 	static PORT = process.env.PORT == undefined ? 8000 : process.env.PORT;
@@ -50,6 +49,7 @@ export default class JSteamServer {
 			socket.on('create party', partyInfo => {
 				this.parties.set(partyInfo.id, {
 					"id": partyInfo.id,
+					"started": false,
 					"socket_id_owner": socket.id,
 					"owner": partyInfo.owner,
 					"difficulty": partyInfo.difficulty,
@@ -72,9 +72,10 @@ export default class JSteamServer {
 				else {
 					socket.join(data.id);
 					let roomInfo = this.parties.get(data.id);
-					
+
 					this.parties.set(data.id, {
 						"id": data.id,
+						"started": data.started,
 						"socket_id_owner": roomInfo.socket_id_owner,
 						"owner": roomInfo.owner,
 						"difficulty": roomInfo.difficulty,
@@ -84,11 +85,24 @@ export default class JSteamServer {
 						}])
 					});
 
-					this.socketServer.to(data.id).emit('un nouveau joueur rejoint la partie', this.parties.get(data.id));
+					// Si la partie a déjà commencé
+					if(roomInfo.started)
+						this.socketServer.to(data.id).emit('la partie commence');
+					else
+						this.socketServer.to(data.id).emit('un nouveau joueur rejoint la partie', this.parties.get(data.id));
 				}
 			});
 
 			socket.on('start game', idRoom => {
+				let partyInfo = this.parties.get(idRoom);
+				this.parties.set(partyInfo.id, {
+					"id": partyInfo.id,
+					"started": true,
+					"socket_id_owner": socket.id,
+					"owner": partyInfo.owner,
+					"difficulty": partyInfo.difficulty,
+					"players": partyInfo.players
+				});
 				this.socketServer.to(idRoom).emit('la partie commence');
 			});
 
