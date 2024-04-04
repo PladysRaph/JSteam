@@ -8,8 +8,10 @@ import PatternFactory from "../model/PatternFactory.js";
 import Player from "../model/Player.js";
 import LoginView from "./LoginView.js";
 import LoginViewController from "../controller/LoginViewController.js";
+import GameViewController from "../controller/GameViewController.js";
 
 export default class GameView extends View {
+    static interval;
     #avatarImage;
     #canvas;
     #context2D;
@@ -33,7 +35,7 @@ export default class GameView extends View {
         // Écoute sur les évènements de cette vue (redimensionnement de fenêtre, touches directionnelles pour contrôler le joueur)
         this.listen();
 
-        setInterval(() => this.controller.move(this.#canvas), 1000/60);
+        GameView.interval = setInterval(() => this.controller.move(this.#canvas), 1000/60);
 
         // Afficher et synchroniser le rendu de l'image suivant le refresh rate de l'écran (60 FPS / 120 FPS)
         requestAnimationFrame(this.render.bind(this));
@@ -111,7 +113,8 @@ export default class GameView extends View {
         }
         this.controller.drawPlayer(this.#context2D);
         this.controller.drawHealthbar(this.#context2D, 10, 10, 210, 20);
-        requestAnimationFrame(this.render.bind(this));
+        if (GameViewController.gameIsOn) 
+            requestAnimationFrame(this.render.bind(this));
     }
 
 }

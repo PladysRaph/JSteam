@@ -6,13 +6,16 @@ import EnemyFactory from "../model/EnemyFactory.js";
 import Bullet from "../model/Bullet.js";
 import LoginView from "../view/LoginView.js";
 import LoginViewController from "./LoginViewController.js";
+import GameView from "../view/GameView.js";
 
 export default class GameViewController extends Controller {
+    static gameIsOn = true;
 
     constructor(model, socketClient, idRoom) {
         super(model, socketClient);
         this.enemies = this.generateEnemies();
         this.idRoom = idRoom;
+        GameViewController.gameIsOn = true;
     }
 
     // Redimensionner le canvas (responsive-design)
@@ -204,6 +207,8 @@ export default class GameViewController extends Controller {
         if (this.player.hp <= 0 || this.enemies.length == 0)  {
             this.enemies = [EnemyFactory.defaultEnemy()];
             this.player.hp = 50;
+            GameViewController.gameIsOn = false;
+            clearInterval(GameView.interval);
             new LoginView(new LoginViewController(this.player));
             this.socketClient.disconnect();
         }
