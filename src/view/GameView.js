@@ -96,10 +96,6 @@ export default class GameView extends View {
         this.controller.socketClient.on("le joueur se déconnecte", username => {
             this.otherPlayers.delete(username);
         });
-
-        this.controller.socketClient.on('déconnexion en pleine partie', () => {
-            new LoginView(new LoginViewController());
-        })
     }
 
     // Gérer le rendu de la vue

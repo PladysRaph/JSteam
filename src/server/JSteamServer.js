@@ -57,8 +57,11 @@ export default class JSteamServer {
 		return false;
 	}
 
-	playerDisconnects(socket, currentRoom) {
-		let player = currentRoom.players.filter(player => player.socket_id == socket.id);
+	getPlayerInfo(socket, currentRoom) {
+		return currentRoom.players.filter(player => player.socket_id == socket.id)[0];
+	}
+
+	playerDisconnects(socket, currentRoom, player, msg) {
 		if(player.length != 0) {
 			this.setParty(
 				currentRoom.id,
@@ -67,13 +70,14 @@ export default class JSteamServer {
 				currentRoom.difficulty,
 				currentRoom.players.filter(p => p.socket_id != socket.id)
 			);
-			return player[0];
+			this.socketServer.to(currentRoom.id).emit(msg, player.username);
 		}
-		return null;
 	}
 
 	handleSocketConnection() {
 		this.socketServer.on('connection', socket => {
+
+			console.log(this.parties);
 
 			socket.on('create party', partyInfo => {
 				this.setParty(
@@ -141,40 +145,37 @@ export default class JSteamServer {
 			});
 
 			socket.on("disconnect", () => {
-				console.log("déconnexion");
 				let roomId;
-				let isOwner = false;
+				let removeParty = false;
 
 				for(let [key, value] of this.parties) {
 					let currentRoom = this.getParty(key);
+					let currentPlayer = this.getPlayerInfo(socket, currentRoom);
+					// Si la partie a commencé
 					if(currentRoom.started) {
-						if(value.socket_id_owner == socket.id) {
+						this.playerDisconnects(socket, currentRoom, currentPlayer, 'le joueur se déconnecte');
+						// Si le nombre de joueurs tombe à 0, alors on supprimera la partie en sortant de la boucle				
+						if(this.getParty(key).players.length == 0) {
 							roomId = key;
-					 		isOwner = true;
-					 		this.socketServer.to(roomId).emit('déconnexion en pleine partie');
+							removeParty = true;
 							break;
-						} else {
-							let player = this.playerDisconnects(socket, currentRoom);
-							if(player != null) 
-								this.socketServer.to(key).emit("le joueur se déconnecte", player.username);
 						}
-					} 
-					else {
+					// Dans le lobby
+					} else {
+						// Si l'owner se déconnecte, on déconnecte tous les joueurs du lobby
 					 	if(value.socket_id_owner == socket.id) {
+							this.playerDisconnects(socket, currentRoom, currentPlayer, 'déconnexion du lobby');
 					 		roomId = key;
-					 		isOwner = true;
-					 		this.socketServer.to(roomId).emit('déconnexion de la partie');
+					 		removeParty = true;
 							break;
-					 	} else {
-							let player = this.playerDisconnects(socket, currentRoom);
-							if(player != null) 
-								this.socketServer.to(key).emit("le joueur quitte le lobby", player.username);
-						}
+						// Un joueur classique se déconnecte
+					 	} else
+							this.playerDisconnects(socket, currentRoom, currentPlayer, 'le joueur quitte le lobby');
 					}
 				}
 
-				// Si la partie n'a pas encore commencé et que l'owner s'est déconnecté
-				if(isOwner)
+				// On supprime la partie si l'owner quitte le lobby ou se déconnecte de la partie en sachant qu'i
+				if(removeParty)
 					this.parties.delete(roomId);
 			});
 		});

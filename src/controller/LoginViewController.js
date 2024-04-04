@@ -143,7 +143,7 @@ export default class LoginViewController extends Controller {
                 });
             });
 
-            this.socketClient.on('déconnexion de la partie', () => {
+            this.socketClient.on('déconnexion du lobby', () => {
                 dialogBox.style.display = 'none';
                 this.showDialogBox(dialogBox, '<p>Vous avez été déconnecté, l\'owner de la partie s\'est déconnecté</p>');
                 window.onclick = e => this.hideDialogBox(e, dialogBox);
