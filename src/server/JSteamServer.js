@@ -78,9 +78,6 @@ export default class JSteamServer {
 
 	handleSocketConnection() {
 		this.socketServer.on('connection', socket => {
-
-			console.log(this.parties);
-
 			socket.on('create party', partyInfo => {
 				this.setParty(
 					partyInfo.id,
