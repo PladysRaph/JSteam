@@ -34,21 +34,11 @@ export default class GameViewController extends Controller {
     // Générer des ennemis
     generateEnemies() {
         let res = [
-            EnemyFactory.defaultEnemy(1500, 300),
-
-            new Enemy("sphere2", 1000, 200, 5,
-                new Avatar("/public/assets/img/dark-sphere.png", 64, 64), 
-                PatternFactory.circlePattern(22, 0, false), 
-                new Bullet('Red pearl bullet', 1000, 200, 10,
-                    new Avatar('public/assets/img/red-pearl-bullet.png', 16, 16),
-                    PatternFactory.circlePattern(44, 0, false), 5, 20)),
-
-            new Enemy("sphere3", 500, 500, 3, 
-                new Avatar("/public/assets/img/dark-sphere.png", 64, 64), 
-                PatternFactory.snakePattern(22, 0), 
-                new Bullet('Red pearl bullet', 1000, 200, 10,
-                    new Avatar('public/assets/img/red-pearl-bullet.png', 16, 16), 
-                    PatternFactory.circlePattern(10, 20), 3, 90))
+            EnemyFactory.speedster(1500, 100),
+            EnemyFactory.soho(1500, 200),
+            EnemyFactory.uther(1500, 300),
+            EnemyFactory.kayn(1500, 400),
+            EnemyFactory.belvet(1500, 500)
         ];
         this.enemies = res;
         return res;
@@ -205,7 +195,7 @@ export default class GameViewController extends Controller {
 
         // Retour au lobby si toutes les vies sont perdues ou si tous les ennemis sont morts
         if (this.player.hp <= 0 || this.enemies.length == 0)  {
-            this.enemies = [EnemyFactory.defaultEnemy()];
+            this.enemies = [EnemyFactory.speedster()];
             this.player.hp = 50;
             GameViewController.gameIsOn = false;
             clearInterval(GameView.interval);
