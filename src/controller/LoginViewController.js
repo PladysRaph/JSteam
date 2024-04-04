@@ -7,8 +7,9 @@ import GameViewController from '../controller/GameViewController.js';
 
 export default class LoginViewController extends Controller {
     
-    constructor(model = null) {
+    constructor(model = null, idRoomToRetry = null) {
         super(model);
+        this.idRoomToRetry = idRoomToRetry;
     }
 
     // Générer un ID pour les rooms (ex: AC16XB)
@@ -149,8 +150,8 @@ export default class LoginViewController extends Controller {
                 window.onclick = e => this.hideDialogBox(e, dialogBox);
             })
 
-            this.socketClient.on('la partie commence', () => {
-                new GameView(new GameViewController(this.player, this.socketClient, partyID.toUpperCase()));
+            this.socketClient.on('la partie commence', enemies => {
+                new GameView(new GameViewController(this.player, this.socketClient, partyID.toUpperCase(), enemies));
             })
         }
     }

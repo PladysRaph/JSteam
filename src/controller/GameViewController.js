@@ -1,19 +1,19 @@
-import Avatar from "../model/Avatar.js";
-import Enemy from "../model/Enemy.js";
-import PatternFactory from "../model/PatternFactory.js";
 import Controller from "./Controller.js";
+import Enemy from "../model/Enemy.js";
 import EnemyFactory from "../model/EnemyFactory.js";
-import Bullet from "../model/Bullet.js";
 import LoginView from "../view/LoginView.js";
 import LoginViewController from "./LoginViewController.js";
 import GameView from "../view/GameView.js";
+import ObjectMapper from "../utils/ObjectMapper.js";
 
 export default class GameViewController extends Controller {
     static gameIsOn = true;
 
-    constructor(model, socketClient, idRoom) {
+    constructor(model, socketClient, idRoom, enemies = null) {
         super(model, socketClient);
-        this.enemies = this.generateEnemies();
+        this.enemies = enemies == null ? this.generateEnemies() : enemies.map(enemy => {
+            return ObjectMapper.deserialize(enemy, Enemy);
+        });
         this.idRoom = idRoom;
         GameViewController.gameIsOn = true;
     }
@@ -199,7 +199,7 @@ export default class GameViewController extends Controller {
             this.player.hp = 50;
             GameViewController.gameIsOn = false;
             clearInterval(GameView.interval);
-            new LoginView(new LoginViewController(this.player));
+            new LoginView(new LoginViewController(this.player, this.idRoom));
             this.socketClient.disconnect();
         }
     }
@@ -210,7 +210,7 @@ export default class GameViewController extends Controller {
         this.player.y += this.player.yFactor;
         this.player.bullet.x = this.player.x + this.player.avatar.width;
         this.player.bullet.y = this.player.y + this.player.avatar.height/2;
-        this.socketClient.emit("action du joueur", this.player, this.idRoom);
+        this.socketClient.emit("action du joueur", this.player, this.enemies, this.idRoom);
         this.handleCollisions(canvas);
     }
 

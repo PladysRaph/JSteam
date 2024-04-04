@@ -99,14 +99,15 @@ select {
 
 .dialog-box>div table {
     width: 150px;
+    border-collapse: collapse;
 }
 
-.dialog-box>div table tr, .dialog-box>div table td {
+.dialog-box>div table tr, .dialog-box>div table td, .dialog-box>div table th {
     border: 2px solid #fff;
     padding: 15px;
 }
 
-.dialog-box>div table tr td:nth-child(2) {
+.dialog-box>div table tr td:nth-child(2), .dialog-box>div table th {
     font-family: 'm6x11';
     font-size: 17px;
     color: #fff;

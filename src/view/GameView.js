@@ -1,13 +1,7 @@
 import Avatar from "../model/Avatar.js";
-import Enemy from "../model/Enemy.js";
-import Track from "../model/Track.js";
 import View from "./View.js";
 import Bullet from "../model/Bullet.js";
-import EnemyFactory from "../model/EnemyFactory.js";
-import PatternFactory from "../model/PatternFactory.js";
 import Player from "../model/Player.js";
-import LoginView from "./LoginView.js";
-import LoginViewController from "../controller/LoginViewController.js";
 import GameViewController from "../controller/GameViewController.js";
 
 export default class GameView extends View {
@@ -26,7 +20,7 @@ export default class GameView extends View {
 		// Créer l'avatar du joueur
 		this.#avatarImage = this.controller.generateHTMLAvatar();
 
-        this. otherPlayers= new Map();
+        this.otherPlayers = new Map();
 		
 		// Canvas de la vue
         this.#canvas = View.mainContent.querySelector('.gameCanvas');

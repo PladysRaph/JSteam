@@ -10,6 +10,7 @@ export default class LoginView extends View {
     #difficulty
     #createPartyBtn
     #joinPartyBtn
+    #retryPartyBtn
     #dialogBox
     #creditsButton
 
@@ -55,7 +56,6 @@ export default class LoginView extends View {
                 </div>
             </form>`, controller);
 
-        
         // Avatar par défaut
         this.#avatarChoiceUser = '/public/assets/img/pirate-ship.png';
 
@@ -68,6 +68,35 @@ export default class LoginView extends View {
         this.#createPartyBtn = View.mainContent.querySelector('#create-party-btn');
         this.#dialogBox = View.mainContent.querySelector('.dialog-box');
 		this.#creditsButton= View.mainContent.querySelector('#creditsButton');
+        
+        // Dans le cas où le joueur perd une partie, il peut la rejouer (si elle existe toujours)
+        if(this.controller.idRoomToRetry != null) {
+            this.controller.showDialogBox(
+                this.#dialogBox,
+                `
+                <p>Vous avez perdu '${this.controller.player.name}', voici vos statistiques de la partie :</p>
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Stat 1</th>
+                        <td>Valeur 1</td>
+                    </tr>
+                    <tr>
+                        <th>Stat 2</th>
+                        <td>Valeur 2</td>
+                    </tr>
+                    <tr>
+                        <th>Stat 3</th>
+                        <td>Valeur 3</td>
+                    </tr>
+                    </thead>
+                </table>
+                <input id="retry-party-btn" type='submit' value='Recommencer'>
+                `
+            );
+            this.#retryPartyBtn = View.mainContent.querySelector('#retry-party-btn');
+        }
+        
         // Écouteur d'évènements
         this.listen();
     }
@@ -92,8 +121,20 @@ export default class LoginView extends View {
                 this.#party.value,
                 this.#avatarChoiceUser
             );
-            
         })
+
+        // ou recommencer une partie
+        if(this.controller.idRoomToRetry != null) {
+            this.#retryPartyBtn.addEventListener('click', e => {
+                e.preventDefault();
+                this.controller.joinParty(
+                    this.#dialogBox,
+                    this.controller.player.name,
+                    this.controller.idRoomToRetry,
+                    this.controller.player.avatar.url
+                );
+            });
+        }
 
         // Créer une partie
         this.#createPartyBtn.addEventListener('click', e => {
@@ -104,7 +145,10 @@ export default class LoginView extends View {
                 this.#avatarChoiceUser,
                 this.#difficulty.value
             );
-            btn.addEventListener('click', e => this.controller.startGame(id));
+            btn.addEventListener('click', e => {
+                e.preventDefault();
+                this.controller.startGame(id)
+            });
         });
 
         //affiche les credits

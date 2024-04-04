@@ -33,12 +33,13 @@ export default class JSteamServer {
 		return this.parties.get(idRoom);
 	}
 
-	setParty(idRoom, started, socket_id_owner, difficulty, players) {
+	setParty(idRoom, started, socket_id_owner, difficulty, enemies, players) {
 		this.parties.set(idRoom, {
 			"id": idRoom,
 			"started": started,
 			"socket_id_owner": socket_id_owner,
 			"difficulty": difficulty,
+			"enemies": enemies,
 			"players": players
 		});
 	}
@@ -69,6 +70,7 @@ export default class JSteamServer {
 					currentRoom.started,
 					socket.id,
 					currentRoom.difficulty,
+					currentRoom.enemies,
 					currentRoom.players.filter(p => p.socket_id != socket.id)
 				);
 				this.socketServer.to(currentRoom.id).emit(msg, player.username);
@@ -84,6 +86,7 @@ export default class JSteamServer {
 					false,
 					socket.id,
 					partyInfo.difficulty,
+					[],
 					[
 						{
 							"username": partyInfo.owner.username,
@@ -111,6 +114,7 @@ export default class JSteamServer {
 						currentRoom.started,
 						currentRoom.socket_id_owner,
 						currentRoom.difficulty,
+						currentRoom.enemies,
 						currentRoom.players.concat([{
 							"username": data.model.name,
 							"avatar": data.model.avatar.url,
@@ -119,7 +123,7 @@ export default class JSteamServer {
 					);
 					// Si la partie a déjà commencé
 					if(currentRoom.started)
-						this.socketServer.to(data.idRoom).emit('la partie commence');
+						this.socketServer.to(data.idRoom).emit('la partie commence', currentRoom.enemies);
 					else
 						this.socketServer.to(data.idRoom).emit('un nouveau joueur rejoint la partie', this.getParty(data.idRoom).players);
 				}
@@ -128,16 +132,26 @@ export default class JSteamServer {
 			socket.on('start game', idRoom => {
 				let currentRoom = this.parties.get(idRoom);
 				this.setParty(
-					idRoom,
+					currentRoom.id,
 					true,
-					socket.id,
+					currentRoom.socket_id_owner,
 					currentRoom.difficulty,
+					currentRoom.enemies,
 					currentRoom.players
 				);
-				this.socketServer.to(idRoom).emit('la partie commence');
+				this.socketServer.to(idRoom).emit('la partie commence', []);
 			});
 
-			socket.on("action du joueur", (player, idRoom) => {
+			socket.on("action du joueur", (player, enemies, idRoom) => {
+				let currentRoom = this.getParty(idRoom);
+				this.setParty(
+					currentRoom.id,
+					currentRoom.started,
+					currentRoom.socket_id_owner,
+					currentRoom.difficulty,
+					enemies,
+					currentRoom.players
+				)
 				socket.to(idRoom).emit("le joueur a fait une action", player);
 			});
 
@@ -151,6 +165,7 @@ export default class JSteamServer {
 					// Si la partie a commencé
 					if(currentRoom.started) {
 						this.playerDisconnects(socket, currentRoom, currentPlayer, 'le joueur se déconnecte');
+						this.socketServer.to(key).emit('écran pour rejouer');
 						// Si le nombre de joueurs tombe à 0, alors on supprimera la partie en sortant de la boucle				
 						if(this.getParty(key).players.length == 0) {
 							roomId = key;
