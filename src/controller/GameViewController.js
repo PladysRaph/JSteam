@@ -150,6 +150,15 @@ export default class GameViewController extends Controller {
         });
     }
 
+    // Supprime les bullets s'ils rentrent en collision  
+    deleteOnCollision(player, bullet) {
+        for (let index = 0; index < bullet.arrX.length; index++) {
+            if (this.isCollisionning(player, bullet, index)) {
+                bullet.delete(index);
+            }
+        }
+    }
+
     // Répond vrai si les deux entités se superposent.
     // Si un index est précisé, on considère que la deuxième entité est un tableau de coordonnées
     isCollisionning(entity1, entity2, index = null, hitbox1 = 1, hitbox2 = 1) {
@@ -205,6 +214,7 @@ export default class GameViewController extends Controller {
             this.enemies = [EnemyFactory.defaultEnemy()];
             this.player.hp = 50;
             new LoginView(new LoginViewController(this.player));
+            this.socketClient.disconnect();
         }
     }
 

@@ -6,6 +6,8 @@ import Bullet from "../model/Bullet.js";
 import EnemyFactory from "../model/EnemyFactory.js";
 import PatternFactory from "../model/PatternFactory.js";
 import Player from "../model/Player.js";
+import LoginView from "./LoginView.js";
+import LoginViewController from "../controller/LoginViewController.js";
 
 export default class GameView extends View {
     #avatarImage;
@@ -94,6 +96,10 @@ export default class GameView extends View {
         this.controller.socketClient.on("le joueur se déconnecte", username => {
             this.otherPlayers.delete(username);
         });
+
+        this.controller.socketClient.on('déconnexion en pleine partie', () => {
+            new LoginView(new LoginViewController());
+        })
     }
 
     // Gérer le rendu de la vue
