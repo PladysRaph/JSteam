@@ -24,7 +24,7 @@ export default class GameView extends View {
 		// Créer l'avatar du joueur
 		this.#avatarImage = this.controller.generateHTMLAvatar();
 
-        this.otherPlayers = new Map();
+        this. otherPlayers= new Map();
 		
 		// Canvas de la vue
         this.#canvas = View.mainContent.querySelector('.gameCanvas');

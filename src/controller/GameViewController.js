@@ -37,7 +37,7 @@ export default class GameViewController extends Controller {
                 new Avatar("/public/assets/img/dark-sphere.png", 64, 64), 
                 PatternFactory.circlePattern(22, 0, false), 
                 new Bullet('Red pearl bullet', 1000, 200, 10,
-                    new Avatar('public/assets/img/red-pearl-bullet.png', 16, 16), 
+                    new Avatar('public/assets/img/red-pearl-bullet.png', 16, 16),
                     PatternFactory.circlePattern(44, 0, false), 5, 20)),
 
             new Enemy("sphere3", 500, 500, 3, 
@@ -196,7 +196,7 @@ export default class GameViewController extends Controller {
         
         // Enlève les ennemis morts
         this.enemies = this.enemies.filter(enemy => {
-            if (enemy.hp >= 0) return true;
+            if (enemy.hp > 0 && enemy.x > 0) return true;
             else return false;
         });
 

@@ -46,4 +46,17 @@ export default class PatternFactory {
             new Track(0, -1, size)
         ] 
     }
+
+    static zigzagPattern(size, isOnTop = true) {
+        if (isOnTop) {
+            return [
+                new Track(-1, -1, size), 
+                new Track(-1, 1, size)
+            ]
+        }
+        return [
+            new Track(-1, 1, size), 
+            new Track(-1, -1, size)
+        ] 
+    }
 }
