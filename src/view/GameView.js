@@ -104,7 +104,7 @@ export default class GameView extends View {
 		for(let [key, value] of this.otherPlayers) {
             index++;
 			this.controller.drawPlayer(this.#context2D, value);
-            this.controller.drawHealthbar(this.#context2D, 15, 15+index*30, 200, 8, value.hp);
+            this.controller.drawHealthbar(this.#context2D, value.x, value.y + value.avatar.width + 10, value.avatar.width, 8, value.hp);
         }
         this.controller.drawPlayer(this.#context2D);
         this.controller.drawHealthbar(this.#context2D, 10, 10, 210, 20);
