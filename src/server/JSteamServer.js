@@ -62,15 +62,17 @@ export default class JSteamServer {
 	}
 
 	playerDisconnects(socket, currentRoom, player, msg) {
-		if(player.length != 0) {
-			this.setParty(
-				currentRoom.id,
-				currentRoom.started,
-				socket.id,
-				currentRoom.difficulty,
-				currentRoom.players.filter(p => p.socket_id != socket.id)
-			);
-			this.socketServer.to(currentRoom.id).emit(msg, player.username);
+		if(player != undefined) {
+			if(player.length != 0) {
+				this.setParty(
+					currentRoom.id,
+					currentRoom.started,
+					socket.id,
+					currentRoom.difficulty,
+					currentRoom.players.filter(p => p.socket_id != socket.id)
+				);
+				this.socketServer.to(currentRoom.id).emit(msg, player.username);
+			}
 		}
 	}
 
@@ -138,10 +140,8 @@ export default class JSteamServer {
 				this.socketServer.to(idRoom).emit('la partie commence');
 			});
 
-			socket.on("action du joueur", player => {
-				for(let [key, value] of this.parties)
-					if(value.players.filter(p => p.username == player.name).length != 0)
-						socket.to(key).emit("le joueur a fait une action", player);
+			socket.on("action du joueur", (player, idRoom) => {
+				socket.to(idRoom).emit("le joueur a fait une action", player);
 			});
 
 			socket.on("disconnect", () => {

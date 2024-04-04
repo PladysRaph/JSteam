@@ -73,7 +73,7 @@ export default class LoginViewController extends Controller {
     // Démarrer une partie
     startGame(id) {
         this.socketClient.emit('start game', id);
-        new GameView(new GameViewController(this.player, this.socketClient));
+        new GameView(new GameViewController(this.player, this.socketClient, id));
     }
 
     // Lobby par défaut (sans joueurs)
@@ -150,7 +150,7 @@ export default class LoginViewController extends Controller {
             })
 
             this.socketClient.on('la partie commence', () => {
-                new GameView(new GameViewController(this.player, this.socketClient));
+                new GameView(new GameViewController(this.player, this.socketClient, partyID.toUpperCase()));
             })
         }
     }

@@ -8,11 +8,11 @@ import LoginView from "../view/LoginView.js";
 import LoginViewController from "./LoginViewController.js";
 
 export default class GameViewController extends Controller {
-    otherModels;
 
-    constructor(model, socketClient) {
+    constructor(model, socketClient, idRoom) {
         super(model, socketClient);
         this.enemies = this.generateEnemies();
+        this.idRoom = idRoom;
     }
 
     // Redimensionner le canvas (responsive-design)
@@ -215,7 +215,7 @@ export default class GameViewController extends Controller {
         this.player.y += this.player.yFactor;
         this.player.bullet.x = this.player.x + this.player.avatar.width;
         this.player.bullet.y = this.player.y + this.player.avatar.height/2;
-        this.socketClient.emit("action du joueur", this.player);
+        this.socketClient.emit("action du joueur", this.player, this.idRoom);
         this.handleCollisions(canvas);
     }
 
