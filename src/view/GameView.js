@@ -62,6 +62,7 @@ export default class GameView extends View {
 
 		// On réinstancie car socket.io ne déserialise pas entièrement l'object Player (il manque les méthodes fournies par cette méthode)
         this.controller.socketClient.on("le joueur a fait une action", player => {
+            this.controller.damagingPlayer(0.8, player);
             this.otherPlayers.set(
                 player.name,
                 new Player(
