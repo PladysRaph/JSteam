@@ -165,7 +165,6 @@ export default class JSteamServer {
 					// Si la partie a commencé
 					if(currentRoom.started) {
 						this.playerDisconnects(socket, currentRoom, currentPlayer, 'le joueur se déconnecte');
-						this.socketServer.to(key).emit('écran pour rejouer');
 						// Si le nombre de joueurs tombe à 0, alors on supprimera la partie en sortant de la boucle				
 						if(this.getParty(key).players.length == 0) {
 							roomId = key;
