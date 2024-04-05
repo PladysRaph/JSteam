@@ -139,19 +139,21 @@ export default class LoginView extends View {
         // Créer une partie
         this.#createPartyBtn.addEventListener('click', e => {
             e.preventDefault();
-            let {id, btn} = this.controller.createParty(
+            let res = this.controller.createParty(
                 this.#dialogBox,
                 this.#username.value,
                 this.#avatarChoiceUser,
                 this.#difficulty.value
             );
-            btn.addEventListener('click', e => {
-                e.preventDefault();
-                this.controller.startGame(id)
-            });
+
+            if(res != null)
+                res.btn.addEventListener('click', e => {
+                    e.preventDefault();
+                    this.controller.startGame(res.id);
+                });
         });
 
-        //affiche les credits
+        //affiche{id, btn} les credits
         this.#creditsButton.addEventListener('click', e => {
             e.preventDefault();
             new CreditsView(new CreditsViewController());

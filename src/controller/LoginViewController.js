@@ -158,9 +158,10 @@ export default class LoginViewController extends Controller {
 
     // Créer une partie
     createParty(dialogBox, username, avatarChoiceUser, difficulty) {
-        if(!this.createUser(username, avatarChoiceUser))
+        if(!this.createUser(username, avatarChoiceUser)) {
             this.showDialogBox(dialogBox, `<p>Le nom d'utilisateur est vide !</p>`);
-        else {
+            return null;
+        } else {
             let id = this.generateID();
 
             this.socketClient.emit(

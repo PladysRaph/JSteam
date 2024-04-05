@@ -15,6 +15,7 @@ export default class GameViewController extends Controller {
             return ObjectMapper.deserialize(enemy, Enemy);
         });
         this.idRoom = idRoom;
+        console.log(this.idRoom);
         GameViewController.gameIsOn = true;
     }
 
@@ -194,11 +195,9 @@ export default class GameViewController extends Controller {
         });
 
         // Retour au lobby si toutes les vies sont perdues ou si tous les ennemis sont morts
-        if (this.player.hp <= 0 || this.enemies.length == 0)  {
-            this.enemies = [EnemyFactory.speedster()];
+        if (this.player.hp <= 0)  {
             this.player.hp = 50;
             GameViewController.gameIsOn = false;
-            clearInterval(GameView.interval);
             new LoginView(new LoginViewController(this.player, this.idRoom));
             this.socketClient.disconnect();
         }

@@ -37,6 +37,6 @@ export default class ObjectMapper {
                 return attribute;
         });
 
-        return Reflect.construct(type, attributes);
+        return  
     }
 }
