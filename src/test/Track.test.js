@@ -14,7 +14,7 @@ describe('Create Track',() =>{
             // Compare pour vérifier que les valeurs sont bien celles données
             assert.equal(track.x, 1);
             assert.equal(track.y, -1);
-            assert.equal(track.time, 1);
+            assert.equal(track.frame, 1);
         }
     )}
 )
