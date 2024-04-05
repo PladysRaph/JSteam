@@ -4,6 +4,7 @@ import Bullet from "../model/Bullet.js";
 import Player from "../model/Player.js";
 import GameViewController from "../controller/GameViewController.js";
 import ObjectMapper from "../utils/ObjectMapper.js";
+import EnemyFactory from "../model/EnemyFactory.js";
 
 export default class GameView extends View {
     static interval;

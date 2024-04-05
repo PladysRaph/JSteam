@@ -124,7 +124,7 @@ export default class JSteamServer {
 					);
 					// Si la partie a déjà commencé
 					if(currentRoom.started)
-						this.socketServer.to(data.idRoom).emit('la partie commence', currentRoom.enemies);
+						this.socketServer.to(data.idRoom).emit('la partie commence', currentRoom.difficulty, currentRoom.enemies);
 					else
 						this.socketServer.to(data.idRoom).emit('un nouveau joueur rejoint la partie', this.getParty(data.idRoom).players);
 				}
@@ -140,7 +140,7 @@ export default class JSteamServer {
 					currentRoom.enemies,
 					currentRoom.players
 				);
-				this.socketServer.to(idRoom).emit('la partie commence', null);
+				this.socketServer.to(idRoom).emit('la partie commence', currentRoom.difficulty, null);
 			});
 
 			socket.on("action du joueur", (player, enemies, idRoom) => {

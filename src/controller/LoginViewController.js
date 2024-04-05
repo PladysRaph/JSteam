@@ -150,8 +150,9 @@ export default class LoginViewController extends Controller {
                 window.onclick = e => this.hideDialogBox(e, dialogBox);
             })
 
-            this.socketClient.on('la partie commence', enemies => {
-                new GameView(new GameViewController(this.player, this.socketClient, partyID.toUpperCase(), enemies));
+            this.socketClient.on('la partie commence', (difficulty, enemies) => {
+                console.log("*" + difficulty);
+                new GameView(new GameViewController(this.player, this.socketClient, partyID.toUpperCase(), enemies, difficulty));
             })
         }
     }
@@ -172,7 +173,7 @@ export default class LoginViewController extends Controller {
                         'username': username,
                         'avatar': avatarChoiceUser
                     },
-                    'difficulty': 'Difficulté' ? 'Facile' : difficulty
+                    'difficulty': 'Difficulté' == difficulty  ? 'Facile' : difficulty
                 });
 
             this.defaultLobby(dialogBox, id, true);

@@ -4,7 +4,7 @@ import Entity from './Entity.js'
 import Track from './Track.js';
 
 export default class Player extends Entity {
-    constructor(name, avatar, bullet = null, x = 0, y = 0, hp = 50, isShooting = false) {
+    constructor(name, avatar, bullet = null, x = 0, y = 0, hp = 100, isShooting = false) {
         super(name, x, y, 5, avatar);
         // PVs du joueur
         this.hp = hp;
