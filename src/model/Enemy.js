@@ -2,7 +2,6 @@ import Avatar from './Avatar.js';
 import Bullet from './Bullet.js';
 import Entity from './Entity.js'
 import PatternFactory from './PatternFactory.js';
-import Track from './Track.js';
 
 export default class Enemy extends Entity {
     constructor(name, x, y, speed, avatar, pattern = null, bullet = null, hp = 30) {

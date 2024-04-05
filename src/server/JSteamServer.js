@@ -110,7 +110,7 @@ export default class JSteamServer {
 					socket.join(data.idRoom);
 					let currentRoom = this.getParty(data.idRoom);
 					this.setParty(
-						data.idRoom,
+						currentRoom.id,
 						currentRoom.started,
 						currentRoom.socket_id_owner,
 						currentRoom.difficulty,
@@ -139,7 +139,7 @@ export default class JSteamServer {
 					currentRoom.enemies,
 					currentRoom.players
 				);
-				this.socketServer.to(idRoom).emit('la partie commence', []);
+				this.socketServer.to(idRoom).emit('la partie commence', null);
 			});
 
 			socket.on("action du joueur", (player, enemies, idRoom) => {

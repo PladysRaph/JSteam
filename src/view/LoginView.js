@@ -68,7 +68,7 @@ export default class LoginView extends View {
         this.#createPartyBtn = View.mainContent.querySelector('#create-party-btn');
         this.#dialogBox = View.mainContent.querySelector('.dialog-box');
 		this.#creditsButton= View.mainContent.querySelector('#creditsButton');
-        
+
         // Dans le cas où le joueur perd une partie, il peut la rejouer (si elle existe toujours)
         if(this.controller.idRoomToRetry != null) {
             this.controller.showDialogBox(

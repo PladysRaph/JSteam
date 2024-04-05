@@ -3,6 +3,7 @@ import View from "./View.js";
 import Bullet from "../model/Bullet.js";
 import Player from "../model/Player.js";
 import GameViewController from "../controller/GameViewController.js";
+import ObjectMapper from "../utils/ObjectMapper.js";
 
 export default class GameView extends View {
     static interval;
@@ -59,35 +60,8 @@ export default class GameView extends View {
 		// On réinstancie car socket.io ne déserialise pas entièrement l'object Player (il manque les méthodes fournies par cette méthode)
         this.controller.socketClient.on("le joueur a fait une action", player => {
             this.controller.damagingPlayer(0.8, player);
-            this.otherPlayers.set(
-                player.name,
-                new Player(
-                    player.name, 
-                    new Avatar(
-                        player.avatar.url, 
-                        player.avatar.width, 
-                        player.avatar.height
-                    ),
-					new Bullet(
-                        player.bullet.name, 
-                        player.bullet.x, 
-                        player.bullet.y, 
-                        player.bullet.speed, 
-                        player.bullet.avatar, 
-                        player.bullet.pattern, 
-                        player.bullet.damage, 
-                        player.bullet.cooldown,
-                        player.bullet.arrX,
-                        player.bullet.arrY,
-                        player.bullet.TTLs,
-                        player.bullet.pathTravelled
-                    ),
-                    player.x,
-                    player.y,
-                    player.hp,
-                    player.isShooting)
-            )
-	    this.controller.damagingEnemies(this.otherPlayers.get(player.name));
+            this.otherPlayers.set(player.name, ObjectMapper.deserialize(player, Player));
+	        this.controller.damagingEnemies(this.otherPlayers.get(player.name));
         });
         
         this.controller.socketClient.on("le joueur se déconnecte", username => {
