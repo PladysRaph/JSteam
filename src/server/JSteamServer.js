@@ -15,6 +15,7 @@ export default class JSteamServer {
 		this.socketServer = new IOServer(this.httpServer);
 		this.handleSocketConnection();
 		this.parties = new Map();
+		setInterval(() => this.socketServer.emit("tic"), 1000/60);
 	}
 
 	routes() {
