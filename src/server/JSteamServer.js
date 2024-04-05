@@ -1,6 +1,7 @@
 import http from 'http';
 import express from 'express';
 import { Server as IOServer } from 'socket.io';
+import { dirname } from 'path';
 
 export default class JSteamServer {
 	static PORT = process.env.PORT == undefined ? 8000 : process.env.PORT;
@@ -21,12 +22,14 @@ export default class JSteamServer {
 		// Routes statiques
 		this.express.use('/public', express.static('public'));
         
-		// Home
-        this.express.use('/home', express.static('index.html'));
+		// Page d'accueil
+		this.express.get('/', (req, res) => {
+			res.sendFile(process.cwd() + "/index.html");
+		});
 
-        this.express.get('/', (req, res) => {
-            res.redirect('/home');
-        });
+        this.express.get('*', (req, res) => {
+			res.redirect('/');
+		});
 	}
 
 	getParty(idRoom) {
