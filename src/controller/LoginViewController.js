@@ -150,17 +150,19 @@ export default class LoginViewController extends Controller {
                 window.onclick = e => this.hideDialogBox(e, dialogBox);
             })
 
-            this.socketClient.on('la partie commence', enemies => {
-                new GameView(new GameViewController(this.player, this.socketClient, partyID.toUpperCase(), enemies));
+            this.socketClient.on('la partie commence', (difficulty, enemies) => {
+                console.log("*" + difficulty);
+                new GameView(new GameViewController(this.player, this.socketClient, partyID.toUpperCase(), enemies, difficulty));
             })
         }
     }
 
     // Créer une partie
     createParty(dialogBox, username, avatarChoiceUser, difficulty) {
-        if(!this.createUser(username, avatarChoiceUser))
+        if(!this.createUser(username, avatarChoiceUser)) {
             this.showDialogBox(dialogBox, `<p>Le nom d'utilisateur est vide !</p>`);
-        else {
+            return null;
+        } else {
             let id = this.generateID();
 
             this.socketClient.emit(
@@ -171,7 +173,7 @@ export default class LoginViewController extends Controller {
                         'username': username,
                         'avatar': avatarChoiceUser
                     },
-                    'difficulty': 'Difficulté' ? 'Facile' : difficulty
+                    'difficulty': 'Difficulté' == difficulty  ? 'Facile' : difficulty
                 });
 
             this.defaultLobby(dialogBox, id, true);

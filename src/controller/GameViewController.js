@@ -5,17 +5,27 @@ import LoginView from "../view/LoginView.js";
 import LoginViewController from "./LoginViewController.js";
 import GameView from "../view/GameView.js";
 import ObjectMapper from "../utils/ObjectMapper.js";
+import EnemyWaveFactory from "../model/EnemyWaveFactory.js";
 
 export default class GameViewController extends Controller {
     static gameIsOn = true;
 
-    constructor(model, socketClient, idRoom, enemies = null) {
+    constructor(model, socketClient, idRoom, enemies = null, difficulty) {
         super(model, socketClient);
         this.enemies = enemies == null ? this.generateEnemies() : enemies.map(enemy => {
             return ObjectMapper.deserialize(enemy, Enemy);
         });
         this.idRoom = idRoom;
         GameViewController.gameIsOn = true;
+        switch (difficulty) {
+            case "moyen":
+                EnemyFactory.difficulty = 1;
+                break;
+            case "difficile":
+                EnemyFactory.difficulty = 2;
+            default:
+                break;
+        }
     }
 
     // Redimensionner le canvas (responsive-design)
@@ -33,13 +43,7 @@ export default class GameViewController extends Controller {
 
     // Générer des ennemis
     generateEnemies() {
-        let res = [
-            EnemyFactory.speedster(1500, 100),
-            EnemyFactory.soho(1500, 200),
-            EnemyFactory.uther(1500, 300),
-            EnemyFactory.kayn(1500, 400),
-            EnemyFactory.belvet(1500, 500)
-        ];
+        let res = EnemyWaveFactory.nextWave();
         this.enemies = res;
         return res;
     }
@@ -97,7 +101,7 @@ export default class GameViewController extends Controller {
         context.stroke();
         context.closePath();
         context.beginPath();
-        const value = hp/50;
+        const value = hp/100;
         context.rect(x, y, width*value, height);
         if(value > 0.63){
             context.fillStyle="green"
@@ -194,14 +198,14 @@ export default class GameViewController extends Controller {
         });
 
         // Retour au lobby si toutes les vies sont perdues ou si tous les ennemis sont morts
-        if (this.player.hp <= 0 || this.enemies.length == 0)  {
-            this.enemies = [EnemyFactory.speedster()];
-            this.player.hp = 50;
+        if (this.player.hp <= 0)  {
+            this.player.hp = 100;
             GameViewController.gameIsOn = false;
-            clearInterval(GameView.interval);
             new LoginView(new LoginViewController(this.player, this.idRoom));
             this.socketClient.disconnect();
         }
+
+        if(this.enemies.length <= 0) this.enemies = EnemyWaveFactory.nextWave();
     }
 
     // Déplacer le joueur en changeant ses coordonnées

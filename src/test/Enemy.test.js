@@ -24,7 +24,7 @@ describe('Create Ennemy',() => {
             assert.equal(enemy1.y, 0);
             assert.equal(enemy1.pattern[0].x, -1);
             assert.equal(enemy1.pattern[0].y, 0);
-            assert.equal(enemy1.pattern[0].time, 1);
+            assert.equal(enemy1.pattern[0].frame, 1);
         }
     )}
 )
@@ -40,7 +40,7 @@ describe('Displace Ennemy',() => {
         assert.equal(enemy1.y, 0);
 
         // Déplace l'enemy comme s'il avait bougé pendant 100 frames puis vérifie que le déplacement a bien été effectué
-        enemy1.skipTime(100);
+        enemy1.skipFrame(100);
         assert.equal(enemy1.x, 100);
         assert.equal(enemy1.y, 0);
     }

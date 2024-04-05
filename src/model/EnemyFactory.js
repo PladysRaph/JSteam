@@ -2,8 +2,10 @@ import Avatar from "./Avatar.js";
 import Enemy from "./Enemy.js";
 import Bullet from "./Bullet.js";
 import PatternFactory from "./PatternFactory.js";
+import EnemyWaveFactory from "./EnemyWaveFactory.js";
 
 export default class EnemyFactory {
+    static difficulty = 0;
 
     static belvet(x, y) {
         return EnemyFactory.makeEnemy("belvet", x, y, 20, 1, 10, 1);
@@ -32,7 +34,9 @@ export default class EnemyFactory {
         bulletAvatar = new Avatar('public/assets/img/red-pearl-bullet.png', 16, 16)) {
         if (avatar == null) avatar = new Avatar("/public/assets/img/dark-sphere.png", 64, 64);
         return new Enemy(name, x, y, speed, avatar, enemyPattern,
-            new Bullet('Red pearl bullet', x, y, 20, bulletAvatar, null, damage, cooldown), 
+            new Bullet('Red pearl bullet', x, y, 20, bulletAvatar, null, 
+                damage*(1+EnemyFactory.difficulty*0.5)*(1+EnemyWaveFactory.turns*0.3), 
+                cooldown), 
             hp
         )
     }
