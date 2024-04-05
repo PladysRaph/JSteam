@@ -1,6 +1,5 @@
-import LoginView from "../view/LoginView.js";
 import Controller from "./Controller.js";
-import LoginViewController from "./LoginViewController.js";
+import Router from "../utils/Router.js";
 
 export default class CreditsViewController extends Controller{
     constructor(model = null){
@@ -8,7 +7,7 @@ export default class CreditsViewController extends Controller{
     }
 
     //Revenir a l'ecran de connexion
-    backToTitleScreen(){
-        new LoginView(new LoginViewController());
+    backToTitleScreen() {
+        Router.navigate('/');
     }
 }

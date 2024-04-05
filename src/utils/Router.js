@@ -7,7 +7,7 @@ import GameViewController from '../controller/GameViewController.js';
 
 export default class Router {
 
-    static navigate(path, args) {
+    static navigate(path, args = []) {
         switch(path) {
             case '/':
                 new LoginView(Reflect.construct(LoginViewController, args));

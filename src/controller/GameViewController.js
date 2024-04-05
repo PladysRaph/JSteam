@@ -1,16 +1,14 @@
 import Controller from "./Controller.js";
 import Enemy from "../model/Enemy.js";
 import EnemyFactory from "../model/EnemyFactory.js";
-import LoginView from "../view/LoginView.js";
-import LoginViewController from "./LoginViewController.js";
-import GameView from "../view/GameView.js";
 import ObjectMapper from "../utils/ObjectMapper.js";
 import EnemyWaveFactory from "../model/EnemyWaveFactory.js";
+import Router from "../utils/Router.js";
 
 export default class GameViewController extends Controller {
     static gameIsOn = true;
 
-    constructor(model, socketClient, idRoom, enemies = null, difficulty) {
+    constructor(model, socketClient, idRoom, enemies, difficulty) {
         super(model, socketClient);
         this.enemies = enemies == null ? this.generateEnemies() : enemies.map(enemy => {
             return ObjectMapper.deserialize(enemy, Enemy);
@@ -18,10 +16,10 @@ export default class GameViewController extends Controller {
         this.idRoom = idRoom;
         GameViewController.gameIsOn = true;
         switch (difficulty) {
-            case "moyen":
+            case "Moyen":
                 EnemyFactory.difficulty = 1;
                 break;
-            case "difficile":
+            case "Difficile":
                 EnemyFactory.difficulty = 2;
             default:
                 break;
@@ -201,7 +199,7 @@ export default class GameViewController extends Controller {
         if (this.player.hp <= 0)  {
             this.player.hp = 100;
             GameViewController.gameIsOn = false;
-            new LoginView(new LoginViewController(this.player, this.idRoom));
+            Router.navigate('/', [this.player, this.idRoom]);
             this.socketClient.disconnect();
         }
 

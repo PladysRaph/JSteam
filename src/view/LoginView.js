@@ -1,6 +1,5 @@
-import CreditsViewController from "../controller/CreditsViewController.js";
-import CreditsView from "./CreditsView.js";
 import View from "./View.js";
+import Router from "../utils/Router.js";
 
 export default class LoginView extends View {
     #avatarChoiceUser
@@ -149,14 +148,14 @@ export default class LoginView extends View {
             if(res != null)
                 res.btn.addEventListener('click', e => {
                     e.preventDefault();
-                    this.controller.startGame(res.id);
+                    this.controller.startGame(res.id, res.difficulty);
                 });
         });
 
         //affiche{id, btn} les credits
         this.#creditsButton.addEventListener('click', e => {
             e.preventDefault();
-            new CreditsView(new CreditsViewController());
+            Router.navigate('/credits');
         });
     }
 
