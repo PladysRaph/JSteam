@@ -63,9 +63,7 @@ body {
 }
 
 #loginForm input, #start-game {
-    border: 2px solid #000;
     padding: 10px;
-    border-radius: 5px;
     margin-top: 10px;
     background: lightgrey;
     color: #000;

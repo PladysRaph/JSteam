@@ -4,7 +4,7 @@ import Entity from './Entity.js'
 import Track from './Track.js';
 
 export default class Player extends Entity {
-    constructor(name, avatar, bullet = null, x = 0, y = 0, hp = 100, isShooting = false, duration = 0, score = 0, kill = 0) {
+    constructor(name, avatar, bullet = null, x = 0, y = 0, hp = 100, isShooting = false) {
         super(name, x, y, 5, avatar);
         // PVs du joueur
         this.hp = hp;
@@ -21,10 +21,10 @@ export default class Player extends Entity {
         // Indique si le joueur est en train de tirer
         this.isShooting = isShooting;
         // Score du joueur
-        this.score = score;
+        this.score = 0;
         // Nombre de kills
-        this.kill = kill;
+        this.kill = 0;
         // Durée de jeu du joueur
-        this.duration = duration;
+        this.duration = 0;
     }
 }

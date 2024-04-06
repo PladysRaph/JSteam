@@ -82,6 +82,7 @@ export default class GameView extends View {
         }
         this.controller.drawPlayer(this.#context2D);
         this.controller.drawHealthbar(this.#context2D, 10, 10, 210, 20);
+        this.controller.drawStats(this.#context2D, 10, 40);
         if (GameViewController.gameIsOn) 
             requestAnimationFrame(this.render.bind(this));
     }

@@ -113,7 +113,18 @@ export default class GameViewController extends Controller {
         }
         context.closePath();
         context.fill();
-      }
+    }
+
+    // Affiche la duration, les kills et le score du joueur
+    drawStats(context, x, y, player = this.player) {
+        context.fillStyle = 'black';
+        context.font = "15px";
+        context.fillText("Time : " + this.player.duration, x, y);
+        context.fillStyle = 'red';
+        context.fillText("Kills : " + this.player.kill, x, y+20);
+        context.fillStyle = 'blue';
+        context.fillText("Score : " + this.player.score, x, y+40);
+    }
 
     // Vérifier que le joueur ne sorte pas du canvas
     noPlayerOutOfBound(canvas, player =  this.player) {
@@ -182,9 +193,6 @@ export default class GameViewController extends Controller {
             if (enemy.hp <= 0) {
                 player.score += player.duration*(1+EnemyFactory.difficulty*0.5)*(1+EnemyWaveFactory.turns*0.3);
                 player.kill++;
-                console.log(player.duration);
-                console.log(player.score);
-                console.log(player.kill);
             }
         });
     }
