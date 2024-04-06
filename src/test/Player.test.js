@@ -19,8 +19,8 @@ describe('Create Player', () => {
         assert.equal(playerTest.x,0);
         assert.equal(playerTest.y,0);
 
-        //vérifie les variable propre a Player sauf les dégats car testé dans Bullet.test.js
-        assert.equal(playerTest.hp,50);
+        //vérifie les variables propres a Player sauf les dégats car testé dans Bullet.test.js
+        assert.equal(playerTest.hp,100);
         assert.equal(playerTest.xFactor,0);
         assert.equal(playerTest.yFactor,0);
         assert.equal(playerTest.duration,0);

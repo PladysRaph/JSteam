@@ -9,7 +9,6 @@ export default class EnemyWaveFactory {
             EnemyWaveFactory.index = 0;
             EnemyWaveFactory.turns++;
         }
-        console.log(EnemyWaveFactory.turns + " turns and " + EnemyWaveFactory.index + " index");
         let res;
         switch (EnemyWaveFactory.index) {
             case 0:

@@ -1,8 +1,9 @@
-import CreditsViewController from "../controller/CreditsViewController.js";
-import CreditsView from "./CreditsView.js";
 import View from "./View.js";
+import Router from "../utils/Router.js";
 
 export default class LoginView extends View {
+    #creditsButton
+    #leaderBoardButton
     #avatarChoiceUser
     #avatars
     #username
@@ -12,13 +13,13 @@ export default class LoginView extends View {
     #joinPartyBtn
     #retryPartyBtn
     #dialogBox
-    #creditsButton
 
     constructor(controller) {
         // Initialiser la vue
         super(
             `          
-            <a href="index.html" id="creditsButton">Credits</a>
+            <a href="#" id="creditsButton" class="btn">Credits</a>
+            <a href="#" id="leaderBoardButton" class="btn">Leaderboard</a>
             <form id="loginForm" method='post'>
                 <div id="flex">
                     <fieldset>
@@ -60,6 +61,8 @@ export default class LoginView extends View {
         this.#avatarChoiceUser = '/public/assets/img/pirate-ship.png';
 
         // Élements de la vue
+        this.#creditsButton= View.mainContent.querySelector('#creditsButton');
+        this.#leaderBoardButton = View.mainContent.querySelector('#leaderBoardButton');
         this.#avatars = View.mainContent.querySelectorAll('#pick-avatar img');
         this.#username = View.mainContent.querySelector('#pseudo');
         this.#party = View.mainContent.querySelector('#party');
@@ -67,7 +70,6 @@ export default class LoginView extends View {
         this.#joinPartyBtn = View.mainContent.querySelector('#join-party-btn');
         this.#createPartyBtn = View.mainContent.querySelector('#create-party-btn');
         this.#dialogBox = View.mainContent.querySelector('.dialog-box');
-		this.#creditsButton= View.mainContent.querySelector('#creditsButton');
 
         // Dans le cas où le joueur perd une partie, il peut la rejouer (si elle existe toujours)
         if(this.controller.idRoomToRetry != null) {
@@ -149,14 +151,20 @@ export default class LoginView extends View {
             if(res != null)
                 res.btn.addEventListener('click', e => {
                     e.preventDefault();
-                    this.controller.startGame(res.id);
+                    this.controller.startGame(res.id, res.difficulty);
                 });
         });
 
-        //affiche{id, btn} les credits
+        // Affiche les credits
         this.#creditsButton.addEventListener('click', e => {
             e.preventDefault();
-            new CreditsView(new CreditsViewController());
+            Router.navigate('/credits', [null, this.controller.socketClient]);
+        });
+
+        // Affiche le leaderboard
+        this.#leaderBoardButton.addEventListener('click', e => {
+            e.preventDefault();
+            Router.navigate('/leaderboard', [null, this.controller.socketClient]);
         });
     }
 

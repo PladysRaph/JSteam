@@ -1,16 +1,15 @@
+import { io } from 'socket.io-client';
 import Controller from "./Controller.js";
 import Enemy from "../model/Enemy.js";
 import EnemyFactory from "../model/EnemyFactory.js";
-import LoginView from "../view/LoginView.js";
-import LoginViewController from "./LoginViewController.js";
-import GameView from "../view/GameView.js";
 import ObjectMapper from "../utils/ObjectMapper.js";
 import EnemyWaveFactory from "../model/EnemyWaveFactory.js";
+import Router from "../utils/Router.js";
 
 export default class GameViewController extends Controller {
     static gameIsOn = true;
 
-    constructor(model, socketClient, idRoom, enemies = null, difficulty) {
+    constructor(model, socketClient, idRoom, enemies, difficulty) {
         super(model, socketClient);
         this.enemies = enemies == null ? this.generateEnemies() : enemies.map(enemy => {
             return ObjectMapper.deserialize(enemy, Enemy);
@@ -18,10 +17,10 @@ export default class GameViewController extends Controller {
         this.idRoom = idRoom;
         GameViewController.gameIsOn = true;
         switch (difficulty) {
-            case "moyen":
+            case "Moyen":
                 EnemyFactory.difficulty = 1;
                 break;
-            case "difficile":
+            case "Difficile":
                 EnemyFactory.difficulty = 2;
             default:
                 break;
@@ -114,7 +113,18 @@ export default class GameViewController extends Controller {
         }
         context.closePath();
         context.fill();
-      }
+    }
+
+    // Affiche la duration, les kills et le score du joueur
+    drawStats(context, x, y, player = this.player) {
+        context.fillStyle = 'black';
+        context.font = "15px";
+        context.fillText("Time : " + this.player.duration/60, x, y);
+        context.fillStyle = 'red';
+        context.fillText("Kills : " + this.player.kill, x, y+20);
+        context.fillStyle = 'blue';
+        context.fillText("Score : " + this.player.score, x, y+40);
+    }
 
     // Vérifier que le joueur ne sorte pas du canvas
     noPlayerOutOfBound(canvas, player =  this.player) {
@@ -180,6 +190,10 @@ export default class GameViewController extends Controller {
                         enemy.hp -= bullet.damage;
                 }
             }
+            if (enemy.hp <= 0) {
+                player.score += player.duration*(1+EnemyFactory.difficulty*0.5)*(1+EnemyWaveFactory.turns*0.3);
+                player.kill++;
+            }
         });
     }
 
@@ -201,7 +215,7 @@ export default class GameViewController extends Controller {
         if (this.player.hp <= 0)  {
             this.player.hp = 100;
             GameViewController.gameIsOn = false;
-            new LoginView(new LoginViewController(this.player, this.idRoom));
+            Router.navigate('/', [this.player, this.idRoom, io()]);
             this.socketClient.disconnect();
         }
 
@@ -215,6 +229,7 @@ export default class GameViewController extends Controller {
         this.player.bullet.x = this.player.x + this.player.avatar.width;
         this.player.bullet.y = this.player.y + this.player.avatar.height/2;
         this.socketClient.emit("action du joueur", this.player, this.enemies, this.idRoom);
+        this.player.duration++;
         this.handleCollisions(canvas);
     }
 

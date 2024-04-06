@@ -1,5 +1,5 @@
-import LoginView from './view/LoginView.js';
-import LoginViewController from './controller/LoginViewController.js';
+import { io } from 'socket.io-client';
+import Router from "./utils/Router.js";
 
-// Affichage de la vue 'Login'
-new LoginView(new LoginViewController());
+// Router vers le LoginView
+Router.navigate('/', [null, null, io()]);

@@ -58,9 +58,9 @@ export default class GameView extends View {
             this.controller.keyup(e.code);
         });
 
-		// On réinstancie car socket.io ne déserialise pas entièrement l'object Player (il manque les méthodes fournies par cette méthode)
         this.controller.socketClient.on("le joueur a fait une action", player => {
             this.controller.damagingPlayer(0.8, player);
+            // On réinstancie car socket.io ne déserialise pas entièrement l'object Player (il manque les méthodes fournies par cette méthode)
             this.otherPlayers.set(player.name, ObjectMapper.deserialize(player, Player));
 	        this.controller.damagingEnemies(this.otherPlayers.get(player.name));
         });
@@ -82,6 +82,7 @@ export default class GameView extends View {
         }
         this.controller.drawPlayer(this.#context2D);
         this.controller.drawHealthbar(this.#context2D, 10, 10, 210, 20);
+        this.controller.drawStats(this.#context2D, 10, 55);
         if (GameViewController.gameIsOn) 
             requestAnimationFrame(this.render.bind(this));
     }

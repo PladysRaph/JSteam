@@ -1,14 +1,13 @@
-import LoginView from "../view/LoginView.js";
 import Controller from "./Controller.js";
-import LoginViewController from "./LoginViewController.js";
+import Router from "../utils/Router.js";
 
-export default class CreditsViewController extends Controller{
-    constructor(model = null){
-        super(model);
+export default class CreditsViewController extends Controller {
+    constructor(model, socketClient){
+        super(model, socketClient);
     }
 
-    //Revenir a l'ecran de connexion
-    backToTitleScreen(){
-        new LoginView(new LoginViewController());
+    // Revenir à l'écran de connexion
+    backToTitleScreen() {
+        Router.navigate('/', [null, null, this.socketClient]);
     }
 }

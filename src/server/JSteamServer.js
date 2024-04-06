@@ -1,7 +1,6 @@
 import http from 'http';
 import express from 'express';
 import { Server as IOServer } from 'socket.io';
-import { dirname } from 'path';
 
 export default class JSteamServer {
 	static PORT = process.env.PORT == undefined ? 8000 : process.env.PORT;

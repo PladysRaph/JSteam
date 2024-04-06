@@ -2,13 +2,12 @@ import Player from "../model/Player.js";
 import Avatar from "../model/Avatar.js";
 import Controller from "./Controller.js";
 import View from '../view/View.js';
-import GameView from "../view/GameView.js";
-import GameViewController from '../controller/GameViewController.js';
+import Router from "../utils/Router.js";
 
 export default class LoginViewController extends Controller {
     
-    constructor(model = null, idRoomToRetry = null) {
-        super(model);
+    constructor(model, idRoomToRetry, socketClient) {
+        super(model, socketClient);
         this.idRoomToRetry = idRoomToRetry;
     }
 
@@ -72,9 +71,9 @@ export default class LoginViewController extends Controller {
     }
 
     // Démarrer une partie
-    startGame(id) {
+    startGame(id, difficulty) {
         this.socketClient.emit('start game', id);
-        new GameView(new GameViewController(this.player, this.socketClient, id));
+        Router.navigate('/game', [this.player, this.socketClient, id, null, difficulty]);
     }
 
     // Lobby par défaut (sans joueurs)
@@ -148,12 +147,11 @@ export default class LoginViewController extends Controller {
                 dialogBox.style.display = 'none';
                 this.showDialogBox(dialogBox, '<p>Vous avez été déconnecté, l\'owner de la partie s\'est déconnecté</p>');
                 window.onclick = e => this.hideDialogBox(e, dialogBox);
-            })
+            });
 
             this.socketClient.on('la partie commence', (difficulty, enemies) => {
-                console.log("*" + difficulty);
-                new GameView(new GameViewController(this.player, this.socketClient, partyID.toUpperCase(), enemies, difficulty));
-            })
+                Router.navigate('/game', [this.player, this.socketClient, partyID.toUpperCase(), enemies, difficulty]);
+            });
         }
     }
 
@@ -193,6 +191,7 @@ export default class LoginViewController extends Controller {
             return {
                 'id': id,
                 'btn': View.mainContent.querySelector('#start-game'),
+                'difficulty': difficulty
             }
         }
     }
