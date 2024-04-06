@@ -123,7 +123,7 @@ export default class GameViewController extends Controller {
         context.fillStyle = 'red';
         context.fillText("Kills : " + this.player.kill, x, y+20);
         context.fillStyle = 'blue';
-        context.fillText("Score : " + this.player.score, x, y+40);
+        context.fillText("Score : " + this.player.score/60, x, y+40);
     }
 
     // Vérifier que le joueur ne sorte pas du canvas
