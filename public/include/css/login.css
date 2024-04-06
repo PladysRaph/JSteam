@@ -65,7 +65,7 @@ body {
 #loginForm input, #start-game {
     padding: 10px;
     margin-top: 10px;
-    background: lightgrey;
+    background: #fff;
     border: none;
     color: #000;
 }
