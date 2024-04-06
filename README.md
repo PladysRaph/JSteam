@@ -2,72 +2,72 @@
 
 Jeu-vidéo multijoueur écrit en Javascript (avec NodeJS et Socket.io).
 
-## Regles
+## SOMMAIRE
 
-### augmentations des points
+# Table of Contents
+1. [Websocket](#websockets)
+2. [Difficulté rencontré lors de la SAE](#difficulté-rencontrées)
+3. [Améliorations possible](#amélioration-possible)
+4. [Ce dont nous sommes fière dans le projet](#ce-dont-nous-sommes-le-plus-fière)
 
-valeur d'un ennemi X numéro de vague \
-valeur d'un ennemi X temps passé dans le jeu \
-numéro de vague X temps passé dans le jeu
+##  WEBSOCKETS
 
-### Apparition des bonus
+### Création d'une partie
 
-a la mort d'un ennemi (ave un % random) \
-full random du ciel \
-après une certaine durée(apres le premier)
+![Création rendu png](./rendu/img/Création%20partie%20fix.png)
 
-## Ennemis
+### Connexion a une partie
 
-                vitesse     mouvement
- basiques:      3           ligne droite
- sinking:       2           zig-zag (change de sens quand il touche un bord de l'écran)
- telekinesiste  2           ligne droite invisible
+![Connexion rendu png](./rendu/img/Connexion%20Partie.png)
 
- | name          | speed    | Attack speed | hp  | degats                   | patter de deplacement                                             | specialité                              |
-|---------------|----------|--------------|-----|--------------------------|-------------------------------------------------------------------|-----------------------------------------|
-| speedster     | 90       | 0            | 15  | 5(au contact)            | ligne droite                                                      |                                         |
-| soho          | 10       | 0.5          | 20  | 10                       | zigzag                                                            |                                         |
-| uther         | 5        | 0.1          | 75  | 10(au contact)           | stand-by                                                          |                                         |
-| kayn          | 50       | 0.1          | 25  | 25(au contact)           | zig zag                                                           |                                         |
-| belveth       | 20       | 5.0          | 20  | 1                        | ligne droite ou stand by( a definir)                              |                                         |
-| tsuyu         | 25       | 1.0          | 30  | 3                        | rebond (en cloche toutjour la même hauteur)                       |                                         |
-| yoru          | 25       | 2.0          | 15  | 5                        | ligne droite                                                      | en partie invisible                     |
-| ziggs         | 15       | 0.5          | 15  | 10                       | ligne droite ou stand by                                          | tir en cloche qui sortent de l'écran    |
-| zane          | 20       | 1            | 10  | 5                        | en cercle                                                         |                                         |
-| genji         | 25       | 0.5          | 15  | 2                        | stand by                                                          | renvoie la première balle qui le touche |
-| collei        | 15       | 1            | 20  | 5                        | en forme de larme                                                 |                                         |
-| space invader | 10       | 0            | 50  | 15(au contact)           | (zigzac carré)                                                    |                                         |
-| koopa         | 5->30->5 | 0.5          | 30  | 2(au contact devient 10) | ligne droite avec arret(_._._._._._._ les points sont les arrets) | change de vitesse quand il est touché    |
-| flaco         | 25       | 0.2          | 15  | 5                        | zig-zac sur tout l'écran                                          |                                         |
-| pong          | 10       | 0.1          | 50  | 1                        | verticale totale                                                  |                                         |
-## Bonus
+### Lancement de la partie 
 
-a détermiser apres reunion de crise (marquer vous idées de bonus en dessous)
+![Lancement rendu png](./rendu/img/Lancement%20Partie.png)
 
-### approved
+### Le joueur a fait une Action
 
-### en reflexion
+![Action rendu png](./rendu/img/Action%20joueur.png)
 
-degats augmentés \
-frezze les ennemis \
-empeches les ennemis de tirer (si ils peuvent tirer) \
-clear le terrain(depop tout les ennemis une fois) \
-plus de balles \
-tirer plus vite
+### Un joueur se déconnecte de la partie 
 
+![Déco partie rendu png](./rendu/img/déco%20partie%20fix.png)
 
-### bonus
+### Un joueur se déconnecte du salon
 
-| nom upgrade           | degats en plus | modification pattern                         | modification vitesse d'attaque | autre                              |
-|-----------------------|----------------|----------------------------------------------|--------------------------------|------------------------------------|
-| gatling               | 5              | non                                          | +2.0                           |                                    |
-| akimbo                | 5              | double le nombre de balle tiré devant soi    |                                |                                    |
-| cerberus              | 2              | ajoute des tir auxiliaire(tir sur les cotés) | -0.5                           |                                    |
-| supernova steam       | 3              |                                              | +1.0                           | +50 hp,+1.0 mouvement speed        |
-| balle en teflon       | 10             | non                                          | -1.0                           |                                    |
-| vaisseau bohriens     | 5              |                                              | +0.5                           | heal de 50% des hp max             |
-| chronomètre de majora | 0              |                                              | +4.0                           |                                    |
-| souffle de bowser     | 7              |                                              |                                | +50 hp                             |
-| sang de brackydios    | 6              |                                              | +2.0                           |                                    |
-| champignon vert       | 0              |                                              | 0                              | 1 res avec la moitié de la vie max |
-| pompe a eau modifié   | 1              | ajoute des tirs auxiliaires                  | +0.5                           |                                    |
+![Déco salon rendu png](./rendu/img/deco%20fix.png)
+
+## DIFFICULTÉ RENCONTRÉES 
+
+### Gestion du temps
+
+La gestion du temps a été un problème car l'on a cru manquer de temps sur la fin avec toute la partie de débug 
+
+### Trouver l'origine de certains bug
+
+Certains bugs on été très durs a corriger ,car beaucoups de choses influaient dessus 
+
+## AMÉLIORATION POSSIBLE
+
+### portage mobile 
+
+### ajouts de différents fonds et différents rendus pour les ennemis 
+
+nous avons choisi de tout faire en pixel art par nos soins sans utiliser d' IA pour créer les rendus ,mais cela a réduit le nombre de variations possible , néanmoins ,nous préférons cela et avoirs des graphismes plus beaux et moins de variété a l'écrans.
+
+## CE DONT NOUS SOMMES LE PLUS FIÈRE
+
+### toutes les choses affichées ont étés faites par nos soins 
+
+des Avatars des ennemis ,au fond d'écrans ,au balles ,tout a été fait par notre groupe (et principalement raphael ) en pixel art afin d'avoir le rendu le plus authentique possible
+
+### utilisation de vecteur pour les pattern de déplacements (des personange ,des ennemis ou des projectiles)
+
+Nous avons décider d'utiliser des vecteurs pour tout les éléments animées car cela permet plus de liberté sur le déplacement et la vitesse 
+
+### utilisation de factories
+
+l'utilisation de Factories nous a permis de pouvoir générer des ennemis de manière plus simple et plus légère ,sans avoir a renier sur la diversité des ennemis 
+
+### architecture MVC
+
+l'utilisation de l'architecture MVC nous a permis de rendre le code plus facilement maintenable et testable afin de pouvoir changer 
