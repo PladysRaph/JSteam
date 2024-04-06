@@ -25,7 +25,6 @@ export default class GameViewController extends Controller {
             default:
                 break;
         }
-        this.timer = 0;
     }
 
     // Redimensionner le canvas (responsive-design)
@@ -181,9 +180,11 @@ export default class GameViewController extends Controller {
                 }
             }
             if (enemy.hp <= 0) {
-                player.score += this.timer*(1+EnemyFactory.difficulty*0.5)*(1+EnemyWaveFactory.turns*0.3);
-                console.log(this.timer);
+                player.score += player.duration*(1+EnemyFactory.difficulty*0.5)*(1+EnemyWaveFactory.turns*0.3);
+                player.kill++;
+                console.log(player.duration);
                 console.log(player.score);
+                console.log(player.kill);
             }
         });
     }
@@ -220,6 +221,7 @@ export default class GameViewController extends Controller {
         this.player.bullet.x = this.player.x + this.player.avatar.width;
         this.player.bullet.y = this.player.y + this.player.avatar.height/2;
         this.socketClient.emit("action du joueur", this.player, this.enemies, this.idRoom);
+        this.player.duration++;
         this.handleCollisions(canvas);
     }
 

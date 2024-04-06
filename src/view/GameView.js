@@ -31,10 +31,7 @@ export default class GameView extends View {
         // Écoute sur les évènements de cette vue (redimensionnement de fenêtre, touches directionnelles pour contrôler le joueur)
         this.listen();
 
-        this.controller.socketClient.on("tic", () => {
-            this.controller.move(this.#canvas)
-            this.controller.timer++; 
-        });
+        this.controller.socketClient.on("tic", () => this.controller.move(this.#canvas));
 
         // Afficher et synchroniser le rendu de l'image suivant le refresh rate de l'écran (60 FPS / 120 FPS)
         requestAnimationFrame(this.render.bind(this));
