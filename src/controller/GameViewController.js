@@ -25,6 +25,7 @@ export default class GameViewController extends Controller {
             default:
                 break;
         }
+        this.timer = 0;
     }
 
     // Redimensionner le canvas (responsive-design)
@@ -178,6 +179,11 @@ export default class GameViewController extends Controller {
                         bullet.delete(index);
                         enemy.hp -= bullet.damage;
                 }
+            }
+            if (enemy.hp <= 0) {
+                player.score += this.timer*(1+EnemyFactory.difficulty*0.5)*(1+EnemyWaveFactory.turns*0.3);
+                console.log(this.timer);
+                console.log(player.score);
             }
         });
     }
