@@ -119,7 +119,7 @@ export default class GameViewController extends Controller {
     drawStats(context, x, y, player = this.player) {
         context.fillStyle = 'black';
         context.font = "15px";
-        context.fillText("Time : " + this.player.duration/60, x, y);
+        context.fillText("Time : " + parseInt(this.player.duration/60, 10), x, y);
         context.fillStyle = 'red';
         context.fillText("Kills : " + this.player.kill, x, y+20);
         context.fillStyle = 'blue';
