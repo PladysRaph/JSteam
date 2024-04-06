@@ -1,3 +1,4 @@
+import { io } from 'socket.io-client';
 import Controller from "./Controller.js";
 import Enemy from "../model/Enemy.js";
 import EnemyFactory from "../model/EnemyFactory.js";
@@ -199,7 +200,7 @@ export default class GameViewController extends Controller {
         if (this.player.hp <= 0)  {
             this.player.hp = 100;
             GameViewController.gameIsOn = false;
-            Router.navigate('/', [this.player, this.idRoom]);
+            Router.navigate('/', [this.player, this.idRoom, io()]);
             this.socketClient.disconnect();
         }
 

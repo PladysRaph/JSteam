@@ -1,13 +1,13 @@
 import Controller from "./Controller.js";
 import Router from "../utils/Router.js";
 
-export default class CreditsViewController extends Controller{
-    constructor(model = null){
-        super(model);
+export default class CreditsViewController extends Controller {
+    constructor(model, socketClient){
+        super(model, socketClient);
     }
 
-    //Revenir a l'ecran de connexion
+    // Revenir à l'écran de connexion
     backToTitleScreen() {
-        Router.navigate('/');
+        Router.navigate('/', [null, null, this.socketClient]);
     }
 }

@@ -97,12 +97,12 @@ select {
     justify-content: center;
 }
 
-.dialog-box>div table {
+table {
     width: 150px;
     border-collapse: collapse;
 }
 
-.dialog-box>div table tr, .dialog-box>div table td, .dialog-box>div table th {
+table tr, table td, table th {
     border: 2px solid #fff;
     padding: 15px;
 }
@@ -119,7 +119,7 @@ select {
     align-items: center;
 }
 
-#creditsButton {
+.btn {
     display: block;
     font-size: larger;
     font-family: 'm6x11';

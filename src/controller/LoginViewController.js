@@ -6,8 +6,8 @@ import Router from "../utils/Router.js";
 
 export default class LoginViewController extends Controller {
     
-    constructor(model = null, idRoomToRetry = null) {
-        super(model);
+    constructor(model, idRoomToRetry, socketClient) {
+        super(model, socketClient);
         this.idRoomToRetry = idRoomToRetry;
     }
 
@@ -147,11 +147,11 @@ export default class LoginViewController extends Controller {
                 dialogBox.style.display = 'none';
                 this.showDialogBox(dialogBox, '<p>Vous avez été déconnecté, l\'owner de la partie s\'est déconnecté</p>');
                 window.onclick = e => this.hideDialogBox(e, dialogBox);
-            })
+            });
 
             this.socketClient.on('la partie commence', (difficulty, enemies) => {
                 Router.navigate('/game', [this.player, this.socketClient, partyID.toUpperCase(), enemies, difficulty]);
-            })
+            });
         }
     }
 

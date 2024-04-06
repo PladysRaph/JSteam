@@ -1,0 +1,10 @@
+#leaderboard-flex {
+    display: flex;
+    justify-content: center;
+}
+
+table tr td, table tr th {
+    font-family: 'm6x11';
+    font-size: 20px;
+    color: #fff;
+}

@@ -4,6 +4,8 @@ import LoginView from '../view/LoginView.js';
 import LoginViewController from '../controller/LoginViewController.js';
 import GameView from '../view/GameView.js';
 import GameViewController from '../controller/GameViewController.js';
+import LeaderboardView from '../view/LeadeboardView.js';
+import LeaderboardViewController from '../controller/LeaderboardViewController.js';
 
 export default class Router {
 
@@ -14,6 +16,9 @@ export default class Router {
                 break;
             case '/credits':
                 new CreditsView(Reflect.construct(CreditsViewController, args));
+                break;
+            case '/leaderboard':
+                new LeaderboardView(Reflect.construct(LeaderboardViewController, args));
                 break;
             case '/game':
                 new GameView(Reflect.construct(GameViewController, args));
