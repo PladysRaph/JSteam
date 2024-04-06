@@ -3,8 +3,13 @@
     justify-content: center;
 }
 
+table tr, table td, table th {
+    border: 4px dashed #000;
+    padding: 15px;
+}
+
 table tr td, table tr th {
     font-family: 'm6x11';
-    font-size: 20px;
-    color: #fff;
+    font-size: 25px;
+    color: #000;
 }
