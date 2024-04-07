@@ -81,7 +81,7 @@ export default class LoginView extends View {
                     <thead>
                     <tr>
                         <th>Durée</th>
-                        <td>${this.controller.player.duration}</td>
+                        <td>${parseInt(this.controller.player.duration/60, 10)}</td>
                     </tr>
                     <tr>
                         <th>Kills</th>

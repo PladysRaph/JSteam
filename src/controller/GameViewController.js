@@ -25,6 +25,7 @@ export default class GameViewController extends Controller {
             default:
                 break;
         }
+        this.bgX = 0;
     }
 
     // Redimensionner le canvas (responsive-design)
@@ -45,6 +46,16 @@ export default class GameViewController extends Controller {
         let res = EnemyWaveFactory.nextWave();
         this.enemies = res;
         return res;
+    }
+
+    //dessine le background et update sa position
+    drawScrollingBackground(canvas, context) {
+        if (this.bgX + canvas.width <= 0)  this.bgX = 0;
+        let image = new Image(canvas.width, canvas.height+76);
+        image.src = 'public/assets/img/wallpaper_login.png';
+        this.drawImage(context, image, this.bgX, 0);
+        this.drawImage(context, image, canvas.width + this.bgX, 0);
+        this.bgX -= 0.5; 
     }
 
     // Dessiner les Images du joueur
@@ -190,7 +201,7 @@ export default class GameViewController extends Controller {
                 }
             }
             if (enemy.hp <= 0) {
-                player.score += player.duration*(1+EnemyFactory.difficulty*0.5)*(1+EnemyWaveFactory.turns*0.3);
+                player.score += parseInt(player.duration*(1+EnemyFactory.difficulty*0.5)*(1+EnemyWaveFactory.turns*0.3), 10);
                 player.kill++;
             }
         });
