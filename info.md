@@ -1,19 +1,5 @@
 # Info sae
 
-## Regles
-
-### augmentations des points
-
-valeur d'un ennemi X numéro de vague \
-valeur d'un ennemi X temps passé dans le jeu \
-numéro de vague X temps passé dans le jeu
-
-### Apparition des bonus
-
-a la mort d'un ennemi (ave un % random) \
-full random du ciel \
-après une certaine durée(apres le premier)
-
 ## Ennemis
 
                 vitesse     mouvement
@@ -38,23 +24,8 @@ après une certaine durée(apres le premier)
 | koopa         | 5->30->5 | 0.5          | 30  | 2(au contact devient 10) | ligne droite avec arret(_._._._._._._ les points sont les arrets) | change de vitesse quand il est touché    |
 | flaco         | 25       | 0.2          | 15  | 5                        | zig-zac sur tout l'écran                                          |                                         |
 | pong          | 10       | 0.1          | 50  | 1                        | verticale totale                                                  |                                         |
+
 ## Bonus
-
-a détermiser apres reunion de crise (marquer vous idées de bonus en dessous)
-
-### approved
-
-### en reflexion
-
-degats augmentés \
-frezze les ennemis \
-empeches les ennemis de tirer (si ils peuvent tirer) \
-clear le terrain(depop tout les ennemis une fois) \
-plus de balles \
-tirer plus vite
-
-
-### bonus
 
 | nom upgrade           | degats en plus | modification pattern                         | modification vitesse d'attaque | autre                              |
 |-----------------------|----------------|----------------------------------------------|--------------------------------|------------------------------------|
