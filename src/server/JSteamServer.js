@@ -1,6 +1,7 @@
 import http from 'http';
 import express from 'express';
 import { Server as IOServer } from 'socket.io';
+import fs from 'fs'
 
 export default class JSteamServer {
 	static PORT = process.env.PORT == undefined ? 8000 : process.env.PORT;
@@ -156,6 +157,35 @@ export default class JSteamServer {
 					currentRoom.players
 				)
 				socket.to(idRoom).emit("le joueur a fait une action", player);
+			});
+
+			socket.on('récuperer le leaderboard', () => {
+				fs.readFile('./leaderboard.json', 'utf-8', (err, text) => {
+					socket.emit('leaderboard reçu', JSON.parse(text));
+				});
+			});
+			
+			socket.on("envoyer les stats du joueur au serveur", (player, callback) => {
+				fs.readFile('./leaderboard.json', 'utf-8', (err, text) => {
+					let json = JSON.parse(text);
+					let leaderBoardMap = new Map();
+					json.map(p => leaderBoardMap.set(p.name, p.score));
+					let current = leaderBoardMap.get(player.name);
+					if(current == undefined || player.score > current) {
+						leaderBoardMap.set(player.name, player.score);
+						let res = [];
+						for(let [key, value] of leaderBoardMap) {
+							res.push({
+								"name": key,
+								"score": value
+							});
+						}
+						fs.writeFile('./leaderboard.json', JSON.stringify(res), 'utf-8', err => {
+							console.log("File writing succeed !");
+						});
+					}
+				});
+				callback();
 			});
 
 			socket.on("disconnect", () => {

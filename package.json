@@ -7,17 +7,13 @@
   "scripts": {
     "test": "node --test",
     "test:watch": "node --test --watch",
-    "client:build": "webpack --mode=production",
+    "client:build": "webpack --mode=development",
     "client:watch": "webpack --mode=development --watch",
     "client:start": "webpack serve --mode=development",
     "server": "node .",
     "server:watch": "node --watch ."
   },
-  "author": [
-    "Raphael Pladys <raphael.pladys.etu@univ-lille.fr>",
-	  "Florian Delbe <florian.delbe.etu@univ-lille.fr>",
-	  "Karim AOULAD-TAYAB <karim.aouladtayab.etu@univ-lille.fr>"
-  ],
+  "author": "Raphael Pladys <raphael.pladys.etu@univ-lille.fr>, Florian Delbe <florian.delbe.etu@univ-lille.fr>, Karim AOULAD-TAYAB <karim.aouladtayab.etu@univ-lille.fr>",
   "homepage": "https://gitlab.univ-lille.fr/karim.aouladtayab.etu/sae-2024-groupeG-pladys-delbe-aouladtayab",
   "license": "ISC",
   "devDependencies": {
@@ -28,12 +24,13 @@
     "prettier": "^3.2.5",
     "webpack": "^5.90.2",
     "webpack-cli": "^5.1.4",
-    "webpack-dev-server": "^5.0.2",
     "webpack-dev-middleware": "^7.0.0",
+    "webpack-dev-server": "^5.0.2",
     "webpack-hot-middleware": "^2.26.1"
   },
   "dependencies": {
     "express": "^4.18.3",
+    "fs": "^0.0.1-security",
     "socket.io": "^4.7.4",
     "socket.io-client": "^4.7.4"
   }

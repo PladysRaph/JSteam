@@ -1,15 +1,18 @@
 #leaderboard-flex {
     display: flex;
     justify-content: center;
+    max-height: 800px;
+    overflow-y: scroll;
 }
 
-table tr, table td, table th {
-    border: 4px dashed #000;
+#leaderboard-flex table tr, #leaderboard-flex table td, #leaderboard-flex table th {
+    border: 4px dashed #fff;
     padding: 15px;
+    background-color: #1c1a1a;
 }
 
-table tr td, table tr th {
+#leaderboard-flex table tr td, #leaderboard-flex table tr th {
     font-family: 'm6x11';
     font-size: 25px;
-    color: #000;
+    color: #fff;
 }

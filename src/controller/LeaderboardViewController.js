@@ -13,7 +13,20 @@ export default class LeaderboardViewController extends Controller {
     }
 
     fillLeaderBoard(bodyTable) {
-        this.socketClient.on('récuperer le leaderboard', html => {
+        this.socketClient.emit('récuperer le leaderboard');
+        this.socketClient.on('leaderboard reçu', json => {
+            let html = '';
+            let sortedJson = json.sort((player1, player2) => {
+                return player2.score - player1.score;
+            });
+            sortedJson.forEach(player => {
+                html += `
+                <tr>
+                    <td>${player.name}</td>
+                    <td>${player.score}</td>
+                </tr>
+                `
+            });
             bodyTable.innerHTML = html;
         });
     }

@@ -80,16 +80,16 @@ export default class LoginView extends View {
                 <table>
                     <thead>
                     <tr>
-                        <th>Stat 1</th>
-                        <td>Valeur 1</td>
+                        <th>Durée</th>
+                        <td>${this.controller.player.duration}</td>
                     </tr>
                     <tr>
-                        <th>Stat 2</th>
-                        <td>Valeur 2</td>
+                        <th>Kills</th>
+                        <td>${this.controller.player.kill}</td>
                     </tr>
                     <tr>
-                        <th>Stat 3</th>
-                        <td>Valeur 3</td>
+                        <th>Score</th>
+                        <td>${this.controller.player.score}</td>
                     </tr>
                     </thead>
                 </table>

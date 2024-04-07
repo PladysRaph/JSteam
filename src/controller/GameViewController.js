@@ -102,15 +102,14 @@ export default class GameViewController extends Controller {
         context.beginPath();
         const value = hp/100;
         context.rect(x, y, width*value, height);
-        if(value > 0.63){
+        if(value > 0.63)
             context.fillStyle="green"
-        }else if(value > 0.37){
+        else if(value > 0.37)
             context.fillStyle="gold"
-        }else if(value > 0.13){
+        else if(value > 0.13)
             context.fillStyle="orange";
-        }else{
+        else
             context.fillStyle="red";
-        }
         context.closePath();
         context.fill();
     }
@@ -215,8 +214,10 @@ export default class GameViewController extends Controller {
         if (this.player.hp <= 0)  {
             this.player.hp = 100;
             GameViewController.gameIsOn = false;
+            this.socketClient.emit('envoyer les stats du joueur au serveur', this.player, () => {
+                this.socketClient.disconnect();
+            });
             Router.navigate('/', [this.player, this.idRoom, io()]);
-            this.socketClient.disconnect();
         }
 
         if(this.enemies.length <= 0) this.enemies = EnemyWaveFactory.nextWave();
