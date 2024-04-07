@@ -70,4 +70,21 @@ l'utilisation de Factories nous a permis de pouvoir générer des ennemis de man
 
 ### architecture MVC
 
-l'utilisation de l'architecture MVC nous a permis de rendre le code plus facilement maintenable et testable afin de pouvoir changer 
+l'utilisation de l'architecture MVC nous a permis de rendre le code plus facilement maintenable et testable afin d'avoir une maintenance plus facile du code
+
+## Autre
+
+### Difficulté et score progressif
+
+le calculs des dégats est progressif ,tout comme le calcul du score .
+
+le calcul des dégats utilise la formule suivante : \
+dégats de base de l'ennemis * difficulté * (1+(0.3\*nb de vague -1))
+
+pour le calcul du score : \
+temps lors de la mort de l'ennemi * difficulté * (1+(0.3nb de vague -1))
+
+### ennemis et bonus 
+
+pour voir les ennemis et les bonus auquels nous avons pensé , merci de regarder dans 
+[info.md](info.md)
