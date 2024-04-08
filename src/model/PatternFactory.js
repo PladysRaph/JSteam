@@ -60,8 +60,8 @@ export default class PatternFactory {
             return[new Track(-0.5,0.5,size*2)
             ,new Track(0,0.5,size*2),new Track(0.5,0.5,size*2),new Track(1,-0.5,size*3),new Track(-1,-0.5,size*3)];
         }else{
-            return[new Track(-0.5,-0.5,size)
-                ,new Track(0,-0.5,size),new Track(1,-0.5,size),new Track(1,0.5,size*3),new Track(-1,0.5,size*3)];
+            return[new Track(-0.5,-0.5,size*2)
+                ,new Track(0,-0.5,size*2),new Track(0.5,-0.5,size*2),new Track(1,0.5,size*3),new Track(-1,0.5,size*3)];
         }
     }
 

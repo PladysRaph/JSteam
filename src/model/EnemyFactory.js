@@ -17,10 +17,10 @@ export default class EnemyFactory {
         new Avatar('public/assets/img/uther.png', 64, 64));
     }
 
-    static soho(x, y) {
+    static soho(x, y,moveOnTop=true) {
         return EnemyFactory.makeEnemy("soho", x, y, 20, 10, 65, 2,
             new Avatar('public/assets/img/soho.png', 64, 64),
-            PatternFactory.zigzagPattern(140));
+            PatternFactory.zigzagPattern(140,moveOnTop));
     }
 
     static speedster(x, y) {
@@ -29,10 +29,10 @@ export default class EnemyFactory {
             new Avatar('public/assets/img/red-pearl-bullet.png', 0, 0));
     }
 
-    static kayn(x, y) {
+    static kayn(x, y,moveOnTop=true) {
         return EnemyFactory.makeEnemy("kayn", x, y, 25, 25, 130, 10,
             new Avatar('public/assets/img/kayn.png', 32, 64),
-            PatternFactory.zigzagPattern(90));
+            PatternFactory.zigzagPattern(90,moveOnTop));
     }
 
     static zane(x,y){
@@ -40,28 +40,28 @@ export default class EnemyFactory {
 
     }
 
-    static pong(x,y){
-        return EnemyFactory.makeEnemy("pong",x,y,25,1,130,3,new Avatar('public/assets/img/pong.png',32,64),PatternFactory.verticalPattern(300,10,false));
+    static pong(x,y,moveOnTop=true){
+        return EnemyFactory.makeEnemy("pong",x,y,25,1,130,3,new Avatar('public/assets/img/pong.png',32,64),PatternFactory.verticalPattern(300,10,moveOnTop));
     }
 
-    static space_invader(x,y){
-        return EnemyFactory.makeEnemy("space Invader",x,y,30,5,65,5,new Avatar('public/assets/img/space-invader.png',64,64),PatternFactory.squareSnake(50));
+    static space_invader(x,y,moveOnTop){
+        return EnemyFactory.makeEnemy("space Invader",x,y,30,5,65,5,new Avatar('public/assets/img/space-invader.png',64,64),PatternFactory.squareSnake(50,moveOnTop));
     }
 
-    static collei(x,y){
-        return EnemyFactory.makeEnemy("Collei",x,y,20,5,110,10,new Avatar('public/assets/img/space-invader.png',64,64),PatternFactory.tearPattern(75));
+    static collei(x,y,moveOnTop=true){
+        return EnemyFactory.makeEnemy("Collei",x,y,20,5,110,10,new Avatar('public/assets/img/space-invader.png',64,64),PatternFactory.tearPattern(75,moveOnTop));
     }
 
-    static tsuyu(x,y){
-        return EnemyFactory.makeEnemy("Tsuyu",x,y,30,3,100,5,new Avatar('public/assets/img/space-invader.png',64,64),PatternFactory.bouncyPattern(50));
+    static tsuyu(x,y,moveOnTop){
+        return EnemyFactory.makeEnemy("Tsuyu",x,y,30,3,100,5,new Avatar('public/assets/img/space-invader.png',64,64),PatternFactory.bouncyPattern(50,moveOnTop));
     }
 
-    static falco(x,y){
-        return EnemyFactory.makeEnemy("Falco",x,y,15,3,170,3,new Avatar('public/assets/img/falco.png',64,64),PatternFactory.zigzagPattern(200));
+    static falco(x,y,moveOnTop){
+        return EnemyFactory.makeEnemy("Falco",x,y,15,3,170,3,new Avatar('public/assets/img/falco.png',64,64),PatternFactory.zigzagPattern(200,moveOnTop));
     }
 
-    static ziggs(x,y){
-        return EnemyFactory.makeEnemy("Ziggs",x,y,15,9,130,0,new Avatar('public/assets/img/falco.png',64,64),PatternFactory.standbyPattern(100),new Avatar('public/assets/img/red-pearl-bullet.png', 16, 16),PatternFactory.HighArcBulletPattern(300));
+    static ziggs(x,y,bulletOnTop=true){
+        return EnemyFactory.makeEnemy("Ziggs",x,y,15,9,130,0,new Avatar('public/assets/img/falco.png',64,64),PatternFactory.standbyPattern(100),new Avatar('public/assets/img/red-pearl-bullet.png', 16, 16),PatternFactory.HighArcBulletPattern(300,bulletOnTop));
     }
 
     static makeEnemy(name, x, y, hp, damage, cooldown, speed, avatar, enemyPattern = null,

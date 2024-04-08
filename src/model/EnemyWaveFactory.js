@@ -5,8 +5,9 @@ export default class EnemyWaveFactory {
     static turns = 0;
 
     static nextWave() {
-        if (EnemyWaveFactory.index > 3) {
+        if (EnemyWaveFactory.index > 5) {
             EnemyWaveFactory.index = 0;
+            EnemyWaveFactory.turns++;
         }
 
         let res;
@@ -22,7 +23,14 @@ export default class EnemyWaveFactory {
                 break;
             case 3:
                 res = EnemyWaveFactory.wave4();
-            default:
+                break;
+            case 4:
+                res = EnemyFactory.wave5();
+                break;
+            case 5:
+                res = EnemyFactory.wave6();
+                break;
+                default:
                 res = EnemyWaveFactory.wave1();
                 break;
         }
@@ -50,7 +58,7 @@ export default class EnemyWaveFactory {
     static wave3(){
         return [
             EnemyFactory.falco(1500,500),
-            EnemyFactory.collei(1200,500),
+            EnemyFactory.collei(1200,600,false),
             EnemyFactory.pong(900,300),
             EnemyFactory.ziggs(1200,300)
         ];
@@ -63,5 +71,23 @@ export default class EnemyWaveFactory {
             EnemyFactory.uther(1000,375),
             EnemyFactory.belvet(1400,375)
         ];
+    }
+    static wave5(){
+        return [
+            EnemyFactory.collei(1200,100),
+            EnemyFactory.collei(1200,600,false),
+            EnemyFactory.pong(1100,100,false),
+            EnemyFactory.pong(1100,600)
+        ];
+    }
+
+    static wave6(){
+        return [
+            EnemyFactory.falco(1300,100,false),
+            EnemyFactory.falco(1300,600),
+            EnemyFactory.ziggs(1300,300),
+            EnemyFactory.uther(1150,200),
+            EnemyFactory.uther(1150,400)
+        ]
     }
 }
