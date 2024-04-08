@@ -1,3 +1,4 @@
+import { io } from 'socket.io-client';
 import Player from "../model/Player.js";
 import Avatar from "../model/Avatar.js";
 import Controller from "./Controller.js";
@@ -74,7 +75,6 @@ export default class LoginViewController extends Controller {
     startGame(id, difficulty) {
         this.socketClient.emit('start game', id);
         Router.navigate('/game', [this.player, this.socketClient, id, null, difficulty]);
-        console.log(id);
     }
 
     // Lobby par défaut (sans joueurs)
@@ -131,6 +131,7 @@ export default class LoginViewController extends Controller {
 
             this.socketClient.on('le code de la partie n\'existe pas', () => {
                 this.showDialogBox(dialogBox, `<p>Le code de la partie n'existe pas</p>`);
+                this.socketClient = io();
             });
 
             this.socketClient.on('un joueur a déjà le même pseudo dans le lobby', () => {
@@ -152,7 +153,6 @@ export default class LoginViewController extends Controller {
 
             this.socketClient.on('la partie commence', (difficulty, enemies) => {
                 Router.navigate('/game', [this.player, this.socketClient, partyID.toUpperCase(), enemies, difficulty]);
-                console.log(partyID.toUpperCase());
             });
         }
     }

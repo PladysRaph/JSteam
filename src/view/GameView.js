@@ -76,7 +76,6 @@ export default class GameView extends View {
         
         this.controller.socketClient.on("le joueur se déconnecte", username => {
             this.otherPlayers.delete(username);
-            console.log(this.otherPlayers);
         });
     }
 

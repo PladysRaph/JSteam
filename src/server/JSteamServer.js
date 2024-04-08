@@ -84,6 +84,7 @@ export default class JSteamServer {
 
 	handleSocketConnection() {
 		this.socketServer.on('connection', socket => {
+
 			socket.on('create party', partyInfo => {
 				this.setParty(
 					partyInfo.id,
@@ -98,7 +99,7 @@ export default class JSteamServer {
 							"socket_id": socket.id
 						}
 					]
-				)
+				);
 				// L'utilisateur créé la room et la rejoint
 				socket.join(partyInfo.id);
 			});
@@ -202,7 +203,6 @@ export default class JSteamServer {
 					// Si la partie a commencé
 					if(currentRoom.started) {
 						this.playerDisconnects(socket, currentRoom, currentPlayer, 'le joueur se déconnecte');
-						console.log(this.parties);
 						// Si le nombre de joueurs tombe à 0, alors on supprimera la partie en sortant de la boucle				
 						if(this.getParty(key).players.length == 0) {
 							roomId = key;
