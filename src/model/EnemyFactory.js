@@ -49,7 +49,7 @@ export default class EnemyFactory {
     }
 
     static collei(x,y,moveOnTop=true){
-        return EnemyFactory.makeEnemy("Collei",x,y,20,5,110,10,new Avatar('public/assets/img/space-invader.png',64,64),PatternFactory.tearPattern(75,moveOnTop));
+        return EnemyFactory.makeEnemy("Collei",x,y,20,5,110,10,new Avatar('public/assets/img/collei.png',64,64),PatternFactory.tearPattern(75,moveOnTop));
     }
 
     static tsuyu(x,y,moveOnTop){
@@ -61,7 +61,7 @@ export default class EnemyFactory {
     }
 
     static ziggs(x,y,bulletOnTop=true){
-        return EnemyFactory.makeEnemy("Ziggs",x,y,15,9,130,0,new Avatar('public/assets/img/falco.png',64,64),PatternFactory.standbyPattern(100),new Avatar('public/assets/img/red-pearl-bullet.png', 16, 16),PatternFactory.HighArcBulletPattern(300,bulletOnTop));
+        return EnemyFactory.makeEnemy("Ziggs",x,y,15,9,130,0,new Avatar('public/assets/img/ziggs.png',64,64),PatternFactory.standbyPattern(100),new Avatar('public/assets/img/red-pearl-bullet.png', 16, 16),PatternFactory.HighArcBulletPattern(300,bulletOnTop));
     }
 
     static makeEnemy(name, x, y, hp, damage, cooldown, speed, avatar, enemyPattern = null,
