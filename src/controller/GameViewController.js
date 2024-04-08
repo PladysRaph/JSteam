@@ -5,6 +5,8 @@ import EnemyFactory from "../model/EnemyFactory.js";
 import ObjectMapper from "../utils/ObjectMapper.js";
 import EnemyWaveFactory from "../model/EnemyWaveFactory.js";
 import Router from "../utils/Router.js";
+import Bonus from "../model/Bonus.js";
+import Avatar from "../model/Avatar.js";
 
 export default class GameViewController extends Controller {
     static gameIsOn = true;
@@ -14,6 +16,7 @@ export default class GameViewController extends Controller {
         this.enemies = enemies == null ? this.generateEnemies() : enemies.map(enemy => {
             return ObjectMapper.deserialize(enemy, Enemy);
         });
+        this.bonuses = new Array();
         this.idRoom = idRoom;
         GameViewController.gameIsOn = true;
         switch (difficulty) {
@@ -172,6 +175,18 @@ export default class GameViewController extends Controller {
         context.fillText("Score : " + this.player.score, x, y+40);
     }
 
+    // Affiche tous les bonus
+    drawBonuses(context) {
+        this.bonuses.forEach(element => this.drawBonus(context, element));
+    }
+
+    // Affiche un bonus
+    drawBonus(context, bonus) {
+        let image = new Image(bonus.avatar.width, bonus.avatar.height);
+        image.src = bonus.avatar.url;
+        this.drawImage(context, image, bonus.x, bonus.y); 
+    }
+
     // Vérifier que le joueur ne sorte pas du canvas
     noPlayerOutOfBound(canvas, player =  this.player) {
         const avatar = player.avatar;
@@ -186,13 +201,23 @@ export default class GameViewController extends Controller {
         if (player.y < 0) player.y = 0;
     }
 
+    takingBonuses(player = this.player) {
+        this.bonuses.forEach(bonus => {
+            if (this.isCollisionning(player, bonus)) { 
+                this.bonuses.pop(bonus);
+                if (this.player.hp <= 70) this.player.hp += 30;
+                else this.player.hp = 100;
+            }
+        });
+    }
+
     // Applique les dégâts au joueur s'il rentre en collision avec des entités adverses
     damagingPlayer(hitbox, player = this.player) {
         this.enemies.forEach(enemy => {
             // Fait perdre des vies au joueur s'il se fait toucher par l'ennemi
             if (this.isCollisionning(player, enemy, null, hitbox)) { 
-                player.hp -= 10;
-                enemy.hp -= 10;
+                player.hp = 0;
+                enemy.hp = 0;
             }
             const bullet = enemy.bullet;
             // Fait perdre des vies au joueur s'il se fait toucher par les balles de l'ennemi
@@ -241,6 +266,7 @@ export default class GameViewController extends Controller {
             if (enemy.hp <= 0) {
                 player.score += parseInt(player.duration*(1+EnemyFactory.difficulty*0.5)*(1+EnemyWaveFactory.turns*0.3), 10);
                 player.kill++;
+                if (Math.random() < 0.1) this.bonuses.push(new Bonus(new Avatar('public/assets/img/secai-de-oins.png', 50, 50), enemy.x, enemy.y));
             }
         });
     }
@@ -252,6 +278,7 @@ export default class GameViewController extends Controller {
         let hitbox = 0.8;
         this.damagingPlayer(hitbox);
         this.damagingEnemies();
+        this.takingBonuses();
         
         // Enlève les ennemis morts
         this.enemies = this.enemies.filter(enemy => {
