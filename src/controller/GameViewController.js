@@ -22,10 +22,14 @@ export default class GameViewController extends Controller {
                 break;
             case "Difficile":
                 EnemyFactory.difficulty = 2;
+                break;
             default:
                 break;
         }
         this.bgX = 0;
+        this.bgY = -82;
+        this.bgUp = true;
+        this.wwX = 1;
     }
 
     // Redimensionner le canvas (responsive-design)
@@ -48,14 +52,46 @@ export default class GameViewController extends Controller {
         return res;
     }
 
+    drawWaveWarning(canvas, context) {
+        let image = new Image(1000, 400);
+        image.src = 'public/assets/img/wave_background.png';
+        let xVector = canvas.width * this.wwX;
+        if (xVector > 4) this.wwX *= 0.96;
+        if (this.wwX < 0.05) this.wwX -= 0.0001;
+        if (xVector < 0) this.wwX /= 0.96;
+        let x = (canvas.width-image.width)/2+xVector;
+        let y = (canvas.height-image.height)/2;
+        this.drawImage(context, image, x, y); 
+        context.fillStyle = 'black';
+        context.font = "64px Arial Black";
+        context.fillText("La vague suivante arrive !", x+50, y+210);
+        context.fillStyle = 'white';
+        context.font = "24px Arial Black";
+        context.fillText("Dernière vague : " + (EnemyWaveFactory.index), x+590, y+35);
+        context.fillStyle = 'Gold';
+        context.fillText("Tour actuel : " + (EnemyWaveFactory.turns+1), x+620, y+70);
+        context.fillStyle = 'Grey';
+        context.fillText("Score et dégâts subits +" + (100*(1+EnemyFactory.difficulty*0.5)*(1+EnemyWaveFactory.turns*0.3)-100) + "%", x+320, y+360);
+        if (canvas.width+xVector <= 0) {
+            this.wwX = 1;
+            this.nextWave();
+            return true;
+        }
+        return false;
+    }
+
     //dessine le background et update sa position
     drawScrollingBackground(canvas, context) {
         if (this.bgX + canvas.width <= 0)  this.bgX = 0;
-        let image = new Image(canvas.width, canvas.height+76);
+        let image = new Image(canvas.width, canvas.height+158);
         image.src = 'public/assets/img/wallpaper_login.png';
-        this.drawImage(context, image, this.bgX, 0);
-        this.drawImage(context, image, canvas.width + this.bgX, 0);
-        this.bgX -= 0.5; 
+        this.drawImage(context, image, this.bgX, this.bgY);
+        this.drawImage(context, image, canvas.width + this.bgX, this.bgY);
+        this.bgX -= 0.5;
+        if (this.bgUp) this.bgY += 0.05;
+        else this.bgY -= 0.05;
+        if (this.bgY >= -1) this.bgUp = false;
+        if (this.bgY <= -157) this.bgUp = true;
     }
 
     // Dessiner les Images du joueur
@@ -217,8 +253,7 @@ export default class GameViewController extends Controller {
         
         // Enlève les ennemis morts
         this.enemies = this.enemies.filter(enemy => {
-            if (enemy.hp > 0 && enemy.x > 0) return true;
-            else return false;
+            return enemy.hp > 0 && enemy.x > 0;
         });
 
         // Retour au lobby si toutes les vies sont perdues ou si tous les ennemis sont morts
@@ -231,7 +266,12 @@ export default class GameViewController extends Controller {
             Router.navigate('/', [this.player, this.idRoom, io()]);
         }
 
-        if(this.enemies.length <= 0) this.enemies = EnemyWaveFactory.nextWave();
+        if (this.enemies.length <= 0) this.socketClient.emit('prochaine vague', this.idRoom);
+    }
+
+    // Passe à la prochaine vague
+    nextWave() {
+        this.enemies = EnemyWaveFactory.nextWave();
     }
 
     // Déplacer le joueur en changeant ses coordonnées

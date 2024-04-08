@@ -35,6 +35,8 @@ export default class GameView extends View {
 
         // Afficher et synchroniser le rendu de l'image suivant le refresh rate de l'écran (60 FPS / 120 FPS)
         requestAnimationFrame(this.render.bind(this));
+
+        this.nextWave = false;
     }
 
     // Écouteur d'évènements de la vue
@@ -64,6 +66,8 @@ export default class GameView extends View {
             this.otherPlayers.set(player.name, ObjectMapper.deserialize(player, Player));
 	        this.controller.damagingEnemies(this.otherPlayers.get(player.name));
         });
+
+        this.controller.socketClient.on('la partie change de vague', event => this.nextWave = true)
         
         this.controller.socketClient.on("le joueur se déconnecte", username => {
             this.otherPlayers.delete(username);
@@ -75,15 +79,14 @@ export default class GameView extends View {
         this.#context2D.clearRect(0, 0, this.#canvas.width, this.#canvas.height);
         this.controller.drawScrollingBackground(this.#canvas, this.#context2D); 
         this.controller.drawEnemies(this.#context2D);
-        let index = 0;
 		for(let [key, value] of this.otherPlayers) {
-            index++;
 			this.controller.drawPlayer(this.#context2D, value);
             this.controller.drawHealthbar(this.#context2D, value.x, value.y + value.avatar.width + 10, value.avatar.width, 8, value.hp);
         }
         this.controller.drawPlayer(this.#context2D);
         this.controller.drawHealthbar(this.#context2D, 10, 10, 210, 20);
         this.controller.drawStats(this.#context2D, 10, 55);
+        if (this.nextWave && this.controller.drawWaveWarning(this.#canvas, this.#context2D)) this.nextWave = false;
         if (GameViewController.gameIsOn) 
             requestAnimationFrame(this.render.bind(this));
     }

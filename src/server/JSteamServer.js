@@ -146,6 +146,8 @@ export default class JSteamServer {
 				this.socketServer.to(idRoom).emit('la partie commence', currentRoom.difficulty, null);
 			});
 
+			socket.on('prochaine vague', idRoom => this.socketServer.to(idRoom).emit('la partie change de vague'));
+
 			socket.on("action du joueur", (player, enemies, idRoom) => {
 				let currentRoom = this.getParty(idRoom);
 				this.setParty(
