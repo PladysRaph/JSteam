@@ -1,7 +1,7 @@
-export default class Bonus {
+import Entity from "./Entity.js";
+
+export default class Bonus extends Entity {
     constructor(avatar, x, y) {
-        this.avatar = avatar;
-        this.x = x;
-        this.y = y;
+        super(null, x, y, null, avatar);
     }
 }

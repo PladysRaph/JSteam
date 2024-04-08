@@ -24,7 +24,7 @@ describe('Create Player', () => {
         assert.equal(playerTest.xFactor,0);
         assert.equal(playerTest.yFactor,0);
         assert.equal(playerTest.duration,0);
-        assert.equal(playerTest.kills,0);
+        assert.equal(playerTest.kill,0);
         assert.equal(playerTest.score,0);
         assert.equal(playerTest.isShooting,false);
 
