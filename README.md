@@ -78,11 +78,13 @@ l'utilisation de l'architecture MVC nous a permis de rendre le code plus facilem
 
 le calculs des dégats est progressif ,tout comme le calcul du score .
 
+par difficulté nosu entendons les valeurs attribué au difficulté(1 pour facile , 1.5 pour normal ,2.5 pour difficile)
+
 le calcul des dégats utilise la formule suivante : \
-dégats de base de l'ennemis * difficulté * (1+(0.3\*nb de vague -1))
+dégats de base de l'ennemis \* difficulté \* (1+(0.3\*nb de vague -1))
 
 pour le calcul du score : \
-temps lors de la mort de l'ennemi * difficulté * (1+(0.3nb de vague -1))
+temps lors de la mort de l'ennemi \* 0.5 \* (1+(0.3\*nb de vague -1))
 
 ### ennemis 
 

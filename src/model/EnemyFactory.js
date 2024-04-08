@@ -8,12 +8,12 @@ export default class EnemyFactory {
     static difficulty = 0;
 
     static belvet(x, y) {
-        return EnemyFactory.makeEnemy("belvet", x, y, 20, 1, 10, 1,
+        return EnemyFactory.makeEnemy("belvet", x, y, 20, 1, 20, 1,
         new Avatar('public/assets/img/belvet.png', 48, 48));
     }
 
     static uther(x, y) {
-        return EnemyFactory.makeEnemy("uther", x, y, 75, 10, 130, 1,
+        return EnemyFactory.makeEnemy("uther", x, y, 50, 1, 130, 1,
         new Avatar('public/assets/img/uther.png', 64, 64));
     }
 
@@ -41,7 +41,7 @@ export default class EnemyFactory {
     }
 
     static pong(x,y){
-        return EnemyFactory.makeEnemy("pong",x,y,25,1,130,3,new Avatar('public/assets/img/pong.png',32,64),PatternFactory.verticalPattern(100,10,false));
+        return EnemyFactory.makeEnemy("pong",x,y,25,1,130,3,new Avatar('public/assets/img/pong.png',32,64),PatternFactory.verticalPattern(300,10,false));
     }
 
     static space_invader(x,y){
@@ -49,13 +49,25 @@ export default class EnemyFactory {
     }
 
     static collei(x,y){
-        return EnemyFactory.makeEnemy("Collei",x,y,30,5,65,5,new Avatar('public/assets/img/space-invader.png',64,64),PatternFactory.tearPattern(75));
+        return EnemyFactory.makeEnemy("Collei",x,y,20,5,110,10,new Avatar('public/assets/img/space-invader.png',64,64),PatternFactory.tearPattern(75));
+    }
+
+    static tsuyu(x,y){
+        return EnemyFactory.makeEnemy("Tsuyu",x,y,30,3,100,5,new Avatar('public/assets/img/space-invader.png',64,64),PatternFactory.bouncyPattern(50));
+    }
+
+    static falco(x,y){
+        return EnemyFactory.makeEnemy("Falco",x,y,15,3,170,3,new Avatar('public/assets/img/falco.png',64,64),PatternFactory.zigzagPattern(200));
+    }
+
+    static ziggs(x,y){
+        return EnemyFactory.makeEnemy("Ziggs",x,y,15,9,130,0,new Avatar('public/assets/img/falco.png',64,64),PatternFactory.standbyPattern(100),new Avatar('public/assets/img/red-pearl-bullet.png', 16, 16),PatternFactory.HighArcBulletPattern(300));
     }
 
     static makeEnemy(name, x, y, hp, damage, cooldown, speed, avatar, enemyPattern = null,
-        bulletAvatar = new Avatar('public/assets/img/red-pearl-bullet.png', 16, 16)) {
+        bulletAvatar = new Avatar('public/assets/img/red-pearl-bullet.png', 16, 16),bulletPatern=null) {
         return new Enemy(name, x, y, speed, avatar, enemyPattern,
-            new Bullet('Red pearl bullet', x, y, 20, bulletAvatar, null, 
+            new Bullet('Red pearl bullet', x, y, 20, bulletAvatar, bulletPatern, 
                 damage*(1+EnemyFactory.difficulty*0.5)*(1+EnemyWaveFactory.turns*0.3), 
                 cooldown), 
             hp

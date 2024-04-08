@@ -57,10 +57,31 @@ export default class PatternFactory {
 
     static tearPattern(size,isOnTop=true){
         if(isOnTop){
-            return[new Track(-1,1,size)
-            ,new Track(0,1,size),new Track(1,1,size),new Track(2,-3/2,size),new Track(-2,-3/2,size)];
+            return[new Track(-0.5,0.5,size*2)
+            ,new Track(0,0.5,size*2),new Track(0.5,0.5,size*2),new Track(1,-0.5,size*3),new Track(-1,-0.5,size*3)];
         }else{
-            return[];
+            return[new Track(-0.5,-0.5,size)
+                ,new Track(0,-0.5,size),new Track(1,-0.5,size),new Track(1,0.5,size*3),new Track(-1,0.5,size*3)];
+        }
+    }
+
+    static standbyPattern(){
+        return [new Track(0,0,1000)];
+    }
+
+    static HighArcBulletPattern(size,isOnTop=true){
+        if (isOnTop) {
+            return [new Track(-1,-1,size),new Track(-1,0,size),new Track(-1,1,size/2),new Track(0,1,size*4)];
+        }else{
+
+        }
+    }
+
+    static bouncyPattern(size,isOnTop=true){
+        if(isOnTop){
+            return[new Track(-1,-1,size*2),new Track(-1,0,size*2),new Track(-1,1,size*2),new Track(0,0,size*2)]
+        }else{
+            return[new Track(-1,1,size*2),new Track(-1,0,size*2),new Track(-1,-1,size*2),new Track(0,0,size*2)];
         }
     }
 
