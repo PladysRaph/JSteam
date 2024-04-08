@@ -190,8 +190,10 @@ export default class GameViewController extends Controller {
     damagingPlayer(hitbox, player = this.player) {
         this.enemies.forEach(enemy => {
             // Fait perdre des vies au joueur s'il se fait toucher par l'ennemi
-            if (this.isCollisionning(player, enemy, null, hitbox)) 
-                player.hp--;
+            if (this.isCollisionning(player, enemy, null, hitbox)) { 
+                player.hp -= 10;
+                enemy.hp -= 10;
+            }
             const bullet = enemy.bullet;
             // Fait perdre des vies au joueur s'il se fait toucher par les balles de l'ennemi
             for (let index = 0; index < bullet.arrX.length; index++) {
@@ -256,7 +258,7 @@ export default class GameViewController extends Controller {
             return enemy.hp > 0 && enemy.x > 0;
         });
 
-        // Retour au lobby si toutes les vies sont perdues ou si tous les ennemis sont morts
+        // Retour au lobby si toutes les vies sont perdues
         if (this.player.hp <= 0)  {
             this.player.hp = 100;
             GameViewController.gameIsOn = false;
@@ -264,9 +266,11 @@ export default class GameViewController extends Controller {
                 this.socketClient.disconnect();
             });
             Router.navigate('/', [this.player, this.idRoom, io()]);
+            EnemyWaveFactory.turns = 0;
+            EnemyWaveFactory.index = 0;
         }
 
-        if (this.enemies.length <= 0) this.socketClient.emit('prochaine vague', this.idRoom);
+        if (this.enemies.length <= 0) this.socketClient.emit('prochaine vague', this.idRoom, EnemyWaveFactory.index, EnemyWaveFactory.turns);
     }
 
     // Passe à la prochaine vague

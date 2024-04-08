@@ -74,6 +74,7 @@ export default class LoginViewController extends Controller {
     startGame(id, difficulty) {
         this.socketClient.emit('start game', id);
         Router.navigate('/game', [this.player, this.socketClient, id, null, difficulty]);
+        console.log(id);
     }
 
     // Lobby par défaut (sans joueurs)
@@ -151,6 +152,7 @@ export default class LoginViewController extends Controller {
 
             this.socketClient.on('la partie commence', (difficulty, enemies) => {
                 Router.navigate('/game', [this.player, this.socketClient, partyID.toUpperCase(), enemies, difficulty]);
+                console.log(partyID.toUpperCase());
             });
         }
     }

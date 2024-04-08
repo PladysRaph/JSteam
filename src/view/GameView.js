@@ -5,6 +5,7 @@ import Player from "../model/Player.js";
 import GameViewController from "../controller/GameViewController.js";
 import ObjectMapper from "../utils/ObjectMapper.js";
 import EnemyFactory from "../model/EnemyFactory.js";
+import EnemyWaveFactory from "../model/EnemyWaveFactory.js";
 
 export default class GameView extends View {
     static interval;
@@ -62,15 +63,20 @@ export default class GameView extends View {
 
         this.controller.socketClient.on("le joueur a fait une action", player => {
             this.controller.damagingPlayer(0.8, player);
-            // On réinstancie car socket.io ne déserialise pas entièrement l'object Player (il manque les méthodes fournies par cette méthode)
+            // On réinstancie car socket.io ne déserialise pas entièrement l'object Player (il manque les méthodes fournies par cet objet)
             this.otherPlayers.set(player.name, ObjectMapper.deserialize(player, Player));
 	        this.controller.damagingEnemies(this.otherPlayers.get(player.name));
         });
 
-        this.controller.socketClient.on('la partie change de vague', event => this.nextWave = true)
+        this.controller.socketClient.on('la partie change de vague', (index, turns) => {
+            this.nextWave = true;
+            EnemyWaveFactory.index = index;
+            EnemyWaveFactory.turns = turns;
+        });
         
         this.controller.socketClient.on("le joueur se déconnecte", username => {
             this.otherPlayers.delete(username);
+            console.log(this.otherPlayers);
         });
     }
 
@@ -86,7 +92,8 @@ export default class GameView extends View {
         this.controller.drawPlayer(this.#context2D);
         this.controller.drawHealthbar(this.#context2D, 10, 10, 210, 20);
         this.controller.drawStats(this.#context2D, 10, 55);
-        if (this.nextWave && this.controller.drawWaveWarning(this.#canvas, this.#context2D)) this.nextWave = false;
+        if (this.nextWave && this.controller.drawWaveWarning(this.#canvas, this.#context2D)) 
+        this.nextWave = false;
         if (GameViewController.gameIsOn) 
             requestAnimationFrame(this.render.bind(this));
     }

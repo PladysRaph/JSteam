@@ -143,10 +143,12 @@ export default class JSteamServer {
 					currentRoom.enemies,
 					currentRoom.players
 				);
-				this.socketServer.to(idRoom).emit('la partie commence', currentRoom.difficulty, null);
+				socket.to(idRoom).emit('la partie commence', currentRoom.difficulty, null);
 			});
 
-			socket.on('prochaine vague', idRoom => this.socketServer.to(idRoom).emit('la partie change de vague'));
+			socket.on('prochaine vague', (idRoom, index, turns) => {
+				this.socketServer.to(idRoom).emit('la partie change de vague', index, turns)
+			});
 
 			socket.on("action du joueur", (player, enemies, idRoom) => {
 				let currentRoom = this.getParty(idRoom);
@@ -192,7 +194,7 @@ export default class JSteamServer {
 
 			socket.on("disconnect", () => {
 				let roomId;
-				let removeParty = false;
+				let removeParty = false
 
 				for(let [key, value] of this.parties) {
 					let currentRoom = this.getParty(key);
@@ -200,6 +202,7 @@ export default class JSteamServer {
 					// Si la partie a commencé
 					if(currentRoom.started) {
 						this.playerDisconnects(socket, currentRoom, currentPlayer, 'le joueur se déconnecte');
+						console.log(this.parties);
 						// Si le nombre de joueurs tombe à 0, alors on supprimera la partie en sortant de la boucle				
 						if(this.getParty(key).players.length == 0) {
 							roomId = key;
