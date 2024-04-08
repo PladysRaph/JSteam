@@ -13,16 +13,19 @@ export default class CreditsView extends View {
                         <div id='Nitor'>
                             <h1>Florian DELBE</h1>
                             <h2>Nitor</h2>
+                            <h2>20% de note</h2>
                             <h3 id="BestGame"><a target="_blank" href="https://store.steampowered.com/app/1687950/Persona_5_Royal/">Persona 5 royal</a></h3>
                         </div>
                         <div id='Neyako'>
                             <h1>Raphaël PLADYS</h1>
                             <h2>Neyako</h2>
+                            <h2>40% de note</h2>
                             <h3 id="BestGame"><a target="_blank" href="https://www.nintendo.fr/Jeux/Wii/Super-Mario-Galaxy-2-529982.html">Super Mario Galaxy 2</a></h3>
                         </div>
                         <div id='Mortim'>
                             <h1>Karim AOULAD TAYAB</h1>
                             <h2>Mortim</h2>
+                            <h2>40% de note</h2>
                             <h3 id="BestGame"><a target="_blank" href="https://store.steampowered.com/app/240/CounterStrike_Source/">Counter Strike -: Source</a></h3>
                         </div>
                 </div>
