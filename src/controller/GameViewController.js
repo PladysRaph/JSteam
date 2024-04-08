@@ -86,7 +86,7 @@ export default class GameViewController extends Controller {
         let image = new Image(canvas.width, canvas.height+158);
         image.src = 'public/assets/img/wallpaper_login.png';
         this.drawImage(context, image, this.bgX, this.bgY);
-        this.drawImage(context, image, canvas.width + this.bgX, this.bgY);
+        this.drawImage(context, image, canvas.width-1 + this.bgX, this.bgY);
         this.bgX -= 0.5;
         if (this.bgUp) this.bgY += 0.05;
         else this.bgY -= 0.05;
