@@ -84,6 +84,7 @@ export default class GameView extends View {
     render() {
         this.#context2D.clearRect(0, 0, this.#canvas.width, this.#canvas.height);
         this.controller.drawScrollingBackground(this.#canvas, this.#context2D); 
+        this.controller.drawBonuses(this.#context2D);
         this.controller.drawEnemies(this.#context2D);
 		for(let [key, value] of this.otherPlayers) {
 			this.controller.drawPlayer(this.#context2D, value);

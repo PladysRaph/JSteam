@@ -25,10 +25,10 @@ export default class EnemyWaveFactory {
                 res = EnemyWaveFactory.wave4();
                 break;
             case 4:
-                res = EnemyFactory.wave5();
+                res = EnemyWaveFactory.wave5();
                 break;
             case 5:
-                res = EnemyFactory.wave6();
+                res = EnemyWaveFactory.wave6();
                 break;
                 default:
                 res = EnemyWaveFactory.wave1();
@@ -56,7 +56,7 @@ export default class EnemyWaveFactory {
         ];
     }
     static wave3(){
-        return [
+        return [
             EnemyFactory.falco(1500,500),
             EnemyFactory.collei(1200,600,false),
             EnemyFactory.pong(900,300),
