@@ -1,16 +1,17 @@
-## JSaÉ - JSTEAM
+# JSaÉ - JSTEAM
 
 Jeu-vidéo multijoueur écrit en Javascript (avec NodeJS et Socket.io).
 
 ## SOMMAIRE
 
-# Table of Contents
+## Table of Contents
+
 1. [Websocket](#websockets)
 2. [Difficulté rencontré lors de la SAE](#difficulté-rencontrées)
 3. [Améliorations possible](#amélioration-possible)
 4. [Ce dont nous sommes fière dans le projet](#ce-dont-nous-sommes-le-plus-fière)
 
-##  WEBSOCKETS
+## WEBSOCKETS
 
 ### Création d'une partie
 
@@ -20,7 +21,7 @@ Jeu-vidéo multijoueur écrit en Javascript (avec NodeJS et Socket.io).
 
 ![Connexion rendu png](./rendu/img/Connexion%20Partie.png)
 
-### Lancement de la partie 
+### Lancement de la partie
 
 ![Lancement rendu png](./rendu/img/Lancement%20Partie.png)
 
@@ -28,7 +29,7 @@ Jeu-vidéo multijoueur écrit en Javascript (avec NodeJS et Socket.io).
 
 ![Action rendu png](./rendu/img/Action%20joueur.png)
 
-### Un joueur se déconnecte de la partie 
+### Un joueur se déconnecte de la partie
 
 ![Déco partie rendu png](./rendu/img/déco%20partie%20fix.png)
 
@@ -36,37 +37,37 @@ Jeu-vidéo multijoueur écrit en Javascript (avec NodeJS et Socket.io).
 
 ![Déco salon rendu png](./rendu/img/deco%20fix.png)
 
-## DIFFICULTÉ RENCONTRÉES 
+## DIFFICULTÉ RENCONTRÉES
 
 ### Gestion du temps
 
-La gestion du temps a été un problème car l'on a cru manquer de temps sur la fin avec toute la partie de débug 
+La gestion du temps a été un problème car l'on a cru manquer de temps sur la fin avec toute la partie de débug
 
 ### Trouver l'origine de certains bug
 
-Certains bugs on été très durs a corriger ,car beaucoups de choses influaient dessus 
+Certains bugs on été très durs a corriger ,car beaucoups de choses influaient dessus
 
 ## AMÉLIORATION POSSIBLE
 
-### portage mobile 
+### portage mobile
 
-### ajouts de différents fonds et différents rendus pour les ennemis 
+### ajouts de différents fonds et différents rendus pour les ennemis
 
 nous avons choisi de tout faire en pixel art par nos soins sans utiliser d' IA pour créer les rendus ,mais cela a réduit le nombre de variations possible , néanmoins ,nous préférons cela et avoirs des graphismes plus beaux et moins de variété a l'écrans.
 
 ## CE DONT NOUS SOMMES LE PLUS FIÈRE
 
-### toutes les choses affichées ont étés faites par nos soins 
+### toutes les choses affichées ont étés faites par nos soins
 
 des Avatars des ennemis ,au fond d'écrans ,au balles ,tout a été fait par notre groupe (et principalement raphael ) en pixel art afin d'avoir le rendu le plus authentique possible
 
 ### utilisation de vecteur pour les pattern de déplacements (des personange ,des ennemis ou des projectiles)
 
-Nous avons décider d'utiliser des vecteurs pour tout les éléments animées car cela permet plus de liberté sur le déplacement et la vitesse 
+Nous avons décider d'utiliser des vecteurs pour tout les éléments animées car cela permet plus de liberté sur le déplacement et la vitesse
 
 ### utilisation de factories
 
-l'utilisation de Factories nous a permis de pouvoir générer des ennemis de manière plus simple et plus légère ,sans avoir a renier sur la diversité des ennemis 
+l'utilisation de Factories nous a permis de pouvoir générer des ennemis de manière plus simple et plus légère ,sans avoir a renier sur la diversité des ennemis
 
 ### architecture MVC
 
@@ -86,7 +87,7 @@ dégats de base de l'ennemis \* difficulté \* (1+(0.3\*nb de vague -1))
 pour le calcul du score : \
 temps lors de la mort de l'ennemi \* 0.5 \* (1+(0.3\*nb de vague -1))
 
-### ennemis 
+### ennemis
 
-pour voir les ennemis auquels nous avons pensé , merci de regarder dans 
+pour voir les ennemis auquels nous avons pensé , merci de regarder dans
 [info.md](info.md)
