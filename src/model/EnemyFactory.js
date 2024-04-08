@@ -35,6 +35,23 @@ export default class EnemyFactory {
             PatternFactory.zigzagPattern(90));
     }
 
+    static zane(x,y){
+        return EnemyFactory.makeEnemy("zane",x,y,20,1,75,5,new Avatar('public/assets/img/zane.png',64,64),PatternFactory.circlePattern(30,10));
+
+    }
+
+    static pong(x,y){
+        return EnemyFactory.makeEnemy("pong",x,y,25,1,130,3,new Avatar('public/assets/img/pong.png',32,64),PatternFactory.verticalPattern(100,10,false));
+    }
+
+    static space_invader(x,y){
+        return EnemyFactory.makeEnemy("space Invader",x,y,30,5,65,5,new Avatar('public/assets/img/space-invader.png',64,64),PatternFactory.squareSnake(50));
+    }
+
+    static collei(x,y){
+        return EnemyFactory.makeEnemy("Collei",x,y,30,5,65,5,new Avatar('public/assets/img/space-invader.png',64,64),PatternFactory.tearPattern(75));
+    }
+
     static makeEnemy(name, x, y, hp, damage, cooldown, speed, avatar, enemyPattern = null,
         bulletAvatar = new Avatar('public/assets/img/red-pearl-bullet.png', 16, 16)) {
         return new Enemy(name, x, y, speed, avatar, enemyPattern,
