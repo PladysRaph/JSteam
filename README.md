@@ -84,7 +84,7 @@ dégats de base de l'ennemis * difficulté * (1+(0.3\*nb de vague -1))
 pour le calcul du score : \
 temps lors de la mort de l'ennemi * difficulté * (1+(0.3nb de vague -1))
 
-### ennemis et bonus 
+### ennemis 
 
-pour voir les ennemis et les bonus auquels nous avons pensé , merci de regarder dans 
+pour voir les ennemis auquels nous avons pensé , merci de regarder dans 
 [info.md](info.md)
